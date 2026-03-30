@@ -1,0 +1,98 @@
+# Copilot stage-to-persona binding layer.
+# This file is the persona label source of truth for the shipped GitHub Copilot adapter.
+# It maps workflow stages to concrete Copilot custom agents.
+
+version = 1
+
+[[stages]]
+name = "idea-create"
+[[stages.assignments]]
+persona = "Product Strategist"
+agent = "product-strategist"
+
+[[stages]]
+name = "idea-review"
+[[stages.assignments]]
+persona = "Stakeholder Advocate"
+agent = "stakeholder-advocate"
+[[stages.assignments]]
+persona = "Product Designer"
+agent = "product-designer"
+allowed_substitutions = ["Domain Expert"]
+[[stages.assignments]]
+persona = "Skeptic"
+agent = "skeptic"
+
+[[stages]]
+name = "spec-create"
+[[stages.assignments]]
+persona = "Product Manager"
+agent = "product-manager"
+
+[[stages]]
+name = "spec-review"
+[[stages.assignments]]
+persona = "Software Architect"
+agent = "software-architect"
+[[stages.assignments]]
+persona = "Stakeholder Advocate"
+agent = "stakeholder-advocate"
+allowed_substitutions = ["Product Designer"]
+[[stages.assignments]]
+persona = "Skeptic"
+agent = "skeptic"
+
+[[stages]]
+name = "plan-create"
+[[stages.assignments]]
+persona = "Software Architect"
+agent = "software-architect"
+
+[[stages]]
+name = "plan-review"
+[[stages.assignments]]
+persona = "Software Architect"
+agent = "software-architect"
+[[stages.assignments]]
+persona = "Software Engineer"
+agent = "software-engineer"
+[[stages.assignments]]
+persona = "Skeptic"
+agent = "skeptic"
+
+[[stages]]
+name = "implement-plan"
+[[stages.assignments]]
+persona = "Software Engineer"
+agent = "software-engineer"
+
+[[stages]]
+name = "implementation-review"
+[[stages.assignments]]
+persona = "Software Architect"
+agent = "software-architect"
+[[stages.assignments]]
+persona = "Security Engineer"
+agent = "security-engineer"
+[[stages.assignments]]
+persona = "QA Engineer"
+agent = "qa-engineer"
+
+[[stages]]
+name = "final-review"
+[[stages.assignments]]
+persona = "Product Manager"
+agent = "product-manager"
+allowed_substitutions = ["Product Strategist"]
+[[stages.assignments]]
+persona = "Software Architect"
+agent = "software-architect"
+[[stages.assignments]]
+persona = "QA Engineer"
+agent = "qa-engineer"
+
+[[stages]]
+name = "docs-closeout"
+[[stages.assignments]]
+persona = "Documentation Maintainer"
+agent = "documentation-maintainer"

@@ -21,6 +21,8 @@ Requirements:
 - state the exact reviewed artifact path in the review artifact
 - link the immediately prior review round when one exists and summarize what changed since that round
 - structure the review as a stakeholder debate that still ends in an actionable recommendation
+- explicitly check whether planning can proceed from the current `spec.md` alone without relying on prior review rounds
+- explicitly check whether accepted prior review feedback appears to have been folded back into the latest `spec.md`
 
 Default reviewer perspectives:
 - product owner
@@ -36,6 +38,9 @@ Synthesize the result into:
 - what works
 - what is unclear or incomplete
 - missing user-facing behavior
+- missing boundary conditions or edge cases that affect correctness
+- whether acceptance criteria are observable enough to drive planning
+- whether the current spec is restartable enough for `plan-create` from the artifact alone
 - details that should stay out of the spec and move to planning
 - where the reviewers disagree
 - what should change before planning
@@ -46,6 +51,9 @@ Write the review artifact with sections like:
 - prior review rounds when relevant
 - participants
 - review scope
+- contract restartability
+- observable acceptance assessment
+- incorporation of prior accepted feedback
 - opening positions
 - debate
 - points of agreement
@@ -58,4 +66,4 @@ Finish with an explicit recommendation:
 - `Recommendation: revise current stage`
 - `Recommendation: ready to advance to plan-create`
 
-The review recommendation informs the next decision, but the human or `workflow-run` decides whether to advance.
+The review recommendation informs the next decision, but the human or `workflow-run` decides whether to advance. The recommendation should make clear whether `plan-create` can proceed from the current `spec.md` without rereading historical review rounds.

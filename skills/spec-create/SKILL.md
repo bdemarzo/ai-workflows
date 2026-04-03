@@ -21,6 +21,7 @@ Requirements:
 - create the file if it does not exist
 - update the file in place if it already exists
 - keep the spec self-contained enough for planning without relying on prior thread context
+- make the spec concrete enough that planning can proceed from `spec.md` alone without mining prior review rounds
 - link back to the source idea artifact path when the spec was created from one
 - if a workflow split created this dossier, explain that relationship in the spec body
 - include rich local tracking in the artifact with:
@@ -28,6 +29,7 @@ Requirements:
   - `Status`
   - `Open Questions`
   - `Revision History`
+- fold accepted review decisions back into the spec so the latest `spec.md` is the current contract
 - keep the spec as the source of truth for user-visible behavior, scope, and correctness
 
 Keep these details in the spec:
@@ -38,6 +40,9 @@ Keep these details in the spec:
 - business rules
 - user-facing routes or URLs
 - acceptance criteria
+- concrete user-facing scenarios or examples
+- boundary conditions and edge cases that affect correctness
+- observable acceptance behavior, not only abstract acceptance language
 
 Do not put these details in the spec:
 - implementation sequencing
@@ -55,6 +60,7 @@ Write the spec with sections like:
 - source idea
 - status
 - summary
+- context and orientation when needed
 - problem statement
 - goals
 - non-goals
@@ -62,8 +68,10 @@ Write the spec with sections like:
 - key scenarios or user flows
 - functional requirements
 - constraints and guardrails
+- boundary conditions and edge cases
 - privacy rules, business rules, and user-facing routes or URLs when relevant
 - acceptance criteria
+- observable acceptance behavior or examples
 - open questions
 - revision history
 

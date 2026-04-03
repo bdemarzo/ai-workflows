@@ -19,6 +19,8 @@ Requirements:
 - state the exact reviewed artifact path in the review artifact
 - link the immediately prior review round when one exists and summarize what changed since that round
 - structure the review as a stakeholder debate that still ends in an actionable recommendation
+- explicitly check whether the current `idea.md` is understandable without prior chat context or prior review rounds
+- explicitly check whether accepted prior review feedback appears to have been folded back into the latest `idea.md`
 
 Default reviewer perspectives:
 - key stakeholders
@@ -33,7 +35,9 @@ Review adaptation:
 Synthesize the result into:
 - what works
 - concerns about value or user relevance
+- whether the idea's success signals are observable enough to justify advancing
 - feasibility or scope concerns
+- whether the artifact is self-contained enough for spec creation from the artifact alone
 - where the stakeholders disagree
 - what should change before spec creation
 - whether the idea is ready to advance
@@ -43,6 +47,9 @@ Write the review artifact with sections like:
 - prior review rounds when relevant
 - participants
 - review scope
+- self-containment assessment
+- observability of value
+- incorporation of prior accepted feedback
 - opening positions
 - debate
 - points of agreement
@@ -55,4 +62,4 @@ Finish with an explicit recommendation:
 - `Recommendation: revise current stage`
 - `Recommendation: ready to advance to spec-create`
 
-The review recommendation informs the next decision, but the human or `workflow-run` decides whether to advance.
+The review recommendation informs the next decision, but the human or `workflow-run` decides whether to advance. The recommendation should make clear whether the idea is ready for spec creation from the current artifact alone.

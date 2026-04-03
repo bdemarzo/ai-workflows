@@ -20,7 +20,7 @@ Portable workflow skills for AI-assisted product and engineering work.
 - `implement-plan`
 - `final-review`
 
-Each skill lives in `skills/<skill-name>/` and is distributed as a portable `SKILL.md`-based package. Some skills may also consult optional repo-local guidance such as `PLANS.md` when it is present.
+Each skill lives in `skills/<skill-name>/` and is distributed as a portable `SKILL.md`-based package. Some skills may also consult repo-local guidance such as `PLANS.md` and project `AGENTS.md`. When a project requires `PLANS.md`, that project policy is authoritative for planning and implementation structure.
 
 ## Canonical Workflow
 
@@ -33,7 +33,7 @@ The workflow has three design loops followed by implementation and a final revie
 - final review: `final-review`
 
 Review stages should adapt the participating personas to the scope of the artifact being reviewed rather than using the exact same reviewer set every time.
-`workflow-run` is the optional orchestrator skill that can drive the full lifecycle unattended from a starting prompt.
+`workflow-run` is the optional orchestrator skill that can drive the full lifecycle unattended from a starting prompt, or pause at configured stage gates for human approval.
 
 | Canonical Stage | Purpose | Primary Owner | Reviewers / Perspectives | Output |
 | --- | --- | --- | --- | --- |
@@ -79,6 +79,27 @@ If a workflow intentionally splits or merges scope, create or reference the rela
   - ask many questions: ask whenever a non-obvious decision could materially improve the result
 - Use this standardized fallback wording when the mode is ambiguous:
   - `Choose question_mode for workflow-run: fully automated, blocking questions only, or ask many questions.`
+- The orchestrator should use `stage_gate_mode` when explicitly provided.
+- If the user's wording clearly implies a stage gate mode, the orchestrator should infer it and record the inferred value in `stage_gate_mode:`.
+- If `stage_gate_mode` is omitted and not clearly implied, default it to `none`.
+- `workflow-run` should also resolve `execution_plan_mode`:
+  - `execplan` when the repository root contains `PLANS.md`
+  - `execplan` when the repository's `AGENTS.md` says planning and implementation must use `PLANS.md`
+  - `standard` otherwise
+- Supported stage gate modes in v1:
+  - `none`: do not pause between major stages unless a normal blocker requires it
+  - `loop boundaries`: pause at stage transitions so a human can approve or request revision before the next major stage starts
+- Supported execution-plan modes:
+  - `standard`: use the portable workflow defaults in this repo
+  - `execplan`: treat `plan.md` as the authoritative execution control document once implementation starts
+- Treat stage gates as transition checkpoints, not clarification questions.
+- In `loop boundaries` mode, pause at these transitions:
+  - after `idea-review`, before `spec-create`
+  - after `spec-review`, before `plan-create`
+  - after `plan-review`, before `implement-plan`
+  - after `implement-plan`, before `final-review`
+- Do not add a completion gate after `final-review` in v1.
+- In `execplan` mode, project `PLANS.md` and project `AGENTS.md` planning rules should outrank the portable defaults in this repo.
 - Hard stop rules for orchestration:
   - stop after a bounded number of loops per stage, such as 3
   - stop when the same unresolved issue persists across 2 consecutive loops
@@ -94,7 +115,7 @@ If a workflow intentionally splits or merges scope, create or reference the rela
 ## Traceability
 
 - The workflow dossier slug is the default traceability anchor for all stage artifacts.
-- `run.md` should keep the current artifact map, review-round paths, decisions, blockers, and resume context.
+- `run.md` should keep the current artifact map, review-round paths, orchestration decisions, blockers, and resume context.
 - `idea.md`, `spec.md`, `plan.md`, and `execution.md` should each identify their immediate source artifact when one exists.
 - Review rounds should state the exact reviewed artifact path and link the immediately prior round when one exists.
 - Later review rounds should explain what changed since the prior round before restating their recommendation.
@@ -105,9 +126,12 @@ If a workflow intentionally splits or merges scope, create or reference the rela
 - Store orchestration ledgers at `docs/workflows/{slug}/run.md`.
 - Put these top-level fields near the top of the run ledger:
   - `question_mode:`
+  - `stage_gate_mode:`
+  - `execution_plan_mode:`
   - `canonical_slug:`
   - `current_stage:`
   - `workflow_status:`
+  - `pending_transition:` when paused for stage approval
 - Treat `run.md` as a living lifecycle document, not a thin status note.
 - Keep these sections current:
   - `# Purpose / Big Picture`
@@ -122,15 +146,49 @@ If a workflow intentionally splits or merges scope, create or reference the rela
   - `## Resume Instructions`
   - `## Outcomes & Retrospective`
 - Update the run ledger at every stage transition and every stopping point so another agent can resume from the run ledger plus the linked artifacts.
+- In `execplan` mode, reduce `run.md` during implementation to orchestration data only:
+  - current stage
+  - artifact map
+  - approval state
+  - blockers
+  - high-level reroute decisions
+- In `execplan` mode, do not duplicate detailed execution progress, decisions, or discoveries in `run.md` once `implement-plan` starts. Those belong in `plan.md`.
+- When paused at a stage gate, set `workflow_status: awaiting-stage-approval` and record the completed stage, pending transition, latest artifact path, latest review-round path when one exists, and the orchestrator's rationale for recommending advancement.
+- Each stage gate prompt should present:
+  - current completed stage
+  - pending next stage
+  - artifact paths to review
+  - latest review recommendation
+  - orchestrator assessment
+  - explicit decision needed: `approve` or `revise current stage`
+- If the user chooses `revise current stage`:
+  - at idea, spec, and plan gates, rerun the matching `*-create` and `*-review` stages
+  - at the implementation gate, rerun `implement-plan`
+  - revisit the same gate before advancing
+
+Paused run-ledger header example:
+
+```text
+question_mode: blocking questions only
+stage_gate_mode: loop boundaries
+execution_plan_mode: execplan
+canonical_slug: customer-flag-dashboard
+current_stage: spec-review
+workflow_status: awaiting-stage-approval
+pending_transition: spec-review -> plan-create
+```
 
 ## Stage Files
 
 The stage files should be richer than thin placeholders.
 
 - `idea.md` should capture the idea in self-contained product language, including purpose, user problem, proposed direction, expected value, tradeoffs, open questions, and revision history.
-- `spec.md` should act as the functional contract, with scope, flows, constraints, acceptance criteria, open questions, and revision history.
-- `plan.md` should behave like a living implementation plan. It should be self-contained enough that a later agent can implement from the plan plus the repository. Keep `Progress`, `Surprises & Discoveries`, `Decision Log`, `Validation and Acceptance`, and `Outcomes & Retrospective` current as work evolves.
+- `idea.md` should open with outcome-first framing and lightweight success signals so a later reader can understand both the opportunity and how value would be recognized.
+- `spec.md` should act as the functional contract, with scope, flows, constraints, acceptance criteria, concrete scenarios, observable acceptance behavior, boundary conditions, open questions, and revision history.
+- `plan.md` should behave like a living implementation plan. It should be self-contained enough that a later agent can implement from the plan plus the repository without needing `run.md`. Keep `Progress`, `Surprises & Discoveries`, `Decision Log`, `Validation and Acceptance`, and `Outcomes & Retrospective` current as work evolves.
+- In `execplan` mode, `plan.md` is the authoritative implementation document after planning. It should absorb accepted plan-review decisions before implementation starts.
 - `execution.md` should capture implementation evidence, including work log entries, commands run, validation results, deviations from the plan, blockers, and follow-up work.
+- In `execplan` mode, prefer using `execution.md` sparingly as an optional evidence appendix rather than as a second implementation control document.
 
 ## Review Files
 
@@ -155,6 +213,9 @@ The stage files should be richer than thin placeholders.
   - `Recommendation`
   - `Outstanding Dissent`
 - Each review round should end with an explicit recommendation. The recommendation informs advancement, but does not control it.
+- Idea-review rounds should explicitly check self-containment, clarity of user value, observability of success, and whether accepted feedback has been folded back into `idea.md`.
+- Spec-review rounds should explicitly check contract restartability from `spec.md` alone, boundary conditions, observable acceptance behavior, and whether accepted feedback has been folded back into `spec.md`.
+- Plan-review rounds should be treated as inputs to plan consolidation. Accepted review decisions should be folded back into `plan.md` before implementation starts.
 
 ## Example Prompts
 
@@ -163,14 +224,20 @@ Use `workflow-run` when you want the full lifecycle coordinated from a starting 
 ```text
 Use workflow-run to take this from idea through final review.
 question_mode: fully automated
+stage_gate_mode: none
+execution_plan_mode: standard
 Prompt: Build a lightweight internal release notes tool for product and engineering teams.
 ```
 
 ```text
 Use workflow-run to drive this workflow.
 question_mode: blocking questions only
+stage_gate_mode: loop boundaries
+execution_plan_mode: execplan
 Prompt: Design and implement a customer-facing feature flag dashboard for account admins.
 ```
+
+This example uses the new stage-gating feature and pauses at loop boundaries for human approval before the workflow advances.
 
 ```text
 Use workflow-run to coordinate the full process.
@@ -183,6 +250,11 @@ Natural-language mode inference is also valid:
 ```text
 Use workflow-run for this feature and ask only if you have blocking questions.
 Prompt: Build an internal customer feedback triage dashboard.
+```
+
+```text
+Use workflow-run for this feature, and let me review each stage before you continue.
+Prompt: Design and implement a partner onboarding checklist for workspace admins.
 ```
 
 ## Install for Claude
@@ -218,6 +290,6 @@ To install all of them, copy each folder under `skills/` into:
 ## Notes
 
 - The skills are intentionally client-neutral and copy-based for now.
-- `PLANS.md` is an optional repo-local extension point for planning and implementation guidance. Its absence is normal and should not block use of the canonical skills.
+- `PLANS.md` is optional only in projects that do not require it. If a project `AGENTS.md` or project policy says to use `PLANS.md`, that requirement should outrank the portable defaults in these skills.
 - This repo currently targets Claude and Codex only.
 - If a future client needs extra packaging, that should be added as a thin adapter without changing the canonical skill packages in `skills/`.

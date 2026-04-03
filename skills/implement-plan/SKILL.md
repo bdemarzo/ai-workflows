@@ -5,7 +5,13 @@ description: Implement an approved engineering plan in bounded, validated steps.
 
 # Implement Plan
 
-Before implementing, read the repository root `PLANS.md` if it exists and follow its instructions for how plans should be used and implemented. Treat `PLANS.md` as supplementary repo-local guidance only. Its absence is normal and must not block implementation.
+Before implementing, inspect the repository root for `PLANS.md` and `AGENTS.md`.
+
+Execution-plan mode:
+- if the repository root contains `PLANS.md`, or if the repository's `AGENTS.md` says planning and implementation must use `PLANS.md`, treat that guidance as authoritative
+- when that guidance is authoritative, operate in `execplan` mode
+- when neither file requires `PLANS.md`, operate in `standard` mode
+- `PLANS.md` is optional only when the project does not require it
 
 Use this skill to carry out an approved plan from `./docs/workflows/{slug}/plan.md`.
 
@@ -14,9 +20,13 @@ This is an engineer-led implementation stage.
 Requirements:
 - the user or upstream workflow must name the workflow dossier to implement
 - read the plan file before making changes
+- treat `plan.md` as the primary living implementation document
 - keep the plan current as a living document when implementation decisions, discoveries, or progress change it
 - keep any execution summary in `./docs/workflows/{slug}/execution.md` if a run log is needed
 - if an execution summary is written, link back to the source plan artifact path
+- in `execplan` mode, do not require `run.md` to reconstruct implementation state
+- in `execplan` mode, prefer recording substantive progress, decisions, discoveries, and validation in `plan.md`
+- in `execplan` mode, use `execution.md` only as an optional evidence appendix when a separate run log is genuinely useful
 
 Treat the spec as the source of truth for user-visible behavior, privacy, and correctness.
 
@@ -24,6 +34,7 @@ Treat the plan as the source of truth for sequencing and implementation approach
 - follow the ordered work items
 - keep changes small and bounded
 - stop if the plan is no longer valid
+- once implementation starts in `execplan` mode, proceed milestone by milestone without asking for next steps unless a true blocker or explicit stage gate requires it
 
 During implementation:
 - make the minimum change required for each step
@@ -33,6 +44,7 @@ During implementation:
 - do not invent product behavior during implementation
 - if the plan needs to change for engineering reasons, update the plan
 - if the user contract needs to change, update the spec first
+- treat review rounds as historical justification and design input, not as active execution control documents
 
 When you keep `execution.md`, use sections like:
 - title

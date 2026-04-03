@@ -1,6 +1,6 @@
 ---
 name: workflow-run
-description: Run the full idea, spec, plan, implementation, and final review workflow from a starting prompt by coordinating the existing stage skills, keeping a living lifecycle document in ./docs/workflows/{slug}/run.md, and deciding when to revise or advance. Use when the user wants unattended execution of the workflow with configurable question gates.
+description: Run the full idea, spec, plan, implementation, and final review workflow from a starting prompt by coordinating the existing stage skills, keeping a living lifecycle document in ./docs/workflows/{slug}/run.md, and deciding when to revise or advance. Use when the user wants unattended execution of the workflow with configurable question and stage gates.
 ---
 
 # Workflow Run
@@ -19,8 +19,10 @@ This skill is the orchestrator. It decides when to revise or advance.
 
 Requirements:
 - derive one canonical `slug` from the starting prompt and keep the workflow dossier under `./docs/workflows/{slug}/`
-- treat `./docs/workflows/{slug}/run.md` as the source of truth for lifecycle status, current stage, artifact paths, review-round paths, loop counts, assumptions, recommendations, decisions, blockers, and resume context
+- treat `./docs/workflows/{slug}/run.md` as the source of truth for orchestration state, current stage, artifact paths, review-round paths, loop counts, approvals, blockers, and resume context
 - keep a top-level `question_mode:` field near the top of the run ledger
+- keep a top-level `stage_gate_mode:` field near the top of the run ledger
+- keep a top-level `execution_plan_mode:` field near the top of the run ledger
 - keep fixed dossier file names for `idea.md`, `spec.md`, `plan.md`, and `execution.md`
 - create new review rounds under `reviews/<stage>/round-XX.md` instead of overwriting prior reviews
 - consult the stage skills for artifact-specific instructions instead of rewriting their responsibilities here
@@ -35,6 +37,14 @@ At startup:
   - ask many questions
 - use this exact fallback question when the mode is still ambiguous:
   - `Choose question_mode for workflow-run: fully automated, blocking questions only, or ask many questions.`
+- if the user already specified a stage gate mode, use it
+- if the user's prompt clearly implies a stage gate mode in natural language, infer it, write the inferred value into `stage_gate_mode:`, and continue without asking
+- otherwise default `stage_gate_mode:` to `none`
+- determine `execution_plan_mode` before planning:
+  - if the repository root contains `PLANS.md`, use `execplan`
+  - if the repository root `AGENTS.md` says planning and implementation must use `PLANS.md`, use `execplan`
+  - otherwise use `standard`
+- write the resolved mode into `execution_plan_mode:`
 
 Question modes:
 - fully automated:
@@ -52,23 +62,49 @@ Inference examples:
 - infer `ask many questions` from prompts such as `check in with me on unclear decisions` or `ask questions as you go`
 - if the wording does not clearly map to one mode, do not guess; ask the fallback question once
 
+Stage gate modes:
+- `none`:
+  - do not pause for human approval between stages unless a normal blocker requires it
+- `loop boundaries`:
+  - pause at major stage transitions so a human can review the current artifacts before the next stage starts
+  - treat these pauses as approval checkpoints, not clarification questions
+
+Stage gate inference examples:
+- infer `loop boundaries` from prompts such as `pause before moving from idea to spec`, `let me review each stage before continuing`, or `gate the workflow at each step`
+- if the wording does not clearly request stage gates, do not guess; default to `none`
+
+Execution-plan modes:
+- `standard`:
+  - use the portable workflow defaults in this repo
+  - `run.md` may continue carrying fuller workflow lifecycle tracking
+- `execplan`:
+  - treat `plan.md` as the authoritative execution control document once implementation starts
+  - treat repository `PLANS.md` and repo `AGENTS.md` planning rules as authoritative
+  - keep `run.md` focused on orchestration, approvals, blockers, and high-level reroute decisions during implementation
+
 Execution model:
 1. establish the question mode, canonical slug, initial context, and run ledger
 2. run `idea-create`, then run `idea-review`
 3. read the current idea and the latest idea review round, decide whether to revise `idea-create` or advance to `spec-create`
+4. if `stage_gate_mode` is `loop boundaries`, pause after `idea-review` and before `spec-create`
 4. run `spec-create`, then run `spec-review`
 5. read the current spec and the latest spec review round, decide whether to revise `spec-create` or advance to `plan-create`
+6. if `stage_gate_mode` is `loop boundaries`, pause after `spec-review` and before `plan-create`
 6. run `plan-create`, then run `plan-review`
 7. read the current plan and the latest plan review round, decide whether to revise `plan-create` or advance to `implement-plan`
+8. before implementation, consolidate accepted plan-review decisions into `plan.md` so execution-critical decisions are captured in the plan itself
+8. if `stage_gate_mode` is `loop boundaries`, pause after `plan-review` and before `implement-plan`
 8. run `implement-plan`
-9. run `final-review`
-10. read the full artifact chain and the latest final-review round, decide whether to reroute to the earliest broken stage or mark the workflow outcome ready
+9. if `stage_gate_mode` is `loop boundaries`, pause after `implement-plan` and before `final-review`
+10. run `final-review`
+11. read the full artifact chain and the latest final-review round, decide whether to reroute to the earliest broken stage or mark the workflow outcome ready
 
 Advancement gates:
 - advance from idea only when the idea is specific enough to support functional design without major unresolved value, feasibility, or scope confusion
 - advance from spec only when user-visible behavior, constraints, acceptance criteria, and contract boundaries are specific enough for technical planning
 - advance from plan only when sequencing, technical coverage, assumptions, validation, and self-containment are specific enough for implementation
 - mark the workflow outcome ready only when the delivered result is faithful enough to the idea, spec, plan, implementation, execution evidence, and validation chain
+- do not add a completion gate after `final-review`; use the final review recommendation and normal reroute logic instead
 
 Decision rules:
 - treat review artifacts as evidence and recommendations, not as the final authority on progression
@@ -76,6 +112,8 @@ Decision rules:
 - if a later stage exposes an earlier-stage contract problem, route back to the earliest broken stage
 - when implementation reveals contract drift, update the spec before resuming implementation
 - if a workflow intentionally splits scope, create or reference the related workflow dossier and log the relationship in both run ledgers
+- in `execplan` mode, treat repo `PLANS.md` and repo `AGENTS.md` execution rules as higher priority than portable defaults in this workflow
+- in `execplan` mode, do not let `run.md` compete with `plan.md` as a second implementation source of truth
 
 Hard stop rules:
 - stop after 3 loops in the same stage unless the user explicitly allows more
@@ -83,12 +121,47 @@ Hard stop rules:
 - stop for required approvals, missing repository access, or ambiguities that would materially invalidate downstream work
 - when stopped, record the blocker, affected stage, recommended next action, and open questions in the run ledger
 
+Stage gate behavior:
+- when `stage_gate_mode` is `loop boundaries`, pause only at these transitions:
+  - after `idea-review`, before `spec-create`
+  - after `spec-review`, before `plan-create`
+  - after `plan-review`, before `implement-plan`
+  - after `implement-plan`, before `final-review`
+- before pausing, update `run.md` with:
+  - the completed stage
+  - the pending transition
+  - the latest artifact path
+  - the latest review-round path when one exists
+  - the orchestrator's rationale for recommending advancement
+- set `workflow_status:` to `awaiting-stage-approval` while paused
+- add `pending_transition:` near the top of the run ledger when paused
+- use a plain-text gate prompt that includes:
+  - current completed stage
+  - pending next stage
+  - artifact paths to review
+  - the latest review recommendation
+  - the orchestrator assessment
+  - the explicit decision needed: `approve` or `revise current stage`
+- if the user responds `approve`, continue into the pending stage
+- if the user responds `revise current stage`:
+  - at the idea, spec, or plan gates, rerun the matching `*-create` stage and then the matching `*-review` stage again
+  - at the implementation gate, rerun `implement-plan` before moving to `final-review`
+  - revisit the same gate after the revision pass before advancing
+- in `execplan` mode, keep stage gates and questions fully available before implementation
+- once `implement-plan` starts in `execplan` mode:
+  - ask no more clarification questions unless a true blocker requires them
+  - do not introduce milestone-by-milestone approval pauses unless the user explicitly requested that behavior
+  - if `stage_gate_mode` is `loop boundaries`, the existing gate before `final-review` may still be used
+
 Run ledger structure:
 - maintain these top-level header fields near the top:
   - `question_mode`
+  - `stage_gate_mode`
+  - `execution_plan_mode`
   - `canonical_slug`
   - `current_stage`
   - `workflow_status`
+  - `pending_transition` when paused for approval
 - maintain these required sections in the body:
   - `# Purpose / Big Picture`
   - `## Artifact Map`
@@ -112,6 +185,12 @@ Run ledger update rules:
   - the review recommendation received
   - the orchestrator decision
   - the rationale for that decision
+- before each stage-gate pause, record:
+  - the completed stage
+  - the pending transition
+  - the latest artifact path
+  - the latest review-round path when one exists
+  - the decision requested from the user
 - after each user question or inferred assumption, record:
   - the question or assumption
   - the answer if one was received
@@ -119,6 +198,9 @@ Run ledger update rules:
 - after each validation step, add concise evidence showing what was run and what it proved
 - when blocked, update `workflow_status`, `Current Blockers`, and `Resume Instructions`
 - when complete, write `Outcomes & Retrospective` before exiting
+- in `execplan` mode, once `implement-plan` starts:
+  - keep `run.md` focused on current stage, artifact map, approval state, blockers, and high-level reroute decisions
+  - avoid duplicating detailed execution progress, decision logs, or discoveries that should live in `plan.md`
 
 Section guidance:
 - `Purpose / Big Picture`: explain what the workflow is trying to deliver, for whom, and what a successful outcome looks like
@@ -130,17 +212,31 @@ Section guidance:
 - `Surprises & Discoveries`: capture unexpected constraints, failed assumptions, or implementation discoveries that changed the workflow
 - `Validation Evidence`: record commands, observed outputs, and what those results proved
 - `Current Blockers`: list active blockers, why they block progress, and whether the workflow is waiting or stopped
-- `Resume Instructions`: state the exact next action for the next agent or resumed run
+- `Resume Instructions`: state the exact next action for the next agent or resumed run, including the approval decision needed when paused at a stage gate
 - `Outcomes & Retrospective`: summarize what was delivered, what was deferred, and lessons learned
+- in `execplan` mode, `run.md` should support orchestration and handoff, while `plan.md` should remain sufficient for implementation restart
 
 Use the run ledger as a lifecycle document, not a thin status note. It should explain what happened, why it happened, and what should happen next.
 
 Run ledger header example:
 ```text
 question_mode: blocking questions only
+stage_gate_mode: loop boundaries
+execution_plan_mode: execplan
 canonical_slug: customer-flag-dashboard
 current_stage: spec-create
 workflow_status: in-progress
+```
+
+Paused run-ledger header example:
+```text
+question_mode: blocking questions only
+stage_gate_mode: loop boundaries
+execution_plan_mode: execplan
+canonical_slug: customer-flag-dashboard
+current_stage: spec-review
+workflow_status: awaiting-stage-approval
+pending_transition: spec-review -> plan-create
 ```
 
 Finish with:

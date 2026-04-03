@@ -1,6 +1,6 @@
 ---
 name: idea-review
-description: Review a product idea for value, feasibility, and user relevance. Use when the user wants review feedback in ./docs/reviews/ideas/{topic}.md before turning an idea into a spec.
+description: Review a product idea for value, feasibility, and user relevance. Use when the user wants review feedback in ./docs/workflows/{slug}/reviews/idea/round-01.md before turning an idea into a spec.
 ---
 
 # Idea Review
@@ -8,15 +8,17 @@ description: Review a product idea for value, feasibility, and user relevance. U
 Use this skill to review an idea artifact and produce evidence and a recommendation about whether it is ready for spec creation.
 
 Input:
-- the idea artifact at `./docs/ideas/{topic}.md`
+- the idea artifact at `./docs/workflows/{slug}/idea.md`
 - any product context or constraints that should stay in view
 
 Requirements:
-- derive `topic` from the idea file name
+- derive `slug` from the workflow dossier
 - preserve the original idea file
-- write the review artifact to `./docs/reviews/ideas/{topic}.md`
-- update the current review file in place by default rather than creating numbered copies
+- write the next review round to `./docs/workflows/{slug}/reviews/idea/round-XX.md`
+- create a new zero-padded round file for each pass rather than overwriting earlier rounds
 - state the exact reviewed artifact path in the review artifact
+- link the immediately prior review round when one exists and summarize what changed since that round
+- structure the review as a stakeholder debate that still ends in an actionable recommendation
 
 Default reviewer perspectives:
 - key stakeholders
@@ -32,8 +34,22 @@ Synthesize the result into:
 - what works
 - concerns about value or user relevance
 - feasibility or scope concerns
+- where the stakeholders disagree
 - what should change before spec creation
 - whether the idea is ready to advance
+
+Write the review artifact with sections like:
+- reviewed artifact
+- prior review rounds when relevant
+- participants
+- review scope
+- opening positions
+- debate
+- points of agreement
+- points of disagreement
+- suggested revisions
+- recommendation
+- outstanding dissent
 
 Finish with an explicit recommendation:
 - `Recommendation: revise current stage`

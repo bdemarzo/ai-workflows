@@ -1,6 +1,6 @@
 ---
 name: plan-review
-description: Perform peer review of an engineering plan from architectural and engineering perspectives across the relevant parts of the stack. Use when the user wants review feedback in ./docs/reviews/plans/{planname}.md before implementation.
+description: Perform peer review of an engineering plan from architectural and engineering perspectives across the relevant parts of the stack. Use when the user wants review feedback in ./docs/workflows/{slug}/reviews/plan/round-01.md before implementation.
 ---
 
 # Plan Review
@@ -8,15 +8,17 @@ description: Perform peer review of an engineering plan from architectural and e
 Use this skill to review an engineering plan and produce evidence and a recommendation about whether it is ready for implementation.
 
 Input:
-- the plan at `./docs/plans/{planname}.md`
+- the plan at `./docs/workflows/{slug}/plan.md`
 - any technical context or constraints that should stay in view
 
 Requirements:
-- derive `planname` from the plan file name
+- derive `slug` from the workflow dossier
 - preserve the original plan file
-- write the review artifact to `./docs/reviews/plans/{planname}.md`
-- update the current review file in place by default rather than creating numbered copies
+- write the next review round to `./docs/workflows/{slug}/reviews/plan/round-XX.md`
+- create a new zero-padded round file for each pass rather than overwriting earlier rounds
 - state the exact reviewed artifact path in the review artifact
+- link the immediately prior review round when one exists and summarize what changed since that round
+- structure the review as a stakeholder debate that still ends in an actionable recommendation
 
 Default reviewer perspectives:
 - engineer
@@ -33,6 +35,20 @@ Focus on:
 - architectural soundness
 - validation realism
 - missing assumptions or risky gaps
+- whether the plan is self-contained enough for a later engineer to implement it safely
+
+Write the review artifact with sections like:
+- reviewed artifact
+- prior review rounds when relevant
+- participants
+- review scope
+- opening positions
+- debate
+- points of agreement
+- points of disagreement
+- suggested revisions
+- recommendation
+- outstanding dissent
 
 Finish with an explicit recommendation:
 - `Recommendation: revise current stage`

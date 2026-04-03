@@ -1,24 +1,26 @@
 ---
 name: spec-review
-description: Review a functional spec for clarity, completeness, user value, and implementation readiness at the contract level. Use when the user wants review feedback in ./docs/reviews/specs/{featurename}.md before planning.
+description: Review a functional spec for clarity, completeness, user value, and implementation readiness at the contract level. Use when the user wants review feedback in ./docs/workflows/{slug}/reviews/spec/round-01.md before planning.
 ---
 
 # Spec Review
 
-Use this skill to review an existing spec and write the coordinating result to `./docs/reviews/specs/{featurename}.md`.
+Use this skill to review an existing spec and write the coordinating result to `./docs/workflows/{slug}/reviews/spec/round-XX.md`.
 
 Review the document as a functional product contract, not as an implementation plan.
 
 Input:
-- the feature spec at `./docs/specs/{featurename}.md`
+- the feature spec at `./docs/workflows/{slug}/spec.md`
 - any product context or constraints that should stay in view
 
 Requirements:
-- derive `featurename` from the feature file name
+- derive `slug` from the workflow dossier
 - preserve the original spec file
-- write the review artifact to `./docs/reviews/specs/{featurename}.md`
-- update the current review file in place by default rather than creating numbered copies
+- write the next review round to `./docs/workflows/{slug}/reviews/spec/round-XX.md`
+- create a new zero-padded round file for each pass rather than overwriting earlier rounds
 - state the exact reviewed artifact path in the review artifact
+- link the immediately prior review round when one exists and summarize what changed since that round
+- structure the review as a stakeholder debate that still ends in an actionable recommendation
 
 Default reviewer perspectives:
 - product owner
@@ -35,8 +37,22 @@ Synthesize the result into:
 - what is unclear or incomplete
 - missing user-facing behavior
 - details that should stay out of the spec and move to planning
+- where the reviewers disagree
 - what should change before planning
 - whether the spec is ready to advance
+
+Write the review artifact with sections like:
+- reviewed artifact
+- prior review rounds when relevant
+- participants
+- review scope
+- opening positions
+- debate
+- points of agreement
+- points of disagreement
+- suggested revisions
+- recommendation
+- outstanding dissent
 
 Finish with an explicit recommendation:
 - `Recommendation: revise current stage`

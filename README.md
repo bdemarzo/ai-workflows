@@ -287,6 +287,69 @@ To install all of them, copy each folder under `skills/` into:
 ~/.codex/skills/
 ```
 
+## Optional: `aiwf` Local Run Controller
+
+This repository now includes a minimal local helper under `bin/`:
+
+- `bin/aiwf.py` (core implementation)
+- `bin/aiwf.ps1` (PowerShell entrypoint for Windows)
+
+`aiwf` is a thin run-ledger controller for hybrid orchestration. It does not replace the stage skills.
+
+Usage model:
+
+- pass `--repo /path/to/target-repo` to run against a different repository
+- omit `--repo` to run against the current working directory
+- the controller writes the run ledger under the canonical workflow dossier at `docs/workflows/{slug}/run.md`
+- the controller preserves the existing ledger body and only updates orchestration state in the header plus targeted lifecycle notes
+- `execution_plan_mode` defaults to `auto` and resolves to `execplan` when the runtime repository requires `PLANS.md`
+- run commands through PowerShell (`pwsh -File bin/aiwf.ps1 ...`)
+
+Examples:
+
+```text
+pwsh -File bin/aiwf.ps1 run start --repo C:\path\to\app-repo --slug customer-flag-dashboard --question-mode fully-automated --stage-gate-mode loop-boundaries --prompt "Design and implement a customer-facing feature flag dashboard."
+pwsh -File bin/aiwf.ps1 run advance --repo C:\path\to\app-repo --slug customer-flag-dashboard --to idea-review
+pwsh -File bin/aiwf.ps1 run status --repo C:\path\to\app-repo --slug customer-flag-dashboard
+pwsh -File bin/aiwf.ps1 run pause --repo C:\path\to\app-repo --slug customer-flag-dashboard --gate idea-to-spec
+pwsh -File bin/aiwf.ps1 run resume --repo C:\path\to\app-repo --slug customer-flag-dashboard --approve idea-to-spec
+pwsh -File bin/aiwf.ps1 run resume --repo C:\path\to\app-repo --slug customer-flag-dashboard --revise-current-stage
+```
+
+Recommended `--question-mode` tokens:
+
+- `fully-automated`
+- `blocking-questions-only`
+- `ask-many-questions`
+
+Legacy aliases `blocking` and `ask-many` are still accepted and normalized into the canonical run-ledger values.
+
+Supported `--stage-gate-mode` tokens:
+
+- `none`
+- `loop-boundaries`
+
+Supported `--execution-plan-mode` values:
+
+- `auto`
+- `standard`
+- `execplan`
+
+Supported major transition gates:
+
+- `idea-to-spec`
+- `spec-to-plan`
+- `plan-to-implement`
+- `implement-to-final`
+
+`aiwf` records the canonical prose values in the run ledger:
+
+- `question_mode: fully automated`
+- `question_mode: blocking questions only`
+- `question_mode: ask many questions`
+- `stage_gate_mode: none`
+- `stage_gate_mode: loop boundaries`
+
 ## Notes
 
 - The skills are intentionally client-neutral and copy-based for now.

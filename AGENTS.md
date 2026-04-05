@@ -58,6 +58,9 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - In `execplan` environments, use `execution.md` sparingly as an optional evidence appendix rather than a second control document.
 - Orchestration should support a startup question gate with three modes: fully automated, blocking questions only, and ask many questions.
 - Orchestration may infer `question_mode` from clear natural-language instructions. If the mode is ambiguous, it should ask one plain-language startup question about how autonomous it should be, not a CLI-style option prompt.
+- New architectural directions, major architectural constraints, and new third-party services, SDKs, hosted platforms, or external tools should count as materially important decisions for orchestration.
+- In `blocking questions only`, those decisions should be surfaced as blocking questions before they are locked in.
+- In `fully automated`, those decisions should be self-answered and documented in the run ledger and affected source artifact.
 - Orchestration should also support an optional `stage_gate_mode` that controls whether the workflow pauses for human approval before major stage transitions.
 - If the user's stage-gate preference is ambiguous, orchestration should ask one plain-language startup question about whether to pause at major stage boundaries or run straight through.
 - In v1, support only `none` and `loop boundaries`.

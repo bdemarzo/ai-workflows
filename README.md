@@ -77,6 +77,9 @@ If a workflow intentionally splits or merges scope, create or reference the rela
   - fully automated: ask no questions after startup and proceed with reasonable assumptions
   - blocking questions only: ask only when a materially important decision cannot be safely assumed
   - ask many questions: ask whenever a non-obvious decision could materially improve the result
+- Material decisions include new architectural directions, major architectural constraints, and adoption of new third-party services, SDKs, hosted platforms, or external tools.
+- In `blocking questions only`, those decisions should be surfaced before they are locked in.
+- In `fully automated`, those decisions should be self-answered and documented with reasoning and tradeoffs in the workflow artifacts.
 - Use this standardized fallback wording when the mode is ambiguous:
   - `How should I handle decisions as I run this workflow: make reasonable assumptions and only stop for review gates, ask only when something would materially block good work, or check in often on non-obvious choices?`
 - The orchestrator should use `stage_gate_mode` when explicitly provided.

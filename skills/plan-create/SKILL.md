@@ -39,6 +39,9 @@ Use the spec to define what must be true for users. Use the plan to define how e
 Decision rule:
 - if a missing detail affects user-visible behavior, privacy, or correctness, stop and send it back to the spec
 - if a missing detail is only needed for implementation, decide it in the plan
+- if the plan would introduce a new architectural direction, major architectural constraint, or a new third-party service, SDK, hosted platform, or external tool, treat that as materially important:
+  - in fully autonomous orchestration, decide it explicitly and record the reasoning, tradeoffs, and validation implications in the plan
+  - otherwise surface it as a blocking question before locking it into the plan
 
 Write the plan in prose-first form with sections like:
 - title

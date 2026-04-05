@@ -52,8 +52,13 @@ Question modes:
 - fully automated:
   - ask no further questions after startup
   - make reasonable assumptions and log them in the run ledger
+  - if the workflow needs a new architectural direction, a major architectural constraint, or a new third-party service, SDK, hosted platform, or external tool, choose the best justified option and record the reasoning, tradeoffs, and affected artifacts in the run ledger
 - blocking questions only:
   - ask only when the missing decision is substantively material to the idea, spec, plan, implementation, or final review
+  - treat these as substantively material by default:
+    - introducing a new architectural pattern, boundary, or major technical constraint
+    - adding a new third-party service, SDK, hosted platform, or external tool
+    - accepting a new security, privacy, cost, operational, or vendor-lock-in tradeoff
   - prefer reasonable assumptions for lower-impact ambiguity
 - ask many questions:
   - ask whenever a non-obvious decision could materially improve correctness, clarity, fit, or implementation quality
@@ -114,6 +119,9 @@ Decision rules:
 - prefer revising the current stage over advancing with unresolved material defects
 - if a later stage exposes an earlier-stage contract problem, route back to the earliest broken stage
 - when implementation reveals contract drift, update the spec before resuming implementation
+- when a new architectural direction or new external dependency becomes necessary, treat that decision as materially important:
+  - in `blocking questions only`, ask before locking it in
+  - in `fully automated`, make the best justified choice and record the reasoning in `run.md` plus the affected source artifact
 - if a workflow intentionally splits scope, create or reference the related workflow dossier and log the relationship in both run ledgers
 - in `execplan` mode, treat repo `PLANS.md` and repo `AGENTS.md` execution rules as higher priority than portable defaults in this workflow
 - in `execplan` mode, do not let `run.md` compete with `plan.md` as a second implementation source of truth

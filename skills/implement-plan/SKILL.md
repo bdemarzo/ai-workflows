@@ -44,6 +44,9 @@ During implementation:
 - do not invent product behavior during implementation
 - if the plan needs to change for engineering reasons, update the plan
 - if the user contract needs to change, update the spec first
+- if implementation reveals a need for a new architectural direction, major architectural constraint, or a new third-party service, SDK, hosted platform, or external tool:
+  - in fully autonomous orchestration, make the best justified choice and record it in the plan and run ledger
+  - otherwise treat it as a blocking question before adopting it
 - treat review rounds as historical justification and design input, not as active execution control documents
 
 When you keep `execution.md`, use sections like:

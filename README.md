@@ -73,15 +73,16 @@ If a workflow intentionally splits or merges scope, create or reference the rela
 - Review stages should produce evidence and explicit recommendations. The orchestrator or a human decides whether the current stage is ready.
 - The orchestrator should use `question_mode` when explicitly provided.
 - If the user's wording clearly implies a mode, the orchestrator should infer it and record the inferred value in `question_mode:`.
-- If the mode is still ambiguous, the orchestrator should ask one startup question:
+- If the mode is still ambiguous, the orchestrator should ask one plain-language startup question about how autonomous it should be:
   - fully automated: ask no questions after startup and proceed with reasonable assumptions
   - blocking questions only: ask only when a materially important decision cannot be safely assumed
   - ask many questions: ask whenever a non-obvious decision could materially improve the result
 - Use this standardized fallback wording when the mode is ambiguous:
-  - `Choose question_mode for workflow-run: fully automated, blocking questions only, or ask many questions.`
+  - `How should I handle decisions as I run this workflow: make reasonable assumptions and only stop for review gates, ask only when something would materially block good work, or check in often on non-obvious choices?`
 - The orchestrator should use `stage_gate_mode` when explicitly provided.
 - If the user's wording clearly implies a stage gate mode, the orchestrator should infer it and record the inferred value in `stage_gate_mode:`.
-- If `stage_gate_mode` is omitted and not clearly implied, default it to `none`.
+- If the user's review-pause preference is still ambiguous, the orchestrator should ask one plain-language startup question instead of exposing internal option names:
+  - `Do you want me to pause for your approval at the major stage boundaries after idea review, spec review, plan review, and implementation, or should I run straight through unless something is blocked?`
 - `workflow-run` should also resolve `execution_plan_mode`:
   - `execplan` when the repository root contains `PLANS.md`
   - `execplan` when the repository's `AGENTS.md` says planning and implementation must use `PLANS.md`
@@ -220,6 +221,8 @@ The stage files should be richer than thin placeholders.
 ## Example Prompts
 
 Use `workflow-run` when you want the full lifecycle coordinated from a starting prompt.
+Use these prompts directly in a skill-capable agent app such as Codex or Claude. No separate local controller is required for orchestration, question handling, or stage gates.
+If the prompt does not make the autonomy level or review-pause preference clear, `workflow-run` should ask those questions in plain language rather than expecting field names or enum-like option tokens.
 
 ```text
 Use workflow-run to take this from idea through final review.
@@ -257,6 +260,14 @@ Use workflow-run for this feature, and let me review each stage before you conti
 Prompt: Design and implement a partner onboarding checklist for workspace admins.
 ```
 
+Plain-language startup questions are also valid:
+
+```text
+Use workflow-run for this feature.
+If my preferences are unclear, ask me how autonomous you should be and whether I want approvals at major stage boundaries.
+Prompt: Improve the workspace member invite flow for admins.
+```
+
 ## Install for Claude
 
 Copy any skill folder from `skills/` into your Claude skills directory:
@@ -286,69 +297,6 @@ To install all of them, copy each folder under `skills/` into:
 ```text
 ~/.codex/skills/
 ```
-
-## Optional: `aiwf` Local Run Controller
-
-This repository now includes a minimal local helper under `bin/`:
-
-- `bin/aiwf.py` (core implementation)
-- `bin/aiwf.ps1` (PowerShell entrypoint for Windows)
-
-`aiwf` is a thin run-ledger controller for hybrid orchestration. It does not replace the stage skills.
-
-Usage model:
-
-- pass `--repo /path/to/target-repo` to run against a different repository
-- omit `--repo` to run against the current working directory
-- the controller writes the run ledger under the canonical workflow dossier at `docs/workflows/{slug}/run.md`
-- the controller preserves the existing ledger body and only updates orchestration state in the header plus targeted lifecycle notes
-- `execution_plan_mode` defaults to `auto` and resolves to `execplan` when the runtime repository requires `PLANS.md`
-- run commands through PowerShell (`pwsh -File bin/aiwf.ps1 ...`)
-
-Examples:
-
-```text
-pwsh -File bin/aiwf.ps1 run start --repo C:\path\to\app-repo --slug customer-flag-dashboard --question-mode fully-automated --stage-gate-mode loop-boundaries --prompt "Design and implement a customer-facing feature flag dashboard."
-pwsh -File bin/aiwf.ps1 run advance --repo C:\path\to\app-repo --slug customer-flag-dashboard --to idea-review
-pwsh -File bin/aiwf.ps1 run status --repo C:\path\to\app-repo --slug customer-flag-dashboard
-pwsh -File bin/aiwf.ps1 run pause --repo C:\path\to\app-repo --slug customer-flag-dashboard --gate idea-to-spec
-pwsh -File bin/aiwf.ps1 run resume --repo C:\path\to\app-repo --slug customer-flag-dashboard --approve idea-to-spec
-pwsh -File bin/aiwf.ps1 run resume --repo C:\path\to\app-repo --slug customer-flag-dashboard --revise-current-stage
-```
-
-Recommended `--question-mode` tokens:
-
-- `fully-automated`
-- `blocking-questions-only`
-- `ask-many-questions`
-
-Legacy aliases `blocking` and `ask-many` are still accepted and normalized into the canonical run-ledger values.
-
-Supported `--stage-gate-mode` tokens:
-
-- `none`
-- `loop-boundaries`
-
-Supported `--execution-plan-mode` values:
-
-- `auto`
-- `standard`
-- `execplan`
-
-Supported major transition gates:
-
-- `idea-to-spec`
-- `spec-to-plan`
-- `plan-to-implement`
-- `implement-to-final`
-
-`aiwf` records the canonical prose values in the run ledger:
-
-- `question_mode: fully automated`
-- `question_mode: blocking questions only`
-- `question_mode: ask many questions`
-- `stage_gate_mode: none`
-- `stage_gate_mode: loop boundaries`
 
 ## Notes
 

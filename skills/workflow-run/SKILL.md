@@ -31,15 +31,17 @@ Requirements:
 At startup:
 - if the user already specified a question mode, use it
 - if the user's prompt clearly implies a question mode in natural language, infer it, write the inferred value into `question_mode:`, and continue without asking
-- otherwise ask one startup question and require one of these modes before proceeding:
+- otherwise ask one plain-language startup question about how autonomous the workflow should be and map the answer into one of these modes:
   - fully automated
   - blocking questions only
   - ask many questions
 - use this exact fallback question when the mode is still ambiguous:
-  - `Choose question_mode for workflow-run: fully automated, blocking questions only, or ask many questions.`
+  - `How should I handle decisions as I run this workflow: make reasonable assumptions and only stop for review gates, ask only when something would materially block good work, or check in often on non-obvious choices?`
 - if the user already specified a stage gate mode, use it
 - if the user's prompt clearly implies a stage gate mode in natural language, infer it, write the inferred value into `stage_gate_mode:`, and continue without asking
-- otherwise default `stage_gate_mode:` to `none`
+- otherwise ask one plain-language startup question about review pauses and map the answer into a supported stage gate mode
+- use this exact fallback question when the stage-gate preference is still ambiguous:
+  - `Do you want me to pause for your approval at the major stage boundaries after idea review, spec review, plan review, and implementation, or should I run straight through unless something is blocked?`
 - determine `execution_plan_mode` before planning:
   - if the repository root contains `PLANS.md`, use `execplan`
   - if the repository root `AGENTS.md` says planning and implementation must use `PLANS.md`, use `execplan`
@@ -60,7 +62,7 @@ Inference examples:
 - infer `fully automated` from prompts such as `fully automate this`, `run this unattended`, or `do not ask questions`
 - infer `blocking questions only` from prompts such as `ask only if you have blocking questions` or `only ask if something materially blocks progress`
 - infer `ask many questions` from prompts such as `check in with me on unclear decisions` or `ask questions as you go`
-- if the wording does not clearly map to one mode, do not guess; ask the fallback question once
+- if the wording does not clearly map to one mode, do not guess; ask the plain-language fallback question once
 
 Stage gate modes:
 - `none`:
@@ -71,7 +73,8 @@ Stage gate modes:
 
 Stage gate inference examples:
 - infer `loop boundaries` from prompts such as `pause before moving from idea to spec`, `let me review each stage before continuing`, or `gate the workflow at each step`
-- if the wording does not clearly request stage gates, do not guess; default to `none`
+- infer `none` from prompts such as `run straight through`, `do not stop between stages`, or `only stop for real blockers`
+- if the wording does not clearly express a review-pause preference, do not guess; ask the plain-language fallback question once
 
 Execution-plan modes:
 - `standard`:

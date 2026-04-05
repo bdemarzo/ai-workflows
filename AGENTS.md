@@ -57,9 +57,9 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - `execution.md` should capture implementation evidence, deviations, validation, blockers, and follow-up work.
 - In `execplan` environments, use `execution.md` sparingly as an optional evidence appendix rather than a second control document.
 - Orchestration should support a startup question gate with three modes: fully automated, blocking questions only, and ask many questions.
-- Orchestration may infer `question_mode` from clear natural-language instructions. If the mode is ambiguous, it should ask the standardized fallback question once.
+- Orchestration may infer `question_mode` from clear natural-language instructions. If the mode is ambiguous, it should ask one plain-language startup question about how autonomous it should be, not a CLI-style option prompt.
 - Orchestration should also support an optional `stage_gate_mode` that controls whether the workflow pauses for human approval before major stage transitions.
-- `stage_gate_mode` should default to `none` unless the user explicitly requests it or the prompt clearly implies it.
+- If the user's stage-gate preference is ambiguous, orchestration should ask one plain-language startup question about whether to pause at major stage boundaries or run straight through.
 - In v1, support only `none` and `loop boundaries`.
 - `loop boundaries` should pause only after `idea-review`, `spec-review`, `plan-review`, and `implement-plan`, and should not add a completion gate after `final-review`.
 - Stage gates are transition checkpoints, not clarification questions.
@@ -95,8 +95,8 @@ After changing the workflow or skill packages, verify:
 - run ledger examples and guidance consistently use a top-level `question_mode:` field
 - run ledger examples and guidance consistently use a top-level `stage_gate_mode:` field and `pending_transition:` when paused
 - run ledger examples and guidance consistently use a top-level `execution_plan_mode:` field
-- `question_mode` inference and fallback-question behavior are described consistently across the orchestrator skill and docs
-- `stage_gate_mode` defaults, inference behavior, and gated transitions are described consistently across the orchestrator skill and docs
+- `question_mode` inference and plain-language startup-question behavior are described consistently across the orchestrator skill and docs
+- `stage_gate_mode` startup-question behavior, inference behavior, and gated transitions are described consistently across the orchestrator skill and docs
 - `execution_plan_mode` resolution and `execplan` behavior are described consistently across the orchestrator skill and docs
 - run ledger lifecycle sections and update rules are described consistently across the orchestrator skill and docs
 - repo-local `PLANS.md` and project `AGENTS.md` precedence are documented consistently

@@ -48,6 +48,7 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - Review rounds should be written as structured stakeholder debates that still end in actionable suggestions and an explicit recommendation.
 - The persona method belongs in the skill body, not in the stage name.
 - `workflow-run` is a meta-skill, not a stage. It may coordinate the stage skills, keep a run ledger, and decide when to advance.
+- `skeptical-review` is an optional manual pressure-test skill, not a workflow stage, not part of the canonical dossier layout, and should return feedback directly instead of creating new files.
 - Review stages should produce explicit recommendations and evidence. They should not be written as the final authority on stage advancement.
 - Repo-local `PLANS.md` and project `AGENTS.md` may be authoritative for planning and implementation behavior. When a project requires `PLANS.md`, that requirement should outrank portable defaults.
 - The workflow dossier slug is the default traceability anchor. Avoid reintroducing separate stage-level naming schemes unless there is a strong reason.

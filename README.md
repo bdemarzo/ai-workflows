@@ -19,6 +19,7 @@ Portable workflow skills for AI-assisted product and engineering work.
 - `plan-review`
 - `implement-plan`
 - `final-review`
+- `skeptical-review`
 
 Each skill lives in `skills/<skill-name>/` and is distributed as a portable `SKILL.md`-based package. Some skills may also consult repo-local guidance such as `PLANS.md` and project `AGENTS.md`. When a project requires `PLANS.md`, that project policy is authoritative for planning and implementation structure.
 
@@ -45,6 +46,13 @@ Review stages should adapt the participating personas to the scope of the artifa
 | `plan-review` | Perform peer review of the plan from architectural and engineering perspectives across the relevant parts of the stack. | Review skill | Engineer and technical product manager by default. Include additional architectural, domain-specific, or UX/front-end experience personas when the plan scope requires it. | `docs/workflows/{slug}/reviews/plan/round-01.md` |
 | `implement-plan` | Implement the approved plan in bounded, validated steps. | Engineer | None during implementation beyond normal validation. | Code changes plus optional `docs/workflows/{slug}/execution.md` |
 | `final-review` | Review the full workflow outcome for architectural quality, product correctness, process fit, and contract fidelity. | Review skill | Architect, product owner, and technical product manager by default. Add or remove personas based on scope. | `docs/workflows/{slug}/reviews/final/round-01.md` |
+
+## Optional Manual Skills
+
+- `skeptical-review` is an optional manual pressure-test skill, not a workflow stage.
+- Use it when you want an intentionally adversarial review of an idea, spec, plan, implementation summary, or product decision.
+- It should look for consequential flaws, compare against industry-standard practice and strong comparable products, and recommend kill, narrow, revise, or proceed despite risk.
+- It should respond directly in chat and should not create new files or workflow artifacts.
 
 ## Workflow Dossiers
 
@@ -275,6 +283,12 @@ Plain-language startup questions are also valid:
 Use workflow-run for this feature.
 If my preferences are unclear, ask me how autonomous you should be and whether I want approvals at major stage boundaries.
 Prompt: Improve the workspace member invite flow for admins.
+```
+
+Manual adversarial review is also valid:
+
+```text
+Use skeptical-review on this spec and tell me why it should not advance yet.
 ```
 
 ## Install for Claude

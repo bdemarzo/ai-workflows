@@ -42,6 +42,7 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - Create a new review round for each review pass. Do not overwrite older rounds.
 - Use zero-padded review round names such as `round-01.md`, `round-02.md`, and `round-03.md`.
 - Review stages should stay artifact-specific and should adapt reviewer personas based on scope, risk, and affected surface area.
+- When a workflow has meaningful UI, UX, navigation, or interaction surface area, idea-review and spec-review should include an explicit UX or product-design perspective, and plan-review should include one when delivery risk depends on interface behavior.
 - Review rounds should be written as structured stakeholder debates that still end in actionable suggestions and an explicit recommendation.
 - The persona method belongs in the skill body, not in the stage name.
 - `workflow-run` is a meta-skill, not a stage. It may coordinate the stage skills, keep a run ledger, and decide when to advance.

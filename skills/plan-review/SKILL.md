@@ -28,6 +28,7 @@ Review adaptation:
 - choose reviewer personas based on artifact scope, risk, and affected surface area
 - include additional architectural or domain-specific personas when the plan scope requires it
 - use a smaller reviewer set for narrow changes
+- when the plan includes meaningful UI, UX, accessibility, responsive behavior, or front-end interaction work, include an explicit UX, design-system, or front-end experience perspective
 
 Focus on:
 - implementation sequencing
@@ -35,6 +36,7 @@ Focus on:
 - architectural soundness
 - validation realism
 - missing assumptions or risky gaps
+- front-end interaction, accessibility, state, or responsive-delivery risks when relevant
 - whether the plan is self-contained enough for a later engineer to implement it safely
 
 Write the review artifact with sections like:

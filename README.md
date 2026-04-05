@@ -38,11 +38,11 @@ Review stages should adapt the participating personas to the scope of the artifa
 | Canonical Stage | Purpose | Primary Owner | Reviewers / Perspectives | Output |
 | --- | --- | --- | --- | --- |
 | `idea-create` | Create or refine a product idea before it becomes a contract. | Product owner | None by default during creation. | `docs/workflows/{slug}/idea.md` |
-| `idea-review` | Pressure-test the idea for value, feasibility, and user relevance. | Review skill | Key stakeholders, power users, and technical product manager. Add or remove personas based on scope. | `docs/workflows/{slug}/reviews/idea/round-01.md` |
+| `idea-review` | Pressure-test the idea for value, feasibility, and user relevance. | Review skill | Key stakeholders, power users, and technical product manager. Add or remove personas based on scope. Include a UX or product-design perspective when the idea has meaningful UI or interaction surface area. | `docs/workflows/{slug}/reviews/idea/round-01.md` |
 | `spec-create` | Turn the approved idea into a functional product contract. | Technical product manager | None by default during creation. | `docs/workflows/{slug}/spec.md` |
-| `spec-review` | Review the spec for clarity, completeness, user value, and implementation readiness at the contract level. | Review skill | Product owner, architect, and scope-appropriate stakeholder or power-user personas. | `docs/workflows/{slug}/reviews/spec/round-01.md` |
+| `spec-review` | Review the spec for clarity, completeness, user value, and implementation readiness at the contract level. | Review skill | Product owner, architect, and scope-appropriate stakeholder or power-user personas. Include a UX or product-design perspective for user-facing features. | `docs/workflows/{slug}/reviews/spec/round-01.md` |
 | `plan-create` | Turn the approved spec into an implementation-ready engineering plan. | Architect | None by default during creation. | `docs/workflows/{slug}/plan.md` |
-| `plan-review` | Perform peer review of the plan from architectural and engineering perspectives across the relevant parts of the stack. | Review skill | Engineer and technical product manager by default. Include additional architectural or domain-specific personas when the plan scope requires it. | `docs/workflows/{slug}/reviews/plan/round-01.md` |
+| `plan-review` | Perform peer review of the plan from architectural and engineering perspectives across the relevant parts of the stack. | Review skill | Engineer and technical product manager by default. Include additional architectural, domain-specific, or UX/front-end experience personas when the plan scope requires it. | `docs/workflows/{slug}/reviews/plan/round-01.md` |
 | `implement-plan` | Implement the approved plan in bounded, validated steps. | Engineer | None during implementation beyond normal validation. | Code changes plus optional `docs/workflows/{slug}/execution.md` |
 | `final-review` | Review the full workflow outcome for architectural quality, product correctness, process fit, and contract fidelity. | Review skill | Architect, product owner, and technical product manager by default. Add or remove personas based on scope. | `docs/workflows/{slug}/reviews/final/round-01.md` |
 
@@ -114,6 +114,8 @@ If a workflow intentionally splits or merges scope, create or reference the rela
 - Review skills should choose reviewer personas based on artifact scope, risk, and affected surface area.
 - Narrow changes can use a smaller reviewer set.
 - Broad, high-risk, user-facing, or cross-functional changes should pull in more perspectives.
+- When a workflow has meaningful UI, UX, navigation, or interaction surface area, idea and spec review should include an explicit UX or product-design perspective.
+- When delivery depends on front-end interaction details, accessibility, or responsive behavior, plan review should include an explicit UX, design-system, or front-end experience perspective.
 - The persona method is an implementation detail of the review stage, not the stage name itself.
 
 ## Traceability

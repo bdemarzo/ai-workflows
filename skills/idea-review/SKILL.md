@@ -31,12 +31,15 @@ Review adaptation:
 - choose reviewer personas based on artifact scope, risk, and affected surface area
 - use fewer perspectives for narrow or exploratory ideas
 - use broader perspectives for high-risk, user-facing, or cross-functional ideas
+- when the workflow includes meaningful UI, UX, navigation, or interaction design, include an explicit UX or product-design perspective
+- for user-facing workflow changes, have that UX or product-design reviewer challenge clarity of flow, user expectations, friction, and success from the interface point of view
 
 Synthesize the result into:
 - what works
 - concerns about value or user relevance
 - whether the idea's success signals are observable enough to justify advancing
 - feasibility or scope concerns
+- UI or UX concerns about discoverability, flow clarity, interaction friction, or user comprehension when relevant
 - whether the artifact is self-contained enough for spec creation from the artifact alone
 - where the stakeholders disagree
 - what should change before spec creation

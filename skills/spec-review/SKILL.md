@@ -33,11 +33,14 @@ Review adaptation:
 - choose reviewer personas based on artifact scope, risk, and affected surface area
 - use fewer perspectives for narrow changes
 - use broader perspectives for high-risk, user-facing, or cross-functional changes
+- when the workflow includes meaningful UI, UX, navigation, or interaction behavior, include an explicit UX or product-design perspective
+- for user-facing features, treat that UX or product-design perspective as expected rather than optional
 
 Synthesize the result into:
 - what works
 - what is unclear or incomplete
 - missing user-facing behavior
+- missing interaction detail, interface states, navigation clarity, accessibility expectations, or UX edge cases when relevant
 - missing boundary conditions or edge cases that affect correctness
 - whether acceptance criteria are observable enough to drive planning
 - whether the current spec is restartable enough for `plan-create` from the artifact alone

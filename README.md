@@ -116,6 +116,9 @@ If a workflow intentionally splits or merges scope, create or reference the rela
 - Broad, high-risk, user-facing, or cross-functional changes should pull in more perspectives.
 - When a workflow has meaningful UI, UX, navigation, or interaction surface area, idea and spec review should include an explicit UX or product-design perspective.
 - When delivery depends on front-end interaction details, accessibility, or responsive behavior, plan review should include an explicit UX, design-system, or front-end experience perspective.
+- Reviewers should form independent opening positions before converging, and at least one reviewer should take an explicitly skeptical or risk-focused stance.
+- For non-trivial or user-facing work, reviews should compare the artifact against industry-standard practices and how comparable successful products or applications solve similar problems.
+- Review rounds should preserve meaningful dissent instead of forcing agreement when important gaps remain.
 - The persona method is an implementation detail of the review stage, not the stage name itself.
 
 ## Traceability
@@ -212,6 +215,7 @@ The stage files should be richer than thin placeholders.
   - `Participants`
   - `Review Scope`
   - `Opening Positions`
+  - `Benchmark and Best-Practice Comparison` when relevant
   - `Debate`
   - `Points of Agreement`
   - `Points of Disagreement`

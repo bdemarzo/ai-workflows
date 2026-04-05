@@ -22,6 +22,9 @@ Requirements:
 - list the exact reviewed artifact paths in the review artifact
 - link the immediately prior final-review round when one exists and summarize what changed since that round
 - structure the review as a stakeholder debate that still ends in an actionable recommendation
+- have reviewers form independent opening positions before converging on a recommendation
+- include at least one explicitly skeptical or risk-focused perspective that tries to find reasons the workflow outcome should not be accepted yet
+- when the outcome is user-facing, platform-facing, or process-sensitive, include at least one perspective that compares it against industry-standard practices and strong comparable products or applications
 
 Default reviewer perspectives:
 - architect
@@ -32,6 +35,7 @@ Review adaptation:
 - choose reviewer personas based on artifact scope, risk, and affected surface area
 - use fewer perspectives for narrow, low-risk changes
 - use broader perspectives for high-risk, user-facing, cross-functional, or process-sensitive changes
+- do not optimize for reviewer consensus; preserve strong dissent when material risks, regressions, or quality gaps remain
 
 Focus on:
 - fidelity across the idea, spec, plan, implementation, execution, and validation chain
@@ -41,6 +45,8 @@ Focus on:
 - process fit and traceability gaps
 - regressions and edge cases
 - insufficient validation
+- where the delivered result falls short of industry-standard practice or comparable successful products or applications when relevant
+- the strongest reasons not to accept the outcome yet
 
 Write the review artifact with sections like:
 - reviewed artifacts
@@ -48,6 +54,7 @@ Write the review artifact with sections like:
 - participants
 - review scope
 - opening positions
+- benchmark and best-practice comparison when relevant
 - debate
 - points of agreement
 - points of disagreement

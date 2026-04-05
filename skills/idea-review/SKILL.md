@@ -19,6 +19,9 @@ Requirements:
 - state the exact reviewed artifact path in the review artifact
 - link the immediately prior review round when one exists and summarize what changed since that round
 - structure the review as a stakeholder debate that still ends in an actionable recommendation
+- have reviewers form independent opening positions before converging on a recommendation
+- include at least one explicitly skeptical or risk-focused perspective that tries to find reasons the current artifact should not advance
+- when the artifact is non-trivial or user-facing, include at least one perspective that compares the idea against industry-standard patterns and how similar successful products or applications solve comparable problems
 - explicitly check whether the current `idea.md` is understandable without prior chat context or prior review rounds
 - explicitly check whether accepted prior review feedback appears to have been folded back into the latest `idea.md`
 
@@ -33,6 +36,8 @@ Review adaptation:
 - use broader perspectives for high-risk, user-facing, or cross-functional ideas
 - when the workflow includes meaningful UI, UX, navigation, or interaction design, include an explicit UX or product-design perspective
 - for user-facing workflow changes, have that UX or product-design reviewer challenge clarity of flow, user expectations, friction, and success from the interface point of view
+- do not optimize for reviewer consensus; preserve strong dissent when the artifact still has meaningful weaknesses
+- when using comparable products or best-practice references, treat them as inputs for critique rather than as permission to hand-wave missing details
 
 Synthesize the result into:
 - what works
@@ -40,6 +45,8 @@ Synthesize the result into:
 - whether the idea's success signals are observable enough to justify advancing
 - feasibility or scope concerns
 - UI or UX concerns about discoverability, flow clarity, interaction friction, or user comprehension when relevant
+- where the idea falls short of industry-standard patterns or comparable successful products when relevant
+- the strongest reasons not to advance yet
 - whether the artifact is self-contained enough for spec creation from the artifact alone
 - where the stakeholders disagree
 - what should change before spec creation
@@ -54,6 +61,7 @@ Write the review artifact with sections like:
 - observability of value
 - incorporation of prior accepted feedback
 - opening positions
+- benchmark and best-practice comparison when relevant
 - debate
 - points of agreement
 - points of disagreement

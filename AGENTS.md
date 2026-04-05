@@ -43,6 +43,8 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - Use zero-padded review round names such as `round-01.md`, `round-02.md`, and `round-03.md`.
 - Review stages should stay artifact-specific and should adapt reviewer personas based on scope, risk, and affected surface area.
 - When a workflow has meaningful UI, UX, navigation, or interaction surface area, idea-review and spec-review should include an explicit UX or product-design perspective, and plan-review should include one when delivery risk depends on interface behavior.
+- Review methods should require independent opening positions, an explicitly skeptical or risk-focused perspective, and preservation of meaningful dissent when important weaknesses remain.
+- For non-trivial or user-facing work, review stages should benchmark against industry-standard practices and how comparable successful products or applications solve similar problems.
 - Review rounds should be written as structured stakeholder debates that still end in actionable suggestions and an explicit recommendation.
 - The persona method belongs in the skill body, not in the stage name.
 - `workflow-run` is a meta-skill, not a stage. It may coordinate the stage skills, keep a run ledger, and decide when to advance.
@@ -105,6 +107,8 @@ After changing the workflow or skill packages, verify:
 - run ledger lifecycle sections and update rules are described consistently across the orchestrator skill and docs
 - repo-local `PLANS.md` and project `AGENTS.md` precedence are documented consistently
 - review rounds preserve history instead of instructing in-place overwrite
+- review skills consistently require independent opening positions, a skeptical perspective, and preservation of meaningful dissent
+- review skills consistently require benchmark or best-practice comparison for non-trivial or user-facing work
 - no review skill is described as owning stage-gate decisions; gates remain owned by `workflow-run`
 - idea-review and spec-review outputs are documented as inputs to source-artifact consolidation rather than alternative truth sources
 - plan-review outputs are documented as inputs to plan consolidation rather than alternative execution control docs

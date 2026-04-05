@@ -19,6 +19,9 @@ Requirements:
 - state the exact reviewed artifact path in the review artifact
 - link the immediately prior review round when one exists and summarize what changed since that round
 - structure the review as a stakeholder debate that still ends in an actionable recommendation
+- have reviewers form independent opening positions before converging on a recommendation
+- include at least one explicitly skeptical or risk-focused perspective that tries to find reasons the current plan should not advance
+- when the plan touches established platform, frontend, architecture, or delivery patterns, include at least one perspective that compares it against industry-standard implementation practices and strong comparable products or applications
 
 Default reviewer perspectives:
 - engineer
@@ -29,6 +32,7 @@ Review adaptation:
 - include additional architectural or domain-specific personas when the plan scope requires it
 - use a smaller reviewer set for narrow changes
 - when the plan includes meaningful UI, UX, accessibility, responsive behavior, or front-end interaction work, include an explicit UX, design-system, or front-end experience perspective
+- do not optimize for reviewer consensus; preserve strong dissent when material implementation or rollout risks remain
 
 Focus on:
 - implementation sequencing
@@ -37,6 +41,8 @@ Focus on:
 - validation realism
 - missing assumptions or risky gaps
 - front-end interaction, accessibility, state, or responsive-delivery risks when relevant
+- where the plan falls short of industry-standard implementation practices or comparable successful applications when relevant
+- the strongest reasons not to advance yet
 - whether the plan is self-contained enough for a later engineer to implement it safely
 
 Write the review artifact with sections like:
@@ -45,6 +51,7 @@ Write the review artifact with sections like:
 - participants
 - review scope
 - opening positions
+- benchmark and best-practice comparison when relevant
 - debate
 - points of agreement
 - points of disagreement

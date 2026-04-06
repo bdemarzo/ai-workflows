@@ -70,9 +70,7 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - In v1, support only `none` and `loop boundaries`.
 - `loop boundaries` should pause only after `idea-review`, `spec-review`, `plan-review`, and `implement-plan`, and should not add a completion gate after `final-review`.
 - Stage gates are transition checkpoints, not clarification questions.
-- The run ledger should include a top-level `question_mode:` field near the top so resumed orchestration behaves consistently.
-- The run ledger should include a top-level `stage_gate_mode:` field near the top and `pending_transition:` when paused for approval.
-- The run ledger should include a top-level `execution_plan_mode:` field near the top.
+- The run ledger should record question mode, stage gate mode, execution plan mode, current stage, workflow status, and pending transition when relevant in plain text under a `Workflow Guidelines` subsection inside `Purpose / Big Picture`.
 - The run ledger should be maintained as a living lifecycle document with required sections for progress, decisions, discoveries, validation, blockers, and resume instructions.
 - Another agent should be able to resume an in-progress workflow from `docs/workflows/{slug}/run.md` plus the linked artifacts without needing prior thread context.
 - Orchestration should enforce hard stop rules for repeated unresolved issues, bounded loop counts, required approvals, missing access, or materially blocking ambiguity.
@@ -99,9 +97,7 @@ After changing the workflow or skill packages, verify:
 - traceability expectations are consistent across the create, review, implementation, and final review stages
 - idea and spec guidance clearly require self-containment, observable outcomes, and consolidation of accepted review decisions back into the source artifact
 - run ledger path references are consistent across the orchestrator skill and docs
-- run ledger examples and guidance consistently use a top-level `question_mode:` field
-- run ledger examples and guidance consistently use a top-level `stage_gate_mode:` field and `pending_transition:` when paused
-- run ledger examples and guidance consistently use a top-level `execution_plan_mode:` field
+- run ledger examples and guidance consistently place workflow guidance under `Purpose / Big Picture` instead of as top-of-file header fields
 - `question_mode` inference and plain-language startup-question behavior are described consistently across the orchestrator skill and docs
 - `stage_gate_mode` startup-question behavior, inference behavior, and gated transitions are described consistently across the orchestrator skill and docs
 - `execution_plan_mode` resolution and `execplan` behavior are described consistently across the orchestrator skill and docs

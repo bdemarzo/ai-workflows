@@ -20,9 +20,7 @@ This skill is the orchestrator. It decides when to revise or advance.
 Requirements:
 - derive one canonical `slug` from the starting prompt and keep the workflow dossier under `./docs/workflows/{slug}/`
 - treat `./docs/workflows/{slug}/run.md` as the source of truth for orchestration state, current stage, artifact paths, review-round paths, loop counts, approvals, blockers, and resume context
-- keep a top-level `question_mode:` field near the top of the run ledger
-- keep a top-level `stage_gate_mode:` field near the top of the run ledger
-- keep a top-level `execution_plan_mode:` field near the top of the run ledger
+- keep workflow guidance in plain text under a `### Workflow Guidelines` subsection inside `# Purpose / Big Picture` rather than as top-of-file header fields
 - keep fixed dossier file names for `idea.md`, `spec.md`, `plan.md`, and `execution.md`
 - create new review rounds under `reviews/<stage>/round-XX.md` instead of overwriting prior reviews
 - consult the stage skills for artifact-specific instructions instead of rewriting their responsibilities here
@@ -30,7 +28,7 @@ Requirements:
 
 At startup:
 - if the user already specified a question mode, use it
-- if the user's prompt clearly implies a question mode in natural language, infer it, write the inferred value into `question_mode:`, and continue without asking
+- if the user's prompt clearly implies a question mode in natural language, infer it, record it in the workflow guidelines subsection, and continue without asking
 - otherwise ask one plain-language startup question about how autonomous the workflow should be and map the answer into one of these modes:
   - fully automated
   - blocking questions only
@@ -38,7 +36,7 @@ At startup:
 - use this exact fallback question when the mode is still ambiguous:
   - `How should I handle decisions as I run this workflow: make reasonable assumptions and only stop for review gates, ask only when something would materially block good work, or check in often on non-obvious choices?`
 - if the user already specified a stage gate mode, use it
-- if the user's prompt clearly implies a stage gate mode in natural language, infer it, write the inferred value into `stage_gate_mode:`, and continue without asking
+- if the user's prompt clearly implies a stage gate mode in natural language, infer it, record it in the workflow guidelines subsection, and continue without asking
 - otherwise ask one plain-language startup question about review pauses and map the answer into a supported stage gate mode
 - use this exact fallback question when the stage-gate preference is still ambiguous:
   - `Do you want me to pause for your approval at the major stage boundaries after idea review, spec review, plan review, and implementation, or should I run straight through unless something is blocked?`
@@ -46,7 +44,7 @@ At startup:
   - if the repository root contains `PLANS.md`, use `execplan`
   - if the repository root `AGENTS.md` says planning and implementation must use `PLANS.md`, use `execplan`
   - otherwise use `standard`
-- write the resolved mode into `execution_plan_mode:`
+- record the resolved mode in the workflow guidelines subsection
 
 Question modes:
 - fully automated:
@@ -145,7 +143,7 @@ Stage gate behavior:
   - the latest review-round path when one exists
   - the orchestrator's rationale for recommending advancement
 - set `workflow_status:` to `awaiting-stage-approval` while paused
-- add `pending_transition:` near the top of the run ledger when paused
+- record `pending_transition` in the workflow guidelines subsection when paused
 - use a plain-text gate prompt that includes:
   - current completed stage
   - pending next stage
@@ -165,16 +163,9 @@ Stage gate behavior:
   - if `stage_gate_mode` is `loop boundaries`, the existing gate before `final-review` may still be used
 
 Run ledger structure:
-- maintain these top-level header fields near the top:
-  - `question_mode`
-  - `stage_gate_mode`
-  - `execution_plan_mode`
-  - `canonical_slug`
-  - `current_stage`
-  - `workflow_status`
-  - `pending_transition` when paused for approval
 - maintain these required sections in the body:
   - `# Purpose / Big Picture`
+  - `### Workflow Guidelines`
   - `## Artifact Map`
   - `## Progress`
   - `## Stage Assessments`
@@ -215,6 +206,7 @@ Run ledger update rules:
 
 Section guidance:
 - `Purpose / Big Picture`: explain what the workflow is trying to deliver, for whom, and what a successful outcome looks like
+- `Workflow Guidelines`: record the current question mode, stage gate mode, execution plan mode, canonical slug, current stage, workflow status, and pending transition when paused, using plain text bullets or short prose rather than frontmatter-like header lines
 - `Artifact Map`: list the current paths for `idea.md`, the latest `idea` review round, `spec.md`, the latest `spec` review round, `plan.md`, the latest `plan` review round, `execution.md` when present, and the latest `final` review round when present
 - `Progress`: use timestamped checkboxes and keep the list current at every stopping point
 - `Stage Assessments`: summarize the current state of each stage, the latest recommendation, and why the orchestrator advanced or looped
@@ -229,25 +221,33 @@ Section guidance:
 
 Use the run ledger as a lifecycle document, not a thin status note. It should explain what happened, why it happened, and what should happen next.
 
-Run ledger header example:
+Run ledger metadata example:
 ```text
-question_mode: blocking questions only
-stage_gate_mode: loop boundaries
-execution_plan_mode: execplan
-canonical_slug: customer-flag-dashboard
-current_stage: spec-create
-workflow_status: in-progress
+# Purpose / Big Picture
+Explain what the workflow is trying to deliver, for whom, and what success looks like.
+
+### Workflow Guidelines
+- Question mode: blocking questions only
+- Stage gate mode: loop boundaries
+- Execution plan mode: execplan
+- Canonical slug: customer-flag-dashboard
+- Current stage: spec-create
+- Workflow status: in-progress
 ```
 
-Paused run-ledger header example:
+Paused run-ledger metadata example:
 ```text
-question_mode: blocking questions only
-stage_gate_mode: loop boundaries
-execution_plan_mode: execplan
-canonical_slug: customer-flag-dashboard
-current_stage: spec-review
-workflow_status: awaiting-stage-approval
-pending_transition: spec-review -> plan-create
+# Purpose / Big Picture
+Explain what the workflow is trying to deliver, for whom, and what success looks like.
+
+### Workflow Guidelines
+- Question mode: blocking questions only
+- Stage gate mode: loop boundaries
+- Execution plan mode: execplan
+- Canonical slug: customer-flag-dashboard
+- Current stage: spec-review
+- Workflow status: awaiting-stage-approval
+- Pending transition: spec-review -> plan-create
 ```
 
 Finish with:

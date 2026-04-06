@@ -68,6 +68,7 @@ In normal use, `workflow-run` will:
 
 - run the stages in order
 - maintain `docs/workflows/{slug}/run.md`
+- keep workflow guidance in plain text under `Purpose / Big Picture` rather than as top-of-file metadata
 - ask plain-language startup questions if your preferred level of autonomy or review pauses is unclear
 - ask blocking questions for materially important decisions
 - pause at major stage boundaries when you ask for review gates

@@ -114,7 +114,7 @@ Structured prompt:
 Use workflow-run to take this from idea through final review.
 question_mode: fully automated
 stage_gate_mode: none
-Prompt: Build a lightweight internal release notes tool for product and engineering teams.
+Build a lightweight internal release notes tool for product and engineering teams.
 ```
 
 Natural-language prompt:
@@ -122,14 +122,7 @@ Natural-language prompt:
 ```text
 Implement the following feature concept. Ask blocking questions. Stop at major steps or milestones so I can review progress.
 Use workflow-run for this feature.
-Prompt: Build a customer-facing saved views experience for our reporting dashboard.
-```
-
-Another natural-language prompt:
-
-```text
-Use workflow-run for this feature and ask only if you have blocking questions.
-Prompt: Build an internal customer feedback triage dashboard.
+Build a customer-facing saved views experience for our reporting dashboard.
 ```
 
 Manual adversarial review:

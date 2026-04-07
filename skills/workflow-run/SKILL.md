@@ -21,6 +21,7 @@ Requirements:
 - derive one canonical `slug` from the starting prompt and keep the workflow dossier under `./docs/workflows/{slug}/`
 - treat `./docs/workflows/{slug}/run.md` as the source of truth for orchestration state, current stage, artifact paths, review-round paths, loop counts, approvals, blockers, and resume context
 - keep workflow guidance in plain text under a `### Workflow Guidelines` subsection inside `# Purpose / Big Picture` rather than as top-of-file header fields
+- treat user interaction history as critical workflow state: important questions asked, answers received, clarifications, unresolved threads, and resulting decisions must be recorded in `run.md`, not left only in chat history
 - keep fixed dossier file names for `idea.md`, `spec.md`, `plan.md`, and `execution.md`
 - create new review rounds under `reviews/<stage>/round-XX.md` instead of overwriting prior reviews
 - consult the stage skills for artifact-specific instructions instead of rewriting their responsibilities here
@@ -179,6 +180,7 @@ Run ledger structure:
 
 Run ledger update rules:
 - update the run ledger at every stopping point and every stage transition
+- update the run ledger after every materially important user interaction, not only at stage boundaries
 - after each `*-create`, update `Artifact Map`, `Progress`, and `Resume Instructions`
 - after each `*-review`, update `Artifact Map`, `Stage Assessments`, `Decision Log`, and `Questions and Assumptions`
 - after each advancement or loop-back decision, record:
@@ -187,6 +189,12 @@ Run ledger update rules:
   - the review recommendation received
   - the orchestrator decision
   - the rationale for that decision
+- after each blocking or materially useful user exchange, record:
+  - what the agent asked
+  - why it asked
+  - the user's answer or clarification
+  - what changed because of that answer
+  - any still-open questions or follow-up needed
 - before each stage-gate pause, record:
   - the completed stage
   - the pending transition
@@ -197,6 +205,7 @@ Run ledger update rules:
   - the question or assumption
   - the answer if one was received
   - the impacted stage or artifact
+- do not summarize a multi-question conversation into a single vague bullet when the individual answers materially shaped the workflow; keep enough detail that another agent can reconstruct why the workflow took its current path
 - after each validation step, add concise evidence showing what was run and what it proved
 - when blocked, update `workflow_status`, `Current Blockers`, and `Resume Instructions`
 - when complete, write `Outcomes & Retrospective` before exiting
@@ -210,9 +219,9 @@ Section guidance:
 - `Artifact Map`: list the current paths for `idea.md`, the latest `idea` review round, `spec.md`, the latest `spec` review round, `plan.md`, the latest `plan` review round, `execution.md` when present, and the latest `final` review round when present
 - `Progress`: use timestamped checkboxes and keep the list current at every stopping point
 - `Stage Assessments`: summarize the current state of each stage, the latest recommendation, and why the orchestrator advanced or looped
-- `Questions and Assumptions`: record every answered question, inferred answer, and assumption that materially shaped an artifact or decision
-- `Decision Log`: record every stage-advancement, loop-back, or reroute decision with rationale
-- `Surprises & Discoveries`: capture unexpected constraints, failed assumptions, or implementation discoveries that changed the workflow
+- `Questions and Assumptions`: record each materially important question, the answer given, why it mattered, any unresolved follow-up, and any inferred assumption used when no answer was available
+- `Decision Log`: record every stage-advancement, loop-back, reroute, or user-driven decision with rationale and note which question, answer, or discovery triggered it when relevant
+- `Surprises & Discoveries`: capture unexpected constraints, failed assumptions, implementation discoveries, or user clarifications that materially changed the workflow
 - `Validation Evidence`: record commands, observed outputs, and what those results proved
 - `Current Blockers`: list active blockers, why they block progress, and whether the workflow is waiting or stopped
 - `Resume Instructions`: state the exact next action for the next agent or resumed run, including the approval decision needed when paused at a stage gate

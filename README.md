@@ -71,6 +71,7 @@ In normal use, `workflow-run` will:
 - keep workflow guidance in plain text under `Purpose / Big Picture` rather than as top-of-file metadata
 - ask plain-language startup questions if your preferred level of autonomy or review pauses is unclear
 - ask blocking questions for materially important decisions
+- record those important questions, answers, clarifications, and resulting decisions in `run.md` as part of the workflow history
 - pause at major stage boundaries when you ask for review gates
 
 Blocking questions should include decisions such as:

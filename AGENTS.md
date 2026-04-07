@@ -61,16 +61,21 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - `execution.md` should capture implementation evidence, deviations, validation, blockers, and follow-up work.
 - In `execplan` environments, use `execution.md` sparingly as an optional evidence appendix rather than a second control document.
 - Orchestration should support a startup question gate with three modes: fully automated, blocking questions only, and ask many questions.
-- Orchestration may infer `question_mode` from clear natural-language instructions. If the mode is ambiguous, it should ask one plain-language startup question about how autonomous it should be, not a CLI-style option prompt.
+- Before stage execution begins, orchestration should resolve startup run options first, then present the resolved setup plus the workflow ask back to the user and require confirmation before starting.
+- Orchestration may infer `question_mode` from clear natural-language instructions. If the mode is ambiguous, it should ask one plain-language startup question about how autonomous it should be using short labeled choices, not just a single open-ended sentence.
 - New architectural directions, major architectural constraints, and new third-party services, SDKs, hosted platforms, or external tools should count as materially important decisions for orchestration.
 - In `blocking questions only`, those decisions should be surfaced as blocking questions before they are locked in.
 - In `fully automated`, those decisions should be self-answered and documented in the run ledger and affected source artifact.
 - Orchestration should also support an optional `stage_gate_mode` that controls whether the workflow pauses for human approval before major stage transitions.
-- If the user's stage-gate preference is ambiguous, orchestration should ask one plain-language startup question about whether to pause at major stage boundaries or run straight through.
+- If the user's stage-gate preference is ambiguous, orchestration should ask one plain-language startup question about whether to pause at major stage boundaries or run straight through using short labeled choices.
+- When the repository is under Git and the workflow is expected to change files, orchestration should also support an optional Git commit policy and ask one plain-language startup question about commit cadence when the user's preference is ambiguous.
 - In v1, support only `none` and `loop boundaries`.
 - `loop boundaries` should pause only after `idea-review`, `spec-review`, `plan-review`, and `implement-plan`, and should not add a completion gate after `final-review`.
 - Stage gates are transition checkpoints, not clarification questions.
 - The run ledger should record question mode, stage gate mode, execution plan mode, current stage, workflow status, and pending transition when relevant in plain text under a `Workflow Guidelines` subsection inside `Purpose / Big Picture`.
+- The run ledger should record the chosen Git commit policy in `Workflow Guidelines` when relevant.
+- The run ledger should record the original workflow ask, resolved startup options, and the user's explicit confirmation to begin.
+- When a workflow is intentionally split across clients or agents, the run ledger should also include a `Client Handoff Plan` subsection under `Purpose / Big Picture` naming the current owner, next recommended owner, stage split, and starting artifact for the next owner.
 - The run ledger should also preserve materially important interaction history: key questions asked, answers received, clarifications, unresolved threads, and the decisions those interactions caused.
 - The run ledger should be maintained as a living lifecycle document with required sections for progress, decisions, discoveries, validation, blockers, and resume instructions.
 - Another agent should be able to resume an in-progress workflow from `docs/workflows/{slug}/run.md` plus the linked artifacts without needing prior thread context.
@@ -102,10 +107,15 @@ After changing the workflow or skill packages, verify:
 - run ledger guidance consistently requires materially important question and answer history to be recorded in enough detail for restartability
 - `question_mode` inference and plain-language startup-question behavior are described consistently across the orchestrator skill and docs
 - `stage_gate_mode` startup-question behavior, inference behavior, and gated transitions are described consistently across the orchestrator skill and docs
+- startup-question formatting consistently prefers short labeled choices with free-form answers still accepted
+- startup preflight behavior consistently resolves options before stage execution and requires a start confirmation summary
+- Git commit policy behavior and startup-question formatting are described consistently across the orchestrator skill and docs
 - `execution_plan_mode` resolution and `execplan` behavior are described consistently across the orchestrator skill and docs
 - run ledger lifecycle sections and update rules are described consistently across the orchestrator skill and docs
 - repo-local `PLANS.md` and project `AGENTS.md` precedence are documented consistently
 - review rounds preserve history instead of instructing in-place overwrite
+- multi-client and multi-agent handoff guidance is described consistently across the orchestrator skill and docs
+- dual reviews on the same artifact are documented as sequential review rounds plus a consolidated decision in `run.md`
 - review skills consistently require independent opening positions, a skeptical perspective, and preservation of meaningful dissent
 - review skills consistently require benchmark or best-practice comparison for non-trivial or user-facing work
 - no review skill is described as owning stage-gate decisions; gates remain owned by `workflow-run`

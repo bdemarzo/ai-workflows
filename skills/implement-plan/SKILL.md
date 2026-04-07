@@ -47,6 +47,10 @@ During implementation:
 - if implementation reveals a need for a new architectural direction, major architectural constraint, or a new third-party service, SDK, hosted platform, or external tool:
   - in fully autonomous orchestration, make the best justified choice and record it in the plan and run ledger
   - otherwise treat it as a blocking question before adopting it
+- if the workflow guidelines specify a Git commit policy, follow it carefully:
+  - only commit workflow-related files
+  - do not include unrelated changes
+  - make sure the plan and run ledger reflect the current state before the commit
 - treat review rounds as historical justification and design input, not as active execution control documents
 
 When you keep `execution.md`, use sections like:

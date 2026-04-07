@@ -66,10 +66,13 @@ Use `workflow-run` when you want the full lifecycle coordinated from a starting 
 
 In normal use, `workflow-run` will:
 
+- resolve run and execution options before stage work begins
 - run the stages in order
 - maintain `docs/workflows/{slug}/run.md`
 - keep workflow guidance in plain text under `Purpose / Big Picture` rather than as top-of-file metadata
-- ask plain-language startup questions if your preferred level of autonomy or review pauses is unclear
+- ask plain-language startup questions with short labeled choices if your preferred level of autonomy or review pauses is unclear
+- ask about Git commit cadence when the repo is under Git and the workflow is likely to change files, unless your preference is already clear
+- once startup options are clear, show you the resolved workflow setup and ask you to confirm before it starts the first stage
 - ask blocking questions for materially important decisions
 - record those important questions, answers, clarifications, and resulting decisions in `run.md` as part of the workflow history
 - pause at major stage boundaries when you ask for review gates
@@ -108,6 +111,27 @@ Use it when you want a harsher reality check on:
 
 It should respond directly in chat and should not create new files.
 
+## Multi-Client Handoffs
+
+You can split a workflow across clients manually. For example:
+
+- use Claude for `idea-create`, `idea-review`, `spec-create`, and `spec-review`
+- use Codex for `plan-create`, `plan-review`, and `implement-plan`
+- use both Claude and Codex for selected review stages
+
+The workflow model already supports this well because `idea.md`, `spec.md`, `plan.md`, review rounds, and `run.md` are meant to be self-contained and restartable.
+
+When handing off between clients:
+
+- use the artifact boundary as the handoff boundary
+- update `run.md` to name the current owner, next recommended owner, and exact artifact path the next client should start from
+- keep the rationale for the handoff in `run.md`
+- if both clients review the same artifact, create sequential review rounds rather than overwriting:
+  - for example, `round-01.md` from one client and `round-02.md` from the other
+- summarize the combined outcome in `run.md` before advancing
+
+This repo does not currently automate client switching. Use `run.md` as the handoff contract.
+
 ## Example Prompts
 
 Structured prompt:
@@ -125,6 +149,51 @@ Natural-language prompt:
 Implement the following feature concept. Ask blocking questions. Stop at major steps or milestones so I can review progress.
 Use workflow-run for this feature.
 Build a customer-facing saved views experience for our reporting dashboard.
+```
+
+Multi-client handoff prompt:
+
+```text
+Use workflow-run for this feature.
+Use Claude for idea and spec work.
+Use Codex for plan creation and implementation.
+Use both Claude and Codex for review stages when useful.
+Ask blocking questions.
+Stop at major stage boundaries so I can review and approve handoffs.
+Build a Portable Markdown Format app with a cross-platform .NET CLI creator and a cross-platform rich reader application.
+```
+
+If `workflow-run` needs a startup clarification, it should prefer a concise numbered-choice question such as:
+
+```text
+How should I handle decisions as I run this workflow?
+1. Make reasonable assumptions and only stop for review gates
+2. Ask only when something would materially block good work
+3. Check in often on non-obvious choices
+Reply with 1, 2, 3, or answer in your own words.
+```
+
+After startup options are resolved, it should present a short start confirmation such as:
+
+```text
+Here is how I will run this workflow:
+- Workflow ask: Build a customer-facing saved views experience for our reporting dashboard.
+- Canonical slug: saved-views-dashboard
+- Decision handling: ask only when something would materially block good work
+- Review pauses: stop for approval after idea review, spec review, plan review, and implementation
+- Git commits: do not create commits automatically
+- Execution plan mode: standard
+Reply 'start' to begin, or tell me what to change.
+```
+
+Git commit preference is also a good startup policy to make explicit. For example:
+
+```text
+How do you want me to handle Git commits for workflow changes?
+1. Do not create commits automatically
+2. Create commits at major approved stage boundaries when files changed
+3. Create a commit after each file-changing stage
+Reply with 1, 2, 3, or answer in your own words.
 ```
 
 Manual adversarial review:

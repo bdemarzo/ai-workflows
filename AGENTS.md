@@ -28,29 +28,65 @@ Use this file for repo-specific operating guidance when changing the skills or d
   - the `name:` field in that skill's frontmatter
   - `README.md`
   - install examples in `README.md`
-- Preserve the folder-by-type artifact path layout for primary artifacts:
-  - `docs/runs/{slug}.md`
-  - `docs/ideas/{topic}.md`
-  - `docs/specs/{featurename}.md`
-  - `docs/plans/{planname}.md`
-  - `docs/executions/{planname}.md`
-- Preserve the typed review path layout for review artifacts:
-  - `docs/reviews/ideas/{topic}.md`
-  - `docs/reviews/specs/{featurename}.md`
-  - `docs/reviews/plans/{planname}.md`
-  - `docs/reviews/finals/{artifactname}.md`
-- Update current review files in place by default.
-- Do not create numbered review files like `-1` or `-2`; if a historical review snapshot must be kept separately, use an explicit dated archive copy instead.
+- Preserve the per-workflow dossier layout:
+  - `docs/workflows/{slug}/run.md`
+  - `docs/workflows/{slug}/idea.md`
+  - `docs/workflows/{slug}/spec.md`
+  - `docs/workflows/{slug}/plan.md`
+  - `docs/workflows/{slug}/execution.md`
+- Preserve the per-workflow review-round layout:
+  - `docs/workflows/{slug}/reviews/idea/round-01.md`
+  - `docs/workflows/{slug}/reviews/spec/round-01.md`
+  - `docs/workflows/{slug}/reviews/plan/round-01.md`
+  - `docs/workflows/{slug}/reviews/final/round-01.md`
+- Create a new review round for each review pass. Do not overwrite older rounds.
+- Use zero-padded review round names such as `round-01.md`, `round-02.md`, and `round-03.md`.
 - Review stages should stay artifact-specific and should adapt reviewer personas based on scope, risk, and affected surface area.
+- When a workflow has meaningful UI, UX, navigation, or interaction surface area, idea-review and spec-review should include an explicit UX or product-design perspective, and plan-review should include one when delivery risk depends on interface behavior.
+- Review methods should require independent opening positions, an explicitly skeptical or risk-focused perspective, and preservation of meaningful dissent when important weaknesses remain.
+- For non-trivial or user-facing work, review stages should benchmark against industry-standard practices and how comparable successful products or applications solve similar problems.
+- Review rounds should be written as structured stakeholder debates that still end in actionable suggestions and an explicit recommendation.
 - The persona method belongs in the skill body, not in the stage name.
 - `workflow-run` is a meta-skill, not a stage. It may coordinate the stage skills, keep a run ledger, and decide when to advance.
+- `skeptical-review` is an optional manual pressure-test skill, not a workflow stage, not part of the canonical dossier layout, and should return feedback directly instead of creating new files.
 - Review stages should produce explicit recommendations and evidence. They should not be written as the final authority on stage advancement.
-- Optional repo-local guidance such as `PLANS.md` is supplementary. The canonical workflow and copied skill packages must still be usable when that guidance file is absent.
-- After ideation, downstream artifacts should reuse one canonical slug by default. If a workflow intentionally splits or merges scope, the artifact body should explain the divergence and link to the source artifact.
+- Repo-local `PLANS.md` and project `AGENTS.md` may be authoritative for planning and implementation behavior. When a project requires `PLANS.md`, that requirement should outrank portable defaults.
+- The workflow dossier slug is the default traceability anchor. Avoid reintroducing separate stage-level naming schemes unless there is a strong reason.
+- If a workflow intentionally splits or merges scope, create or reference the related workflow dossier and explain the relationship in the run ledger and affected stage files.
+- Create artifacts should be self-contained enough for a later contributor to understand the stage without reopening the entire conversation.
+- `idea.md` should stay idea-level, but should be outcome-first, self-contained, and clear about how value would be recognized.
+- `spec.md` should stay contract-level, but should be self-contained enough for planning from the artifact alone and should capture observable acceptance behavior and important boundary conditions.
+- `plan.md` should behave like a living implementation plan and keep sections such as `Progress`, `Surprises & Discoveries`, `Decision Log`, `Validation and Acceptance`, and `Outcomes & Retrospective` current as work evolves.
+- In `execplan` environments, `plan.md` is the authoritative implementation document once implementation starts and should be restartable without relying on `run.md`.
+- `execution.md` should capture implementation evidence, deviations, validation, blockers, and follow-up work.
+- In `execplan` environments, use `execution.md` sparingly as an optional evidence appendix rather than a second control document.
 - Orchestration should support a startup question gate with three modes: fully automated, blocking questions only, and ask many questions.
-- Orchestration may infer `question_mode` from clear natural-language instructions. If the mode is ambiguous, it should ask the standardized fallback question once.
-- The run ledger should include a top-level `question_mode:` field near the top so resumed orchestration behaves consistently.
+- Before stage execution begins, orchestration should resolve startup run options first, then present the resolved setup plus the workflow ask back to the user and require confirmation before starting.
+- Orchestration may infer `question_mode` from clear natural-language instructions. If the mode is ambiguous, it should ask one plain-language startup question about how autonomous it should be using short labeled choices, not just a single open-ended sentence.
+- New architectural directions, major architectural constraints, and new third-party services, SDKs, hosted platforms, or external tools should count as materially important decisions for orchestration.
+- In `blocking questions only`, those decisions should be surfaced as blocking questions before they are locked in.
+- In `fully automated`, those decisions should be self-answered and documented in the run ledger and affected source artifact.
+- Orchestration should also support an optional `stage_gate_mode` that controls whether the workflow pauses for human approval before major stage transitions.
+- If the user's stage-gate preference is ambiguous, orchestration should ask one plain-language startup question about whether to pause at major stage boundaries or run straight through using short labeled choices.
+- When the repository is under Git and the workflow is expected to change files, orchestration should also support an optional Git commit policy and ask one plain-language startup question about commit cadence when the user's preference is ambiguous.
+- In v1, support only `none` and `loop boundaries`.
+- `loop boundaries` should pause only after `idea-review`, `spec-review`, `plan-review`, and `implement-plan`, and should not add a completion gate after `final-review`.
+- Stage gates are transition checkpoints, not clarification questions.
+- The run ledger should record question mode, stage gate mode, execution plan mode, current stage, workflow status, and pending transition when relevant in plain text under a `Workflow Guidelines` subsection inside `Purpose / Big Picture`.
+- The run ledger should record the chosen Git commit policy in `Workflow Guidelines` when relevant.
+- The run ledger should record the original workflow ask, resolved startup options, and the user's explicit confirmation to begin.
+- When a workflow is intentionally split across clients or agents, the run ledger should also include a `Client Handoff Plan` subsection under `Purpose / Big Picture` naming the current owner, next recommended owner, stage split, and starting artifact for the next owner.
+- The run ledger should also preserve materially important interaction history: key questions asked, answers received, clarifications, unresolved threads, and the decisions those interactions caused.
+- The run ledger should be maintained as a living lifecycle document with required sections for progress, decisions, discoveries, validation, blockers, and resume instructions.
+- Another agent should be able to resume an in-progress workflow from `docs/workflows/{slug}/run.md` plus the linked artifacts without needing prior thread context.
 - Orchestration should enforce hard stop rules for repeated unresolved issues, bounded loop counts, required approvals, missing access, or materially blocking ambiguity.
+- When paused at a stage gate, `workflow_status` should be `awaiting-stage-approval` and `Resume Instructions` should state the approval decision needed.
+- In `execplan` environments, `workflow-run` should determine `execution_plan_mode` automatically from root `PLANS.md` or project `AGENTS.md`.
+- In `execplan` environments, `run.md` should be reduced during implementation to orchestration data rather than duplicating detailed execution progress.
+- Accepted idea-review decisions should be consolidated back into `idea.md` before spec creation advances.
+- Accepted spec-review decisions should be consolidated back into `spec.md` before planning advances.
+- Accepted plan-review decisions should be consolidated back into `plan.md` before implementation starts.
+- Review rounds should remain design and review evidence, not alternative execution sources of truth.
 
 ## Consistency Checks
 
@@ -61,12 +97,30 @@ After changing the workflow or skill packages, verify:
 - each skill's `name:` matches its folder name
 - `README.md` and the skill package surface describe the same stage names and order
 - artifact path references are consistent across all skills and docs
+- dossier path references are consistent across all skills and docs
+- review-round path references are consistent across all skills and docs
 - `workflow-run` is documented consistently as an orchestrator rather than a workflow stage
 - traceability expectations are consistent across the create, review, implementation, and final review stages
+- idea and spec guidance clearly require self-containment, observable outcomes, and consolidation of accepted review decisions back into the source artifact
 - run ledger path references are consistent across the orchestrator skill and docs
-- run ledger examples and guidance consistently use a top-level `question_mode:` field
-- `question_mode` inference and fallback-question behavior are described consistently across the orchestrator skill and docs
-- optional repo-local guidance such as `PLANS.md` is documented as optional rather than assumed
+- run ledger examples and guidance consistently place workflow guidance under `Purpose / Big Picture` instead of as top-of-file header fields
+- run ledger guidance consistently requires materially important question and answer history to be recorded in enough detail for restartability
+- `question_mode` inference and plain-language startup-question behavior are described consistently across the orchestrator skill and docs
+- `stage_gate_mode` startup-question behavior, inference behavior, and gated transitions are described consistently across the orchestrator skill and docs
+- startup-question formatting consistently prefers short labeled choices with free-form answers still accepted
+- startup preflight behavior consistently resolves options before stage execution and requires a start confirmation summary
+- Git commit policy behavior and startup-question formatting are described consistently across the orchestrator skill and docs
+- `execution_plan_mode` resolution and `execplan` behavior are described consistently across the orchestrator skill and docs
+- run ledger lifecycle sections and update rules are described consistently across the orchestrator skill and docs
+- repo-local `PLANS.md` and project `AGENTS.md` precedence are documented consistently
+- review rounds preserve history instead of instructing in-place overwrite
+- multi-client and multi-agent handoff guidance is described consistently across the orchestrator skill and docs
+- dual reviews on the same artifact are documented as sequential review rounds plus a consolidated decision in `run.md`
+- review skills consistently require independent opening positions, a skeptical perspective, and preservation of meaningful dissent
+- review skills consistently require benchmark or best-practice comparison for non-trivial or user-facing work
+- no review skill is described as owning stage-gate decisions; gates remain owned by `workflow-run`
+- idea-review and spec-review outputs are documented as inputs to source-artifact consolidation rather than alternative truth sources
+- plan-review outputs are documented as inputs to plan consolidation rather than alternative execution control docs
 - skill folders can still be copied as-is into local Claude and Codex skill directories
 
 ## Current Limitations

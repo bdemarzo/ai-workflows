@@ -1,24 +1,30 @@
 ---
 name: final-review
-description: Review the full workflow outcome for architectural quality, product correctness, process fit, and contract fidelity. Use when the user wants review output in ./docs/reviews/finals/{artifactname}.md after implementation.
+description: Review the full workflow outcome for architectural quality, product correctness, process fit, and contract fidelity. Use when the user wants review output in ./docs/workflows/{slug}/reviews/final/round-01.md after implementation.
 ---
 
 # Final Review
 
-Use this skill to review the full workflow outcome after implementation and write the review artifact to `./docs/reviews/finals/{artifactname}.md`.
+Use this skill to review the full workflow outcome after implementation and write the next review round to `./docs/workflows/{slug}/reviews/final/round-XX.md`.
 
 Input:
 - the implemented change, diff, or implementation summary
 - the relevant idea, spec, and plan files
 - the execution summary when present
+- the run ledger when present
 - any validation output that should stay in view
 
 Requirements:
-- derive `artifactname` from the canonical slug or `planname` being reviewed rather than inventing a freeform name
-- write the review artifact to `./docs/reviews/finals/{artifactname}.md`
-- update the current review file in place by default rather than creating numbered copies
+- derive `slug` from the workflow dossier being reviewed
+- write the next review round to `./docs/workflows/{slug}/reviews/final/round-XX.md`
+- create a new zero-padded round file for each pass rather than overwriting earlier rounds
 - do not overwrite the source artifacts
 - list the exact reviewed artifact paths in the review artifact
+- link the immediately prior final-review round when one exists and summarize what changed since that round
+- structure the review as a stakeholder debate that still ends in an actionable recommendation
+- have reviewers form independent opening positions before converging on a recommendation
+- include at least one explicitly skeptical or risk-focused perspective that tries to find reasons the workflow outcome should not be accepted yet
+- when the outcome is user-facing, platform-facing, or process-sensitive, include at least one perspective that compares it against industry-standard practices and strong comparable products or applications
 
 Default reviewer perspectives:
 - architect
@@ -29,15 +35,32 @@ Review adaptation:
 - choose reviewer personas based on artifact scope, risk, and affected surface area
 - use fewer perspectives for narrow, low-risk changes
 - use broader perspectives for high-risk, user-facing, cross-functional, or process-sensitive changes
+- do not optimize for reviewer consensus; preserve strong dissent when material risks, regressions, or quality gaps remain
 
 Focus on:
-- fidelity across the idea, spec, plan, implementation, and validation chain
+- fidelity across the idea, spec, plan, implementation, execution, and validation chain
 - architectural quality
 - product correctness
 - fit against the intended contract
 - process fit and traceability gaps
 - regressions and edge cases
 - insufficient validation
+- where the delivered result falls short of industry-standard practice or comparable successful products or applications when relevant
+- the strongest reasons not to accept the outcome yet
+
+Write the review artifact with sections like:
+- reviewed artifacts
+- prior review rounds when relevant
+- participants
+- review scope
+- opening positions
+- benchmark and best-practice comparison when relevant
+- debate
+- points of agreement
+- points of disagreement
+- suggested revisions
+- recommendation
+- outstanding dissent
 
 Finish with an explicit recommendation:
 - `Recommendation: loop back to idea-create`

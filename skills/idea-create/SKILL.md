@@ -28,6 +28,20 @@ Requirements:
   - `Revision History`
 - include lightweight evidence-of-value guidance or success signals without turning the idea into a metric plan
 - keep the output focused on the idea itself, not on implementation planning
+- prefer leaving later-stage detail unresolved rather than prematurely inventing spec or engineering detail
+
+Stage boundary rule:
+- `idea.md` should explain why the idea matters and what kind of product direction is worth exploring
+- `idea.md` should not try to fully define how the product must behave; that belongs in `spec.md`
+- `idea.md` should not try to define how engineering will build it; that belongs in `plan.md`
+- when a detail starts to read like product contract language, acceptance behavior, workflow-by-workflow UX definition, route definition, privacy rule, business rule, implementation breakdown, or technical design, stop and move that detail out of the idea
+- keep only high-level success framing, major tradeoffs, and open questions that help decide whether the idea is worth pursuing
+
+Decision rule:
+- if a detail is only needed to explain the opportunity, value, risk, or high-level direction, keep it in the idea
+- if a detail changes exact user-visible behavior, correctness expectations, privacy handling, or scope boundaries, leave it for the spec
+- if a detail exists only so engineering can estimate, sequence, or implement the work, leave it for the plan
+- when unsure, bias toward less detail and capture the uncertainty in `Open Questions` instead of drafting the next stage early
 
 Focus on:
 - the user problem or opportunity
@@ -41,6 +55,7 @@ Do not:
 - write a functional spec
 - write an implementation plan
 - settle engineering details that belong later in the workflow
+- include detailed acceptance criteria, route inventories, API contracts, data models, file/module breakdowns, migration mechanics, or task sequencing
 
 Write the idea artifact with sections like:
 - title
@@ -56,5 +71,11 @@ Write the idea artifact with sections like:
 - open questions
 - revision history
 - reasons not to do this
+
+Before finalizing `idea.md`, perform a scope check:
+- remove or simplify any section that reads like `functional requirements`, `acceptance criteria`, `routes`, `privacy rules`, `business rules`, `implementation approach`, `milestones`, or `concrete steps`
+- convert prematurely specific downstream detail into either:
+  - a higher-level product direction statement, or
+  - an `Open Questions` entry for later stages
 
 The output of this stage should be ready for `idea-review`.

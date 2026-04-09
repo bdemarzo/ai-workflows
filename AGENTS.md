@@ -57,6 +57,7 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - `idea.md` should stay idea-level, but should be outcome-first, self-contained, and clear about how value would be recognized.
 - `spec.md` should stay contract-level, but should be self-contained enough for planning from the artifact alone and should capture observable acceptance behavior and important boundary conditions.
 - `plan.md` should behave like a living implementation plan and keep sections such as `Progress`, `Surprises & Discoveries`, `Decision Log`, `Validation and Acceptance`, and `Outcomes & Retrospective` current as work evolves.
+- Create-stage skills should bias toward deferring next-stage detail rather than filling it in early: `idea.md` should not drift into contract language, `spec.md` should not drift into execution design, and `plan.md` should push user-facing contract gaps back to the spec instead of silently resolving them.
 - In `execplan` environments, `plan.md` is the authoritative implementation document once implementation starts and should be restartable without relying on `run.md`.
 - `execution.md` should capture implementation evidence, deviations, validation, blockers, and follow-up work.
 - In `execplan` environments, use `execution.md` sparingly as an optional evidence appendix rather than a second control document.
@@ -102,6 +103,7 @@ After changing the workflow or skill packages, verify:
 - `workflow-run` is documented consistently as an orchestrator rather than a workflow stage
 - traceability expectations are consistent across the create, review, implementation, and final review stages
 - idea and spec guidance clearly require self-containment, observable outcomes, and consolidation of accepted review decisions back into the source artifact
+- create-stage skills include explicit stage-boundary checks that remove or defer next-stage detail instead of letting scope bleed forward
 - run ledger path references are consistent across the orchestrator skill and docs
 - run ledger examples and guidance consistently place workflow guidance under `Purpose / Big Picture` instead of as top-of-file header fields
 - run ledger guidance consistently requires materially important question and answer history to be recorded in enough detail for restartability

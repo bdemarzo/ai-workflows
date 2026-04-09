@@ -31,6 +31,12 @@ Requirements:
   - `Revision History`
 - fold accepted review decisions back into the spec so the latest `spec.md` is the current contract
 - keep the spec as the source of truth for user-visible behavior, scope, and correctness
+- prefer leaving engineering implementation detail unresolved rather than prematurely turning the spec into a plan
+
+Stage boundary rule:
+- `spec.md` should define what must be true for the user and product, not how engineering will implement it
+- the spec should be concrete about behavior, correctness, scope, and constraints, but should stop short of execution design
+- when a detail starts to read like sequencing, work packages, code structure, architecture decision records, integration mechanics, migration steps, or validation command lists, stop and move that detail out of the spec
 
 Keep these details in the spec:
 - user-visible behavior
@@ -54,6 +60,7 @@ Do not put these details in the spec:
 Decision rule:
 - if a detail is only needed so engineering can implement it, leave it for the plan
 - if it changes user expectations, privacy, or correctness, keep it in the spec
+- when unsure, bias toward preserving the user-facing contract and leave engineering mechanics unresolved
 
 Write the spec with sections like:
 - title
@@ -74,5 +81,11 @@ Write the spec with sections like:
 - observable acceptance behavior or examples
 - open questions
 - revision history
+
+Before finalizing `spec.md`, perform a scope check:
+- remove or simplify sections that read like `plan of work`, `milestones`, `concrete steps`, `module ownership`, `file lists`, `dependency rollout`, `migration sequence`, or `validation commands`
+- convert prematurely specific implementation detail into either:
+  - a product-facing constraint or requirement if it truly affects user expectations, privacy, or correctness, or
+  - an `Open Questions` item to be decided in planning
 
 The output of this stage should be ready for `spec-review`.

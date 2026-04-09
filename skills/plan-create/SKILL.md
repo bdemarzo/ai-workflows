@@ -42,6 +42,7 @@ Decision rule:
 - if the plan would introduce a new architectural direction, major architectural constraint, or a new third-party service, SDK, hosted platform, or external tool, treat that as materially important:
   - in fully autonomous orchestration, decide it explicitly and record the reasoning, tradeoffs, and validation implications in the plan
   - otherwise surface it as a blocking question before locking it into the plan
+- when unsure, do not backfill product discovery into the plan; push unclear user-facing contract questions back to the spec
 
 Write the plan in prose-first form with sections like:
 - title
@@ -75,5 +76,6 @@ Do not:
 - restate product policy unless the spec is ambiguous
 - mix in brainstorming
 - begin implementation
+- silently repair product-contract gaps that should have been clarified in the spec
 
 The output of this stage should be ready for `plan-review`.

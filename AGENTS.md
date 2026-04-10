@@ -45,12 +45,15 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - When a workflow has meaningful UI, UX, navigation, or interaction surface area, idea-review and spec-review should include an explicit UX or product-design perspective, and plan-review should include one when delivery risk depends on interface behavior.
 - Review methods should require independent opening positions, an explicitly skeptical or risk-focused perspective, and preservation of meaningful dissent when important weaknesses remain.
 - For non-trivial or user-facing work, review stages should benchmark against industry-standard practices and how comparable successful products or applications solve similar problems.
-- Review rounds should be written as structured stakeholder debates that still end in actionable suggestions and an explicit recommendation.
+- Permanent workflow artifacts should be skimmable and concise by default; preserve extra detail only when it materially changes a decision, a constraint, or restartability.
+- Review rounds should be findings-first by default, not long stakeholder-debate transcripts.
+- Review methods may use personas and debate internally, but saved artifacts should avoid persona-by-persona restatement and repeated framing when a short summary is sufficient.
 - The persona method belongs in the skill body, not in the stage name.
 - `workflow-run` is a meta-skill, not a stage. It may coordinate the stage skills, keep a run ledger, and decide when to advance.
 - `skeptical-review` is an optional manual pressure-test skill, not a workflow stage, not part of the canonical dossier layout, and should return feedback directly instead of creating new files.
 - Review stages should produce explicit recommendations and evidence. They should not be written as the final authority on stage advancement.
-- Repo-local `PLANS.md` and project `AGENTS.md` may be authoritative for planning and implementation behavior. When a project requires `PLANS.md`, that requirement should outrank portable defaults.
+- When these workflow skills are active, their dossier contract should be treated as authoritative for workflow structure, stage order, and execution control.
+- Repo-local `PLANS.md` and project `AGENTS.md` may be read as project context, but they should not silently override this workflow contract unless the user explicitly asks for repo-native planning mode.
 - The workflow dossier slug is the default traceability anchor. Avoid reintroducing separate stage-level naming schemes unless there is a strong reason.
 - If a workflow intentionally splits or merges scope, create or reference the related workflow dossier and explain the relationship in the run ledger and affected stage files.
 - Create artifacts should be self-contained enough for a later contributor to understand the stage without reopening the entire conversation.
@@ -58,9 +61,10 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - `spec.md` should stay contract-level, but should be self-contained enough for planning from the artifact alone and should capture observable acceptance behavior and important boundary conditions.
 - `plan.md` should behave like a living implementation plan and keep sections such as `Progress`, `Surprises & Discoveries`, `Decision Log`, `Validation and Acceptance`, and `Outcomes & Retrospective` current as work evolves.
 - Create-stage skills should bias toward deferring next-stage detail rather than filling it in early: `idea.md` should not drift into contract language, `spec.md` should not drift into execution design, and `plan.md` should push user-facing contract gaps back to the spec instead of silently resolving them.
-- In `execplan` environments, `plan.md` is the authoritative implementation document once implementation starts and should be restartable without relying on `run.md`.
+- Create-stage artifacts should favor short summaries, compact bullet lists, or small tables when they communicate the stage result clearly; avoid essay-style buildup when the shorter form is sufficient.
+- `plan.md` is the authoritative implementation document for this workflow once implementation starts and should be restartable without relying on `run.md`.
 - `execution.md` should capture implementation evidence, deviations, validation, blockers, and follow-up work.
-- In `execplan` environments, use `execution.md` sparingly as an optional evidence appendix rather than a second control document.
+- Use `execution.md` sparingly as an optional evidence appendix rather than a second control document.
 - Orchestration should support a startup question gate with three modes: fully automated, blocking questions only, and ask many questions.
 - Before stage execution begins, orchestration should resolve startup run options first, then present the resolved setup plus the workflow ask back to the user and require confirmation before starting.
 - Orchestration may infer `question_mode` from clear natural-language instructions. If the mode is ambiguous, it should ask one plain-language startup question about how autonomous it should be using short labeled choices, not just a single open-ended sentence.
@@ -82,8 +86,6 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - Another agent should be able to resume an in-progress workflow from `docs/workflows/{slug}/run.md` plus the linked artifacts without needing prior thread context.
 - Orchestration should enforce hard stop rules for repeated unresolved issues, bounded loop counts, required approvals, missing access, or materially blocking ambiguity.
 - When paused at a stage gate, `workflow_status` should be `awaiting-stage-approval` and `Resume Instructions` should state the approval decision needed.
-- In `execplan` environments, `workflow-run` should determine `execution_plan_mode` automatically from root `PLANS.md` or project `AGENTS.md`.
-- In `execplan` environments, `run.md` should be reduced during implementation to orchestration data rather than duplicating detailed execution progress.
 - Accepted idea-review decisions should be consolidated back into `idea.md` before spec creation advances.
 - Accepted spec-review decisions should be consolidated back into `spec.md` before planning advances.
 - Accepted plan-review decisions should be consolidated back into `plan.md` before implementation starts.
@@ -112,14 +114,14 @@ After changing the workflow or skill packages, verify:
 - startup-question formatting consistently prefers short labeled choices with free-form answers still accepted
 - startup preflight behavior consistently resolves options before stage execution and requires a start confirmation summary
 - Git commit policy behavior and startup-question formatting are described consistently across the orchestrator skill and docs
-- `execution_plan_mode` resolution and `execplan` behavior are described consistently across the orchestrator skill and docs
 - run ledger lifecycle sections and update rules are described consistently across the orchestrator skill and docs
-- repo-local `PLANS.md` and project `AGENTS.md` precedence are documented consistently
+- repo-local `PLANS.md` and project `AGENTS.md` are documented as optional context rather than silent overrides
 - review rounds preserve history instead of instructing in-place overwrite
 - multi-client and multi-agent handoff guidance is described consistently across the orchestrator skill and docs
 - dual reviews on the same artifact are documented as sequential review rounds plus a consolidated decision in `run.md`
 - review skills consistently require independent opening positions, a skeptical perspective, and preservation of meaningful dissent
 - review skills consistently require benchmark or best-practice comparison for non-trivial or user-facing work
+- review skills consistently describe saved artifacts as concise findings-first outputs rather than debate transcripts
 - no review skill is described as owning stage-gate decisions; gates remain owned by `workflow-run`
 - idea-review and spec-review outputs are documented as inputs to source-artifact consolidation rather than alternative truth sources
 - plan-review outputs are documented as inputs to plan consolidation rather than alternative execution control docs

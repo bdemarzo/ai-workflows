@@ -22,6 +22,7 @@ Requirements:
 - update the file in place if it already exists
 - keep the spec self-contained enough for planning without relying on prior thread context
 - make the spec concrete enough that planning can proceed from `spec.md` alone without mining prior review rounds
+- keep the permanent artifact concise and skimmable by default; preserve extra detail only when it materially changes the product contract, a constraint, or restartability
 - link back to the source idea artifact path when the spec was created from one
 - if a workflow split created this dossier, explain that relationship in the spec body
 - include rich local tracking in the artifact with:
@@ -49,6 +50,7 @@ Keep these details in the spec:
 - concrete user-facing scenarios or examples
 - boundary conditions and edge cases that affect correctness
 - observable acceptance behavior, not only abstract acceptance language
+- compact structure over essay-style explanation; prefer bullets or tables when they communicate the contract more clearly
 
 Do not put these details in the spec:
 - implementation sequencing
@@ -61,6 +63,7 @@ Decision rule:
 - if a detail is only needed so engineering can implement it, leave it for the plan
 - if it changes user expectations, privacy, or correctness, keep it in the spec
 - when unsure, bias toward preserving the user-facing contract and leave engineering mechanics unresolved
+- if a short requirement, example list, or table is enough, do not expand it into long prose
 
 Write the spec with sections like:
 - title
@@ -87,5 +90,6 @@ Before finalizing `spec.md`, perform a scope check:
 - convert prematurely specific implementation detail into either:
   - a product-facing constraint or requirement if it truly affects user expectations, privacy, or correctness, or
   - an `Open Questions` item to be decided in planning
+- compress repeated examples, requirement restatements, or rationale when one clear statement is sufficient
 
 The output of this stage should be ready for `spec-review`.

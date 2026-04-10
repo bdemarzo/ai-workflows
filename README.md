@@ -4,6 +4,8 @@ Portable workflow skills for AI-assisted product and engineering work.
 
 This repo packages a structured workflow you can run inside skill-capable agent apps such as Codex or Claude. The default flow moves from idea, to spec, to plan, to implementation, to final review, while keeping a workflow dossier under `docs/workflows/{slug}/`.
 
+The intended output style is concise by default: permanent workflow artifacts should read like working documents, not transcripts of everything the model thought about.
+
 ## What You Get
 
 - `workflow-run` to coordinate the full workflow from a starting prompt
@@ -77,13 +79,19 @@ In normal use, `workflow-run` will:
 - record those important questions, answers, clarifications, and resulting decisions in `run.md` as part of the workflow history
 - pause at major stage boundaries when you ask for review gates
 
+Permanent artifacts should stay skimmable:
+
+- deep questioning and internal reasoning may happen during a stage, but the saved document should keep only the decisions, evidence, and open issues needed to move forward safely
+- review rounds are findings-first by default, not full stakeholder-debate transcripts
+- when a short summary, bullet list, or table is enough, prefer that over long prose
+
 Blocking questions should include decisions such as:
 
 - new architectural directions or major architectural constraints
 - new third-party services, SDKs, hosted platforms, or external tools
 - material security, privacy, cost, operational, or vendor-lock-in tradeoffs
 
-If the target repo requires `PLANS.md`, or its `AGENTS.md` says planning and implementation must use `PLANS.md`, the workflow should treat `plan.md` as the authoritative execution document once implementation starts.
+When these workflow skills are active, the workflow dossier remains authoritative. Repo-local `PLANS.md` can be read as project context, but it should not silently override this workflow's stage structure, artifact structure, or execution control unless the user explicitly asks for repo-native planning mode.
 
 ## Review Style
 
@@ -96,6 +104,12 @@ They should:
 - include a skeptical or risk-focused perspective
 - preserve meaningful dissent when important weaknesses remain
 - compare non-trivial or user-facing work against industry-standard practice and strong comparable products
+
+But the saved review artifact should stay compact:
+
+- keep named reviewer lenses without transcribing the whole debate
+- merge overlapping critiques instead of repeating them persona by persona
+- preserve only the disagreements that materially affect the recommendation
 
 ## Optional Manual Skill
 
@@ -244,4 +258,4 @@ To install everything, copy each folder under `skills/` into:
 
 - The skills are intentionally client-neutral.
 - This repo currently targets Claude and Codex.
-- Repo-local `PLANS.md` and project `AGENTS.md` can override portable planning and implementation defaults.
+- Repo-local `PLANS.md` can be useful project context, but it should not silently override this workflow contract.

@@ -21,6 +21,7 @@ Requirements:
 - keep the idea self-contained enough that a later reader can understand the opportunity without prior thread context
 - open with outcome-first framing that states what changes for the user, why it matters, and how value would be observed if the idea succeeds
 - keep the dossier slug stable unless the workflow intentionally splits into a new dossier
+- keep the permanent artifact concise and skimmable by default; preserve extra detail only when it materially changes a decision, a constraint, or restartability
 - include rich local tracking in the artifact with:
   - `Source Context` when relevant
   - `Status`
@@ -50,12 +51,14 @@ Focus on:
 - how success would be recognized at a high level
 - why the idea is worth pursuing or rejecting
 - open questions that still need review
+- concise phrasing over long narrative buildup
 
 Do not:
 - write a functional spec
 - write an implementation plan
 - settle engineering details that belong later in the workflow
 - include detailed acceptance criteria, route inventories, API contracts, data models, file/module breakdowns, migration mechanics, or task sequencing
+- repeat the same framing in multiple sections when one short summary is enough
 
 Write the idea artifact with sections like:
 - title
@@ -77,5 +80,6 @@ Before finalizing `idea.md`, perform a scope check:
 - convert prematurely specific downstream detail into either:
   - a higher-level product direction statement, or
   - an `Open Questions` entry for later stages
+- compress repeated rationale, examples, or risk descriptions when they do not materially change the decision
 
 The output of this stage should be ready for `idea-review`.

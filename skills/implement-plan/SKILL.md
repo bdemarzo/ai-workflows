@@ -5,14 +5,6 @@ description: Implement an approved engineering plan in bounded, validated steps.
 
 # Implement Plan
 
-Before implementing, inspect the repository root for `PLANS.md` and `AGENTS.md`.
-
-Execution-plan mode:
-- if the repository root contains `PLANS.md`, or if the repository's `AGENTS.md` says planning and implementation must use `PLANS.md`, treat that guidance as authoritative
-- when that guidance is authoritative, operate in `execplan` mode
-- when neither file requires `PLANS.md`, operate in `standard` mode
-- `PLANS.md` is optional only when the project does not require it
-
 Use this skill to carry out an approved plan from `./docs/workflows/{slug}/plan.md`.
 
 This is an engineer-led implementation stage.
@@ -24,9 +16,8 @@ Requirements:
 - keep the plan current as a living document when implementation decisions, discoveries, or progress change it
 - keep any execution summary in `./docs/workflows/{slug}/execution.md` if a run log is needed
 - if an execution summary is written, link back to the source plan artifact path
-- in `execplan` mode, do not require `run.md` to reconstruct implementation state
-- in `execplan` mode, prefer recording substantive progress, decisions, discoveries, and validation in `plan.md`
-- in `execplan` mode, use `execution.md` only as an optional evidence appendix when a separate run log is genuinely useful
+- when this workflow skill is active, follow `./docs/workflows/{slug}/plan.md` as the authoritative implementation control document for the workflow
+- repo-local `PLANS.md` may be read as optional project context, but it must not replace this workflow's plan, stage contract, or execution control unless the user explicitly asks for repo-native planning mode
 
 Treat the spec as the source of truth for user-visible behavior, privacy, and correctness.
 
@@ -34,7 +25,7 @@ Treat the plan as the source of truth for sequencing and implementation approach
 - follow the ordered work items
 - keep changes small and bounded
 - stop if the plan is no longer valid
-- once implementation starts in `execplan` mode, proceed milestone by milestone without asking for next steps unless a true blocker or explicit stage gate requires it
+- proceed milestone by milestone without asking for next steps unless a true blocker or explicit stage gate requires it
 
 During implementation:
 - make the minimum change required for each step

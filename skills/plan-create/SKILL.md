@@ -5,14 +5,6 @@ description: Turn an approved spec into an implementation-ready engineering plan
 
 # Plan Create
 
-Before planning, inspect the repository root for `PLANS.md` and `AGENTS.md`.
-
-Execution-plan mode:
-- if the repository root contains `PLANS.md`, or if the repository's `AGENTS.md` says planning and implementation must use `PLANS.md`, treat that guidance as authoritative
-- when that guidance is authoritative, operate in `execplan` mode
-- when neither file requires `PLANS.md`, operate in `standard` mode
-- `PLANS.md` is optional only when the project does not require it
-
 Use this skill to produce an implementation-ready plan in `./docs/workflows/{slug}/plan.md`.
 
 This is an architect-led creation stage.
@@ -23,14 +15,15 @@ Requirements:
 - link to the source spec artifact path in the plan body
 - keep the plan self-contained enough that a later engineer can resume from the plan plus the repository without needing `run.md`
 - make clear near the top what changes for the user or system and how successful delivery will be observed
+- keep the permanent artifact concise and skimmable by default; preserve longer rationale only when the reasoning is non-obvious and materially affects implementation safety
+- when this workflow skill is active, treat `./docs/workflows/{slug}/plan.md` as the authoritative execution plan for the workflow
+- repo-local `PLANS.md` may be read as optional project context, but it must not replace this workflow's plan structure, workflow stage contract, or execution control unless the user explicitly asks for repo-native planning mode
 - treat the plan as a living document and keep these sections current as the plan changes:
   - `Progress`
   - `Surprises & Discoveries`
   - `Decision Log`
   - `Outcomes & Retrospective`
 - define non-obvious terms in plain language instead of assuming prior repo knowledge
-- in `execplan` mode, treat `./docs/workflows/{slug}/plan.md` as the repository's executable plan for this workflow, not just a supporting artifact
-- in `execplan` mode, ensure the plan is strong enough to serve as the primary implementation control document once implementation starts
 - when revising after `plan-review`, fold accepted review decisions back into `plan.md` so implementation-critical details do not remain stranded in review rounds
 - when the plan is ready for execution, mark that state clearly in the plan body
 
@@ -65,7 +58,12 @@ Write the plan in prose-first form with sections like:
 - open questions
 - revision history
 
-In `execplan` mode, require these expectations:
+Style rule:
+- focus the plan on decisions, sequencing, interfaces, validation, and recovery
+- prefer compact bullets or short prose blocks over long explanatory narrative
+- avoid restating the same intent, dependency, or risk in multiple sections unless the repetition materially improves implementation safety
+
+Require these expectations:
 - the plan must be restartable from `plan.md` plus the repository alone
 - treat restartability from `plan.md` plus the repository alone as a hard requirement, not a nice-to-have
 - `Progress`, `Decision Log`, `Surprises & Discoveries`, `Validation and Acceptance`, and `Outcomes & Retrospective` must be treated as mandatory living sections
@@ -77,5 +75,6 @@ Do not:
 - mix in brainstorming
 - begin implementation
 - silently repair product-contract gaps that should have been clarified in the spec
+- expand straightforward decisions into essay-style rationale unless the tradeoff is non-obvious or high risk
 
 The output of this stage should be ready for `plan-review`.

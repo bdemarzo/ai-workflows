@@ -21,10 +21,11 @@ Requirements:
 - do not overwrite the source artifacts
 - list the exact reviewed artifact paths in the review artifact
 - link the immediately prior final-review round when one exists and summarize what changed since that round
-- structure the review as a stakeholder debate that still ends in an actionable recommendation
 - have reviewers form independent opening positions before converging on a recommendation
+- use persona diversity and independent opening positions as an analysis method, not as a requirement to save a long transcript of the debate
 - include at least one explicitly skeptical or risk-focused perspective that tries to find reasons the workflow outcome should not be accepted yet
 - when the outcome is user-facing, platform-facing, or process-sensitive, include at least one perspective that compares it against industry-standard practices and strong comparable products or applications
+- keep the saved review artifact concise and findings-first by default
 
 Default reviewer perspectives:
 - architect
@@ -36,6 +37,7 @@ Review adaptation:
 - use fewer perspectives for narrow, low-risk changes
 - use broader perspectives for high-risk, user-facing, cross-functional, or process-sensitive changes
 - do not optimize for reviewer consensus; preserve strong dissent when material risks, regressions, or quality gaps remain
+- preserve only consequential disagreements in the saved artifact; do not transcribe the full back-and-forth when a short summary will do
 
 Focus on:
 - fidelity across the idea, spec, plan, implementation, execution, and validation chain
@@ -48,19 +50,23 @@ Focus on:
 - where the delivered result falls short of industry-standard practice or comparable successful products or applications when relevant
 - the strongest reasons not to accept the outcome yet
 
-Write the review artifact with sections like:
+Write the review artifact as a compact findings-first review with sections like:
 - reviewed artifacts
 - prior review rounds when relevant
-- participants
+- reviewer lenses
 - review scope
-- opening positions
 - benchmark and best-practice comparison when relevant
-- debate
-- points of agreement
-- points of disagreement
+- key findings
+- meaningful disagreements
 - suggested revisions
 - recommendation
 - outstanding dissent
+
+Compression rule:
+- merge overlapping findings when multiple reviewer lenses point to the same underlying issue
+- avoid repeating the same critique from multiple personas
+- summarize benchmark or comparable-product analysis into a short conclusion unless it materially changes the recommendation
+- keep persona names short and use them as reviewer lenses, not as a reason to expand the artifact into a transcript
 
 Finish with an explicit recommendation:
 - `Recommendation: loop back to idea-create`

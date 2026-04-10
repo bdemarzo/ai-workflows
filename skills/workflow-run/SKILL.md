@@ -28,6 +28,9 @@ Requirements:
 - create new review rounds under `reviews/<stage>/round-XX.md` instead of overwriting prior reviews
 - consult the stage skills for artifact-specific instructions instead of rewriting their responsibilities here
 - keep the run ledger self-contained enough that another agent can resume from the run ledger plus the linked artifacts without needing prior conversation context
+- when this workflow skill is active, treat this workflow dossier contract as authoritative for workflow structure, stage order, run-ledger behavior, and execution control
+- do not silently adopt repo-local `PLANS.md` or repo `AGENTS.md` planning systems as an override to this workflow
+- repo-local `PLANS.md` may be read as optional project context, but it must not replace this workflow's stage structure, artifact structure, gate behavior, or implementation control unless the user explicitly asks for repo-native planning mode
 
 At startup:
 - treat startup as a preflight step, not as the beginning of stage execution
@@ -67,17 +70,12 @@ At startup:
     - `2. Create commits at major approved stage boundaries when files changed`
     - `3. Create a commit after each file-changing stage`
     - `Reply with 1, 2, 3, or answer in your own words.`
-- determine `execution_plan_mode` before planning:
-  - if the repository root contains `PLANS.md`, use `execplan`
-  - if the repository root `AGENTS.md` says planning and implementation must use `PLANS.md`, use `execplan`
-  - otherwise use `standard`
 - once all startup options are clear, present one concise startup confirmation summary before beginning the workflow:
   - restate the workflow ask or prompt in plain language
   - show the canonical slug
   - show the resolved question mode
   - show the resolved stage gate mode
   - show the resolved Git commit policy when relevant
-  - show the resolved execution plan mode
   - show any explicit client handoff plan when relevant
   - ask the user to confirm before stage execution begins
 - use a plain-language confirmation prompt rather than internal field names or raw config dumps
@@ -88,7 +86,6 @@ At startup:
   - `- Decision handling: ask only when something would materially block good work`
   - `- Review pauses: stop for approval after idea review, spec review, plan review, and implementation`
   - `- Git commits: create commits at major approved stage boundaries when files changed`
-  - `- Execution plan mode: standard`
   - `Reply 'start' to begin, or tell me what to change.`
 - do not begin `idea-create` until the user confirms the startup summary
 - after confirmation, create or update `run.md` and record the final startup choices plus the fact that the user approved the workflow start
@@ -143,15 +140,6 @@ Git commit inference examples:
 - if the wording does not clearly express a commit preference, do not guess; ask the plain-language fallback question once
 - when asking the fallback question, preserve the numbered-choice format rather than collapsing it into a single open-ended sentence
 
-Execution-plan modes:
-- `standard`:
-  - use the portable workflow defaults in this repo
-  - `run.md` may continue carrying fuller workflow lifecycle tracking
-- `execplan`:
-  - treat `plan.md` as the authoritative execution control document once implementation starts
-  - treat repository `PLANS.md` and repo `AGENTS.md` planning rules as authoritative
-  - keep `run.md` focused on orchestration, approvals, blockers, and high-level reroute decisions during implementation
-
 Execution model:
 1. resolve startup options, ask any needed startup-option questions, and prepare the workflow ask for confirmation
 2. present one startup confirmation summary and wait for explicit user approval to begin
@@ -198,8 +186,7 @@ Decision rules:
   - do not include unrelated user changes
   - do not create empty commits
   - update `run.md` before committing so the commit reflects the actual workflow state
-- in `execplan` mode, treat repo `PLANS.md` and repo `AGENTS.md` execution rules as higher priority than portable defaults in this workflow
-- in `execplan` mode, do not let `run.md` compete with `plan.md` as a second implementation source of truth
+- if repo-local `PLANS.md` or repo `AGENTS.md` conflict with this workflow contract, do not silently switch planning systems; surface the conflict to the user only when it materially blocks safe execution
 
 Hard stop rules:
 - stop after 3 loops in the same stage unless the user explicitly allows more
@@ -233,11 +220,6 @@ Stage gate behavior:
   - at the idea, spec, or plan gates, rerun the matching `*-create` stage and then the matching `*-review` stage again
   - at the implementation gate, rerun `implement-plan` before moving to `final-review`
   - revisit the same gate after the revision pass before advancing
-- in `execplan` mode, keep stage gates and questions fully available before implementation
-- once `implement-plan` starts in `execplan` mode:
-  - ask no more clarification questions unless a true blocker requires them
-  - do not introduce milestone-by-milestone approval pauses unless the user explicitly requested that behavior
-  - if `stage_gate_mode` is `loop boundaries`, the existing gate before `final-review` may still be used
 
 Run ledger structure:
 - maintain these required sections in the body:
@@ -303,13 +285,10 @@ Run ledger update rules:
 - after each validation step, add concise evidence showing what was run and what it proved
 - when blocked, update `workflow_status`, `Current Blockers`, and `Resume Instructions`
 - when complete, write `Outcomes & Retrospective` before exiting
-- in `execplan` mode, once `implement-plan` starts:
-  - keep `run.md` focused on current stage, artifact map, approval state, blockers, and high-level reroute decisions
-  - avoid duplicating detailed execution progress, decision logs, or discoveries that should live in `plan.md`
 
 Section guidance:
 - `Purpose / Big Picture`: explain what the workflow is trying to deliver, for whom, and what a successful outcome looks like
-- `Workflow Guidelines`: record the current question mode, stage gate mode, Git commit policy when relevant, execution plan mode, canonical slug, current stage, workflow status, and pending transition when paused, using plain text bullets or short prose rather than frontmatter-like header lines
+- `Workflow Guidelines`: record the current question mode, stage gate mode, Git commit policy when relevant, canonical slug, current stage, workflow status, and pending transition when paused, using plain text bullets or short prose rather than frontmatter-like header lines
 - `Client Handoff Plan`: when relevant, record the preferred client or agent for each stage group, the current owner, the next recommended owner, and how dual-review stages should be sequenced
 - `Artifact Map`: list the current paths for `idea.md`, the latest `idea` review round, `spec.md`, the latest `spec` review round, `plan.md`, the latest `plan` review round, `execution.md` when present, and the latest `final` review round when present
 - `Progress`: use timestamped checkboxes and keep the list current at every stopping point
@@ -321,7 +300,6 @@ Section guidance:
 - `Current Blockers`: list active blockers, why they block progress, and whether the workflow is waiting or stopped
 - `Resume Instructions`: state the exact next action for the next agent or resumed run, including the approval decision needed when paused at a stage gate
 - `Outcomes & Retrospective`: summarize what was delivered, what was deferred, and lessons learned
-- in `execplan` mode, `run.md` should support orchestration and handoff, while `plan.md` should remain sufficient for implementation restart
 
 Use the run ledger as a lifecycle document, not a thin status note. It should explain what happened, why it happened, and what should happen next.
 
@@ -334,7 +312,6 @@ Build a lightweight internal release notes tool for product and engineering team
 - Question mode: blocking questions only
 - Stage gate mode: loop boundaries
 - Git commit policy: approved stage boundaries
-- Execution plan mode: execplan
 - Canonical slug: customer-flag-dashboard
 - Current stage: spec-create
 - Workflow status: in-progress
@@ -349,7 +326,6 @@ Build a lightweight internal release notes tool for product and engineering team
 - Question mode: blocking questions only
 - Stage gate mode: loop boundaries
 - Git commit policy: approved stage boundaries
-- Execution plan mode: execplan
 - Canonical slug: customer-flag-dashboard
 - Current stage: spec-review
 - Workflow status: awaiting-stage-approval

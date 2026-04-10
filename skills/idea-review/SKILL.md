@@ -18,12 +18,13 @@ Requirements:
 - create a new zero-padded round file for each pass rather than overwriting earlier rounds
 - state the exact reviewed artifact path in the review artifact
 - link the immediately prior review round when one exists and summarize what changed since that round
-- structure the review as a stakeholder debate that still ends in an actionable recommendation
 - have reviewers form independent opening positions before converging on a recommendation
+- use persona diversity and independent opening positions as an analysis method, not as a requirement to save a long transcript of the debate
 - include at least one explicitly skeptical or risk-focused perspective that tries to find reasons the current artifact should not advance
 - when the artifact is non-trivial or user-facing, include at least one perspective that compares the idea against industry-standard patterns and how similar successful products or applications solve comparable problems
 - explicitly check whether the current `idea.md` is understandable without prior chat context or prior review rounds
 - explicitly check whether accepted prior review feedback appears to have been folded back into the latest `idea.md`
+- keep the saved review artifact concise and findings-first by default
 
 Default reviewer perspectives:
 - key stakeholders
@@ -38,6 +39,7 @@ Review adaptation:
 - for user-facing workflow changes, have that UX or product-design reviewer challenge clarity of flow, user expectations, friction, and success from the interface point of view
 - do not optimize for reviewer consensus; preserve strong dissent when the artifact still has meaningful weaknesses
 - when using comparable products or best-practice references, treat them as inputs for critique rather than as permission to hand-wave missing details
+- preserve only consequential disagreements in the saved artifact; do not transcribe the full back-and-forth when a short summary will do
 
 Synthesize the result into:
 - what works
@@ -52,22 +54,26 @@ Synthesize the result into:
 - what should change before spec creation
 - whether the idea is ready to advance
 
-Write the review artifact with sections like:
+Write the review artifact as a compact findings-first review with sections like:
 - reviewed artifact
 - prior review rounds when relevant
-- participants
+- reviewer lenses
 - review scope
 - self-containment assessment
 - observability of value
 - incorporation of prior accepted feedback
-- opening positions
 - benchmark and best-practice comparison when relevant
-- debate
-- points of agreement
-- points of disagreement
+- key findings
+- meaningful disagreements
 - suggested revisions
 - recommendation
 - outstanding dissent
+
+Compression rule:
+- merge overlapping findings when multiple reviewer lenses point to the same underlying issue
+- avoid repeating the same critique from multiple personas
+- summarize benchmark or comparable-product analysis into a short conclusion unless it materially changes the recommendation
+- keep persona names short and use them as reviewer lenses, not as a reason to expand the artifact into a transcript
 
 Finish with an explicit recommendation:
 - `Recommendation: revise current stage`

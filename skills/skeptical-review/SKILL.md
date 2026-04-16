@@ -1,13 +1,13 @@
 ---
 name: skeptical-review
-description: Apply an adversarial, high-skepticism review lens to an idea, spec, plan, implementation summary, or shipped change. Use when the user wants a harsh reality check, wants someone to find meaningful flaws, wants stronger dissent than a normal review stage provides, or wants to pressure-test whether something is under-specified, risky, overbuilt, solving the wrong problem, or weaker than industry-standard practice.
+description: Apply an optional manual pressure-test lens outside the main workflow. This is separate from the mandatory skeptic reviewer used inside idea/spec/plan review.
 ---
 
 # Skeptical Review
 
 Use this skill to pressure-test an artifact with an intentionally skeptical stance.
 
-This is not a balanced peer review. It is a targeted search for consequential weaknesses.
+This skill remains optional and manual. It is separate from the mandatory `Skeptic` reviewer that is already part of the standard idea, spec, and plan review phases.
 
 Use it on:
 - an idea artifact
@@ -38,7 +38,7 @@ Requirements:
 - recommend kill, narrow, defer, revise, or proceed despite risk when appropriate
 
 Review method:
-- start by identifying the strongest claim the artifact is making
+- identify the strongest claim the artifact is making
 - attack the hidden assumptions behind that claim
 - ask what breaks first in real usage, delivery, operations, or adoption
 - look for vague language hiding unresolved decisions
@@ -47,12 +47,6 @@ Review method:
 - compare the approach against industry-standard practice and how strong comparable products or teams usually solve the same problem
 - when the artifact is user-facing, question usability, discoverability, trust, defaults, failure states, and accessibility
 - when the artifact depends on new architecture or third-party services, question whether the tradeoff is really justified
-
-Do not:
-- pad the response with generic negativity
-- nitpick wording unless wording hides a material ambiguity
-- pretend certainty where the artifact only supports a risk judgment
-- collapse into a normal balanced review voice
 
 Write the output with sections like:
 - artifact under review
@@ -70,4 +64,4 @@ Recommendation styles:
 - `Recommendation: revise before advancing`
 - `Recommendation: proceed only if the stated risks are accepted`
 
-Return the critique directly in the response. This skill is interactive by default and should not create workflow artifacts or standalone review files unless the skill is explicitly revised later to do so.
+Return the critique directly in the response. This skill is interactive by default and should not create workflow artifacts or standalone review files.

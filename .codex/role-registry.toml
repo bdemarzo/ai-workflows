@@ -1,0 +1,145 @@
+# Codex runtime binding layer for abstract workflow roles.
+# The workflow skills stay role-based and client-neutral.
+# This file maps those abstract roles to concrete Codex agent names and allowed substitutions.
+
+version = 1
+
+[[roles]]
+label = "Product Strategist"
+default_agent = "product_strategist"
+phases = ["idea-create"]
+required = true
+substitutions = []
+
+[[roles]]
+label = "Technical Product Manager"
+default_agent = "technical_product_manager"
+phases = ["spec-create"]
+required = true
+substitutions = []
+
+[[roles]]
+label = "Architect / Implementation Planner"
+default_agent = "implementation_planner"
+phases = ["plan-create"]
+required = true
+substitutions = []
+
+[[roles]]
+label = "Stakeholder Value Reviewer"
+default_agent = "stakeholder_value_reviewer"
+phases = ["idea-review"]
+required = false
+substitutions = ["ux_product_design_reviewer", "domain_reviewer"]
+
+[[roles]]
+label = "UX / Product Design Reviewer"
+default_agent = "ux_product_design_reviewer"
+phases = ["idea-review", "spec-review"]
+required = false
+substitutions = ["domain_reviewer", "stakeholder_value_reviewer"]
+
+[[roles]]
+label = "Domain Reviewer"
+default_agent = "domain_reviewer"
+phases = ["idea-review", "spec-review"]
+required = false
+substitutions = ["ux_product_design_reviewer", "stakeholder_value_reviewer"]
+
+[[roles]]
+label = "Architect Reviewer"
+default_agent = "architect_reviewer"
+phases = ["spec-review"]
+required = false
+substitutions = ["senior_engineer_reviewer"]
+
+[[roles]]
+label = "Stakeholder / Power User Reviewer"
+default_agent = "stakeholder_value_reviewer"
+phases = ["spec-review"]
+required = false
+substitutions = ["ux_product_design_reviewer", "domain_reviewer"]
+
+[[roles]]
+label = "Senior Engineer Reviewer"
+default_agent = "senior_engineer_reviewer"
+phases = ["plan-review"]
+required = false
+substitutions = ["architect_reviewer"]
+
+[[roles]]
+label = "Delivery / Systems Reviewer"
+default_agent = "delivery_systems_reviewer"
+phases = ["plan-review"]
+required = false
+substitutions = ["frontend_delivery_reviewer", "senior_engineer_reviewer"]
+
+[[roles]]
+label = "Frontend Delivery Reviewer"
+default_agent = "frontend_delivery_reviewer"
+phases = ["plan-review"]
+required = false
+substitutions = ["delivery_systems_reviewer", "senior_engineer_reviewer"]
+
+[[roles]]
+label = "Skeptic"
+default_agent = "skeptic"
+phases = ["idea-review", "spec-review", "plan-review"]
+required = true
+substitutions = []
+
+[[roles]]
+label = "Expert Engineer"
+default_agent = "expert_engineer"
+phases = ["implement-plan"]
+required = true
+substitutions = []
+
+[[roles]]
+label = "Architecture Reviewer"
+default_agent = "architecture_reviewer"
+phases = ["implementation-review"]
+required = true
+substitutions = ["architect_reviewer", "senior_engineer_reviewer"]
+
+[[roles]]
+label = "Security Reviewer"
+default_agent = "security_reviewer"
+phases = ["implementation-review"]
+required = true
+substitutions = []
+
+[[roles]]
+label = "QA / Product Correctness Reviewer"
+default_agent = "qa_product_correctness_reviewer"
+phases = ["implementation-review"]
+required = true
+substitutions = ["qa_regression_reviewer"]
+
+[[roles]]
+label = "Product Fidelity Reviewer"
+default_agent = "product_fidelity_reviewer"
+phases = ["final-review"]
+required = true
+substitutions = ["stakeholder_value_reviewer", "ux_product_design_reviewer"]
+
+[[roles]]
+label = "Plan Fidelity Reviewer"
+default_agent = "plan_fidelity_reviewer"
+phases = ["final-review"]
+required = true
+substitutions = ["architect_reviewer", "senior_engineer_reviewer"]
+
+[[roles]]
+label = "QA / Regression Reviewer"
+default_agent = "qa_regression_reviewer"
+phases = ["final-review"]
+required = true
+substitutions = ["qa_product_correctness_reviewer"]
+
+[[roles]]
+label = "Documentation Maintainer"
+default_agent = "documentation_maintainer"
+phases = ["docs-closeout"]
+required = true
+substitutions = []

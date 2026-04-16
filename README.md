@@ -1,18 +1,97 @@
 # ai-workflows
 
-Portable workflow skills for AI-assisted product and engineering work.
+Codex-first workflow skills for AI-assisted product and engineering work.
 
-This repo packages a structured workflow you can run inside skill-capable agent apps such as Codex or Claude. The default flow moves from idea, to spec, to plan, to implementation, to final review, while keeping a workflow dossier under `docs/workflows/{slug}/`.
-
-The intended output style is concise by default: permanent workflow artifacts should read like working documents, not transcripts of everything the model thought about.
+This repo defines a guided workflow where the active AI session is the orchestrator and subagents act as operators and reviewers. The orchestrator asks clarifying questions when needed, presents each major phase to the user, and requires approval before moving forward.
 
 ## What You Get
 
-- `workflow-run` to coordinate the full workflow from a starting prompt
-- creation skills for idea, spec, and plan stages
-- review skills for idea, spec, plan, and final outcome
-- `implement-plan` for execution
-- `skeptical-review` for optional adversarial feedback outside the main stage sequence
+- `workflow-run` to orchestrate the full workflow
+- operator playbooks for:
+  - `idea-create`
+  - `spec-create`
+  - `plan-create`
+  - `implement-plan`
+- review playbooks for:
+  - `idea-review`
+  - `spec-review`
+  - `plan-review`
+  - `implementation-review`
+  - `final-review`
+- `skeptical-review` as an optional manual pressure-test outside the main workflow
+
+## Core Model
+
+- The active session is always the orchestrator.
+- Operators and reviewers are always subagents.
+- Agents define durable role behavior.
+- Skills define the stage procedure and artifact contract.
+- Operators own drafting or implementation work for their phase.
+- Reviewers provide findings and recommendations but do not own the source artifact.
+- The orchestrator writes the official consolidated review rounds.
+- The user gates progress between major phases.
+
+## Codex Runtime Layer
+
+The skills in [skills/](/C:/git/bdcf/ai-workflows/skills) stay portable and role-based. For Codex, this repo now also includes an optional project-scoped runtime layer under [.codex/agents/](/C:/git/bdcf/ai-workflows/.codex/agents).
+
+This follows the OpenAI Codex subagents model: custom agents can be defined as standalone TOML files in `.codex/agents/`, while the parent session remains the orchestrator. See [OpenAI Codex Subagents](https://developers.openai.com/codex/subagents).
+
+The Codex runtime layer in this repo now has three pieces:
+- [.codex/agents/](/C:/git/bdcf/ai-workflows/.codex/agents) for concrete role agents
+- [.codex/role-registry.toml](/C:/git/bdcf/ai-workflows/.codex/role-registry.toml) for mapping abstract workflow roles to concrete agent names and substitutions
+- [.codex/config.toml](/C:/git/bdcf/ai-workflows/.codex/config.toml) for global subagent limits
+
+The starter scaffold included here maps the workflow roles to named Codex agents such as:
+- `product_strategist`
+- `technical_product_manager`
+- `implementation_planner`
+- `skeptic`
+- `expert_engineer`
+- `architecture_reviewer`
+- `security_reviewer`
+- `qa_product_correctness_reviewer`
+- `product_fidelity_reviewer`
+- `plan_fidelity_reviewer`
+- `qa_regression_reviewer`
+- `documentation_maintainer`
+
+The included [.codex/config.toml](/C:/git/bdcf/ai-workflows/.codex/config.toml) also sets conservative global subagent limits for Codex:
+- `max_threads = 6`
+- `max_depth = 1`
+
+Use this layer when you want the orchestrator to call stable, named Codex subagents instead of reconstructing role instructions every run.
+
+The intended split is:
+- agent = role/persona/stable behavior
+- skill = stage procedure, inputs, outputs, and boundaries
+- orchestrator = role-to-skill assignment plus gating
+
+## Workflow Modes
+
+`workflow-run` should resolve one workflow mode at startup:
+- `light`
+- `standard`
+- `heavy`
+
+`light`
+- for small, localized, low-risk work
+- may compress `idea-create` and `spec-create` into one discovery cycle before the first user gate
+- still leaves both `idea.md` and `spec.md` in the dossier
+- early reviews use one substantive reviewer plus one skeptic
+- `implementation-review`, `final-review`, and docs close-out remain mandatory
+
+`standard`
+- default mode
+- full `idea -> spec -> plan -> implement -> implementation-review -> final-review -> docs close-out`
+- early reviews use two substantive reviewers plus one skeptic
+- user gates remain between major phases
+
+`heavy`
+- for high-risk, cross-cutting, security-sensitive, or high-blast-radius work
+- same stage order as `standard`
+- early reviews use two substantive reviewers plus one skeptic
+- the orchestrator should ask more clarifying questions, preserve more dissent, and require stronger validation before advancing
 
 ## Workflow
 
@@ -20,27 +99,89 @@ The canonical workflow is:
 
 1. `idea-create`
 2. `idea-review`
-3. `spec-create`
-4. `spec-review`
-5. `plan-create`
-6. `plan-review`
-7. `implement-plan`
-8. `final-review`
+3. user gate
+4. `spec-create`
+5. `spec-review`
+6. user gate
+7. `plan-create`
+8. `plan-review`
+9. user gate
+10. `implement-plan`
+11. `implementation-review`
+12. user gate
+13. `final-review`
+14. resolve final gaps with the user
+15. docs close-out
+16. final user approval and workflow closure
 
 `workflow-run` is the orchestrator. It is not a stage.
 
-## Stage Outputs
+## Stage Ownership
 
-| Stage | Purpose | Output |
-| --- | --- | --- |
-| `idea-create` | Shape the product idea and expected value. | `docs/workflows/{slug}/idea.md` |
-| `idea-review` | Pressure-test the idea before spec work. | `docs/workflows/{slug}/reviews/idea/round-01.md` |
-| `spec-create` | Turn the idea into a functional product contract. | `docs/workflows/{slug}/spec.md` |
-| `spec-review` | Review the spec for clarity, completeness, and readiness for planning. | `docs/workflows/{slug}/reviews/spec/round-01.md` |
-| `plan-create` | Turn the spec into an implementation-ready engineering plan. | `docs/workflows/{slug}/plan.md` |
-| `plan-review` | Review the plan before implementation begins. | `docs/workflows/{slug}/reviews/plan/round-01.md` |
-| `implement-plan` | Implement the approved plan. | Code changes plus optional `docs/workflows/{slug}/execution.md` |
-| `final-review` | Review the finished outcome against the artifact chain. | `docs/workflows/{slug}/reviews/final/round-01.md` |
+### Idea
+- Operator: `Product Strategist`
+- Reviewers:
+  - `Stakeholder Value Reviewer`
+  - `UX / Product Design Reviewer` or `Domain Reviewer`
+  - `Skeptic`
+
+### Spec
+- Operator: `Technical Product Manager`
+- Reviewers:
+  - `Architect Reviewer`
+  - `Stakeholder / Power User Reviewer` or `UX / Product Design Reviewer`
+  - `Skeptic`
+
+### Plan
+- Operator: `Architect / Implementation Planner`
+- Reviewers:
+  - `Senior Engineer Reviewer`
+  - `Delivery / Systems Reviewer` or `Frontend Delivery Reviewer`
+  - `Skeptic`
+
+### Implementation
+- Operator: `Expert Engineer`
+
+### Implementation Review
+- Reviewers:
+  - `Architecture Reviewer`
+  - `Security Reviewer`
+  - `QA / Product Correctness Reviewer`
+
+### Final Review
+- Orchestrator-led synthesis with reviewer lenses such as:
+  - `Product Fidelity Reviewer`
+  - `Plan Fidelity Reviewer`
+  - `QA / Regression Reviewer`
+
+### Docs Close-Out
+- Operator: `Documentation Maintainer`
+
+## Review Rules
+
+For `idea`, `spec`, and `plan` in `standard` and `heavy` mode:
+- each review uses exactly:
+  - two substantive reviewers
+  - one skeptic
+- the second substantive reviewer may adapt to the workflow type, but the reviewer count does not change
+
+For `idea`, `spec`, and `plan` in `light` mode:
+- each review uses:
+  - one substantive reviewer
+  - one skeptic
+- the substantive reviewer should be chosen by dominant risk for the phase
+
+For `implementation-review`:
+- the reviewer set is fixed:
+  - architecture
+  - security
+  - QA / product correctness
+- QA / product correctness should explicitly consider regressions, edge cases, and unit-test coverage expectations
+
+Saved review rounds should stay concise and findings-first:
+- keep reviewer rosters visible
+- merge overlapping findings
+- preserve only disagreements that materially affect the recommendation
 
 ## Workflow Dossier
 
@@ -57,6 +198,7 @@ docs/workflows/{slug}/
     idea/round-01.md
     spec/round-01.md
     plan/round-01.md
+    implementation/round-01.md
     final/round-01.md
 ```
 
@@ -64,173 +206,54 @@ Use one canonical `slug` per workflow. Create a new review round for each pass i
 
 ## How It Works
 
-Use `workflow-run` when you want the full lifecycle coordinated from a starting prompt.
-
 In normal use, `workflow-run` will:
 
-- resolve run and execution options before stage work begins
-- run the stages in order
-- maintain `docs/workflows/{slug}/run.md`
-- keep workflow guidance in plain text under `Purpose / Big Picture` rather than as top-of-file metadata
-- ask plain-language startup questions with short labeled choices if your preferred level of autonomy or review pauses is unclear
-- ask about Git commit cadence when the repo is under Git and the workflow is likely to change files, unless your preference is already clear
-- once startup options are clear, show you the resolved workflow setup and ask you to confirm before it starts the first stage
-- ask blocking questions for materially important decisions
-- record those important questions, answers, clarifications, and resulting decisions in `run.md` as part of the workflow history
-- pause at major stage boundaries when you ask for review gates
+- resolve `light`, `standard`, or `heavy` mode
+- resolve workflow roles through the runtime role registry when one exists
+- record the actual role-to-agent bindings used for the run
+- clarify the goal, audience, constraints, and success criteria when needed
+- confirm the guided workflow before the first phase starts
+- delegate creation work to the current phase operator subagent
+- delegate review work to the current phase reviewer subagents
+- write the official review artifact for the phase
+- present the result to the user
+- ask whether to proceed
+- keep `docs/workflows/{slug}/run.md` current as the restartable workflow ledger
 
-Permanent artifacts should stay skimmable:
+The orchestrator should ask questions whenever clarity is needed. The workflow should not rely on autonomous straight-through execution as its primary mode.
 
-- deep questioning and internal reasoning may happen during a stage, but the saved document should keep only the decisions, evidence, and open issues needed to move forward safely
-- review rounds are findings-first by default, not full stakeholder-debate transcripts
-- when a short summary, bullet list, or table is enough, prefer that over long prose
+If a runtime-specific role registry is missing or incomplete, the orchestrator should fall back explicitly and record that fallback in `run.md` instead of silently improvising.
 
-Blocking questions should include decisions such as:
+## Stage Outputs
 
-- new architectural directions or major architectural constraints
-- new third-party services, SDKs, hosted platforms, or external tools
-- material security, privacy, cost, operational, or vendor-lock-in tradeoffs
+| Stage | Purpose | Output |
+| --- | --- | --- |
+| `idea-create` | Shape the product idea and expected value. | `docs/workflows/{slug}/idea.md` |
+| `idea-review` | Review the idea before spec work. | `docs/workflows/{slug}/reviews/idea/round-01.md` |
+| `spec-create` | Turn the idea into a functional product contract. | `docs/workflows/{slug}/spec.md` |
+| `spec-review` | Review the spec before planning. | `docs/workflows/{slug}/reviews/spec/round-01.md` |
+| `plan-create` | Turn the spec into an implementation-ready plan. | `docs/workflows/{slug}/plan.md` |
+| `plan-review` | Review the plan before implementation. | `docs/workflows/{slug}/reviews/plan/round-01.md` |
+| `implement-plan` | Implement the approved plan. | code changes plus optional `docs/workflows/{slug}/execution.md` |
+| `implementation-review` | Review implementation with architecture, security, and QA/product-correctness lenses. | `docs/workflows/{slug}/reviews/implementation/round-01.md` |
+| `final-review` | Check fidelity against idea, spec, plan, and implementation evidence. | `docs/workflows/{slug}/reviews/final/round-01.md` |
+| docs close-out | Update repository documentation before closure. | repo docs updates plus closure recorded in `run.md` |
 
-When these workflow skills are active, the workflow dossier remains authoritative. Repo-local `PLANS.md` can be read as project context, but it should not silently override this workflow's stage structure, artifact structure, or execution control unless the user explicitly asks for repo-native planning mode.
-
-## Review Style
-
-Review skills are meant to do more than rubber-stamp artifacts.
-
-They should:
-
-- adapt reviewer personas to scope and risk
-- include an explicit UX or product-design perspective for meaningful UI or interaction work
-- include a skeptical or risk-focused perspective
-- preserve meaningful dissent when important weaknesses remain
-- compare non-trivial or user-facing work against industry-standard practice and strong comparable products
-
-But the saved review artifact should stay compact:
-
-- keep named reviewer lenses without transcribing the whole debate
-- merge overlapping critiques instead of repeating them persona by persona
-- preserve only the disagreements that materially affect the recommendation
-
-## Optional Manual Skill
-
-`skeptical-review` is an optional manual pressure-test skill. It is not part of the canonical stage sequence.
-
-Use it when you want a harsher reality check on:
-
-- an idea
-- a spec
-- a plan
-- an implementation summary
-- a product or architecture decision
-
-It should respond directly in chat and should not create new files.
-
-## Multi-Client Handoffs
-
-You can split a workflow across clients manually. For example:
-
-- use Claude for `idea-create`, `idea-review`, `spec-create`, and `spec-review`
-- use Codex for `plan-create`, `plan-review`, and `implement-plan`
-- use both Claude and Codex for selected review stages
-
-The workflow model already supports this well because `idea.md`, `spec.md`, `plan.md`, review rounds, and `run.md` are meant to be self-contained and restartable.
-
-When handing off between clients:
-
-- use the artifact boundary as the handoff boundary
-- update `run.md` to name the current owner, next recommended owner, and exact artifact path the next client should start from
-- keep the rationale for the handoff in `run.md`
-- if both clients review the same artifact, create sequential review rounds rather than overwriting:
-  - for example, `round-01.md` from one client and `round-02.md` from the other
-- summarize the combined outcome in `run.md` before advancing
-
-This repo does not currently automate client switching. Use `run.md` as the handoff contract.
-
-## Example Prompts
-
-Structured prompt:
+## Example Prompt
 
 ```text
-Use workflow-run to take this from idea through final review.
-question_mode: fully automated
-stage_gate_mode: none
-Build a lightweight internal release notes tool for product and engineering teams.
-```
-
-Natural-language prompt:
-
-```text
-Implement the following feature concept. Ask blocking questions. Stop at major steps or milestones so I can review progress.
 Use workflow-run for this feature.
+Ask questions whenever clarity is needed.
+Use subagents for operators and reviewers.
+Gate each major phase with me before proceeding.
+Use standard mode unless the task is clearly small enough for light mode.
+
 Build a customer-facing saved views experience for our reporting dashboard.
 ```
 
-Multi-client handoff prompt:
+## Optional Manual Skill
 
-```text
-Use workflow-run for this feature.
-Use Claude for idea and spec work.
-Use Codex for plan creation and implementation.
-Use both Claude and Codex for review stages when useful.
-Ask blocking questions.
-Stop at major stage boundaries so I can review and approve handoffs.
-Build a Portable Markdown Format app with a cross-platform .NET CLI creator and a cross-platform rich reader application.
-```
-
-If `workflow-run` needs a startup clarification, it should prefer a concise numbered-choice question such as:
-
-```text
-How should I handle decisions as I run this workflow?
-1. Make reasonable assumptions and only stop for review gates
-2. Ask only when something would materially block good work
-3. Check in often on non-obvious choices
-Reply with 1, 2, 3, or answer in your own words.
-```
-
-After startup options are resolved, it should present a short start confirmation such as:
-
-```text
-Here is how I will run this workflow:
-- Workflow ask: Build a customer-facing saved views experience for our reporting dashboard.
-- Canonical slug: saved-views-dashboard
-- Decision handling: ask only when something would materially block good work
-- Review pauses: stop for approval after idea review, spec review, plan review, and implementation
-- Git commits: do not create commits automatically
-- Execution plan mode: standard
-Reply 'start' to begin, or tell me what to change.
-```
-
-Git commit preference is also a good startup policy to make explicit. For example:
-
-```text
-How do you want me to handle Git commits for workflow changes?
-1. Do not create commits automatically
-2. Create commits at major approved stage boundaries when files changed
-3. Create a commit after each file-changing stage
-Reply with 1, 2, 3, or answer in your own words.
-```
-
-Manual adversarial review:
-
-```text
-Use skeptical-review on this spec and tell me why it should not advance yet.
-```
-
-## Install for Claude
-
-Copy any skill folder from `skills/` into your Claude skills directory:
-
-```text
-skills/workflow-run -> ~/.claude/skills/workflow-run
-skills/implement-plan -> ~/.claude/skills/implement-plan
-skills/skeptical-review -> ~/.claude/skills/skeptical-review
-```
-
-To install everything, copy each folder under `skills/` into:
-
-```text
-~/.claude/skills/
-```
+`skeptical-review` is still available as an optional manual pressure-test. It is separate from the mandatory `Skeptic` reviewer already present in the standard idea/spec/plan review phases.
 
 ## Install for Codex
 
@@ -239,6 +262,7 @@ Copy any skill folder from `skills/` into your Codex skills directory:
 ```text
 skills/workflow-run -> ~/.codex/skills/workflow-run
 skills/implement-plan -> ~/.codex/skills/implement-plan
+skills/implementation-review -> ~/.codex/skills/implementation-review
 skills/skeptical-review -> ~/.codex/skills/skeptical-review
 ```
 
@@ -248,14 +272,37 @@ To install everything, copy each folder under `skills/` into:
 ~/.codex/skills/
 ```
 
+If you want the Codex-first runtime behavior in a target repository, also copy the project-scoped Codex runtime layer into that repository root:
+
+```text
+.codex/agents/
+.codex/role-registry.toml
+.codex/config.toml
+```
+
+That runtime layer is what makes the abstract workflow roles resolve to stable named Codex subagents.
+
 ## Repository Layout
 
 - `skills/` - canonical skill packages
+- `.codex/agents/` - optional Codex-specific subagent runtime definitions
+- `.codex/role-registry.toml` - optional Codex-specific role-to-agent binding registry
+- `.codex/config.toml` - optional Codex-specific subagent runtime settings
+- `docs/examples/` - example workflow dossiers
 - `docs/` - supporting docs and artifact examples
 - `README.md` - human-facing workflow overview
 
+## Examples
+
+The repo includes example dossiers under [docs/examples/](/C:/git/bdcf/ai-workflows/docs/examples):
+- [standard-saved-views](/C:/git/bdcf/ai-workflows/docs/examples/standard-saved-views) for a `standard` workflow
+- [light-profile-copy-refresh](/C:/git/bdcf/ai-workflows/docs/examples/light-profile-copy-refresh) for a `light` workflow
+
+Each example shows the expected dossier shape, review rounds, and run-ledger recording style.
+
 ## Notes
 
-- The skills are intentionally client-neutral.
-- This repo currently targets Claude and Codex.
+- This repo now prioritizes Codex-first orchestration with subagents.
+- `plan.md` is the authoritative implementation document for the workflow once implementation starts.
+- `execution.md` is optional and should be used as an evidence appendix rather than a second control document.
 - Repo-local `PLANS.md` can be useful project context, but it should not silently override this workflow contract.

@@ -1,18 +1,25 @@
 ---
 name: final-review
-description: Review the full workflow outcome for architectural quality, product correctness, process fit, and contract fidelity. Use when the user wants review output in ./docs/workflows/{slug}/reviews/final/round-01.md after implementation.
+description: Run an orchestrator-led fidelity review against the idea, spec, plan, implementation, and validation chain before docs close-out and workflow closure.
 ---
 
 # Final Review
 
-Use this skill to review the full workflow outcome after implementation and write the next review round to `./docs/workflows/{slug}/reviews/final/round-XX.md`.
+Use this skill as the final fidelity-review playbook.
+
+The active session owns the final synthesis. Reviewer subagents provide critique, but the active session writes the official review round and coordinates gap resolution with the user.
 
 Input:
 - the implemented change, diff, or implementation summary
-- the relevant idea, spec, and plan files
-- the execution summary when present
-- the run ledger when present
-- any validation output that should stay in view
+- the relevant `idea.md`, `spec.md`, and `plan.md`
+- the latest implementation-review round
+- `execution.md` when present
+- validation output that should stay in view
+
+Expected reviewer roster:
+- `Product Fidelity Reviewer`
+- `Plan Fidelity Reviewer`
+- `QA / Regression Reviewer`
 
 Requirements:
 - derive `slug` from the workflow dossier being reviewed
@@ -21,41 +28,22 @@ Requirements:
 - do not overwrite the source artifacts
 - list the exact reviewed artifact paths in the review artifact
 - link the immediately prior final-review round when one exists and summarize what changed since that round
-- have reviewers form independent opening positions before converging on a recommendation
-- use persona diversity and independent opening positions as an analysis method, not as a requirement to save a long transcript of the debate
-- include at least one explicitly skeptical or risk-focused perspective that tries to find reasons the workflow outcome should not be accepted yet
-- when the outcome is user-facing, platform-facing, or process-sensitive, include at least one perspective that compares it against industry-standard practices and strong comparable products or applications
-- keep the saved review artifact concise and findings-first by default
-
-Default reviewer perspectives:
-- architect
-- product owner
-- technical product manager
-
-Review adaptation:
-- choose reviewer personas based on artifact scope, risk, and affected surface area
-- use fewer perspectives for narrow, low-risk changes
-- use broader perspectives for high-risk, user-facing, cross-functional, or process-sensitive changes
-- do not optimize for reviewer consensus; preserve strong dissent when material risks, regressions, or quality gaps remain
-- preserve only consequential disagreements in the saved artifact; do not transcribe the full back-and-forth when a short summary will do
+- keep the reviewer roster explicit in the saved artifact
+- keep the saved review artifact concise and findings-first
+- focus on fidelity, regressions, and unresolved gaps rather than rerunning all prior stage debate
 
 Focus on:
-- fidelity across the idea, spec, plan, implementation, execution, and validation chain
-- architectural quality
-- product correctness
-- fit against the intended contract
-- process fit and traceability gaps
-- regressions and edge cases
-- insufficient validation
-- where the delivered result falls short of industry-standard practice or comparable successful products or applications when relevant
-- the strongest reasons not to accept the outcome yet
+- fidelity of code and delivered behavior against `idea.md`, `spec.md`, and `plan.md`
+- unresolved correctness gaps
+- regressions and validation gaps
+- places where implementation drifted from the approved artifact chain
+- what must still be fixed before docs close-out and closure
 
-Write the review artifact as a compact findings-first review with sections like:
+Write the review artifact with sections like:
 - reviewed artifacts
 - prior review rounds when relevant
-- reviewer lenses
+- reviewer roster
 - review scope
-- benchmark and best-practice comparison when relevant
 - key findings
 - meaningful disagreements
 - suggested revisions
@@ -63,16 +51,15 @@ Write the review artifact as a compact findings-first review with sections like:
 - outstanding dissent
 
 Compression rule:
-- merge overlapping findings when multiple reviewer lenses point to the same underlying issue
-- avoid repeating the same critique from multiple personas
-- summarize benchmark or comparable-product analysis into a short conclusion unless it materially changes the recommendation
-- keep persona names short and use them as reviewer lenses, not as a reason to expand the artifact into a transcript
+- merge overlapping findings across reviewer lenses
+- avoid repeating the same critique in multiple voices
+- keep only the disagreements that materially affect closure readiness
 
 Finish with an explicit recommendation:
-- `Recommendation: loop back to idea-create`
-- `Recommendation: loop back to spec-create`
-- `Recommendation: loop back to plan-create`
 - `Recommendation: loop back to implement-plan`
-- `Recommendation: workflow outcome ready`
+- `Recommendation: loop back to plan-create`
+- `Recommendation: loop back to spec-create`
+- `Recommendation: loop back to idea-create`
+- `Recommendation: ready for docs close-out`
 
-The review recommendation informs the next decision, but the human or `workflow-run` decides whether to advance, reroute, or stop.
+The recommendation informs the next decision, but the orchestrator and user decide whether to reroute, continue remediation, or begin close-out.

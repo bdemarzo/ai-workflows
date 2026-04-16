@@ -1,15 +1,15 @@
 ---
 name: idea-create
-description: Create or refine a product idea before it becomes a functional product contract. Use when the user wants to shape an idea in ./docs/workflows/{slug}/idea.md before moving to spec creation.
+description: Draft or refine the idea artifact as the Product Strategist operator before idea-review. Use when the workflow needs `./docs/workflows/{slug}/idea.md`.
 ---
 
 # Idea Create
 
-Use this skill to create or refine a product idea before it becomes a spec.
+Use this skill as the `Product Strategist` operator playbook.
 
-This is a product-owner-led creation stage.
+The operator owns drafting and updating `./docs/workflows/{slug}/idea.md`.
 
-The input can be either:
+Input can be:
 - a rough prompt or theme
 - a specific product question
 - an existing idea file at `./docs/workflows/{slug}/idea.md`
@@ -18,46 +18,48 @@ Requirements:
 - derive the workflow `slug` from the prompt or existing workflow dossier
 - use a short kebab-case name for the dossier
 - write or update `./docs/workflows/{slug}/idea.md`
-- keep the idea self-contained enough that a later reader can understand the opportunity without prior thread context
+- keep the artifact self-contained enough that a later reader can understand the opportunity without prior thread context
 - open with outcome-first framing that states what changes for the user, why it matters, and how value would be observed if the idea succeeds
 - keep the dossier slug stable unless the workflow intentionally splits into a new dossier
-- keep the permanent artifact concise and skimmable by default; preserve extra detail only when it materially changes a decision, a constraint, or restartability
-- include rich local tracking in the artifact with:
+- keep the permanent artifact concise and skimmable by default
+- include local tracking with:
   - `Source Context` when relevant
   - `Status`
   - `Open Questions`
   - `Revision History`
-- include lightweight evidence-of-value guidance or success signals without turning the idea into a metric plan
-- keep the output focused on the idea itself, not on implementation planning
-- prefer leaving later-stage detail unresolved rather than prematurely inventing spec or engineering detail
+- include lightweight success signals without turning the idea into a metric plan
+- keep the output focused on the idea itself, not on spec or plan detail
+
+Operator responsibility:
+- draft the source artifact for later review
+- do not try to review or approve your own work
+- leave material concerns for `idea-review`
 
 Stage boundary rule:
-- `idea.md` should explain why the idea matters and what kind of product direction is worth exploring
-- `idea.md` should not try to fully define how the product must behave; that belongs in `spec.md`
-- `idea.md` should not try to define how engineering will build it; that belongs in `plan.md`
-- when a detail starts to read like product contract language, acceptance behavior, workflow-by-workflow UX definition, route definition, privacy rule, business rule, implementation breakdown, or technical design, stop and move that detail out of the idea
-- keep only high-level success framing, major tradeoffs, and open questions that help decide whether the idea is worth pursuing
+- `idea.md` explains why the idea matters and what direction is worth exploring
+- it does not fully define exact user-visible behavior; that belongs in `spec.md`
+- it does not define engineering delivery; that belongs in `plan.md`
+- when a detail starts to read like product contract language, route definition, privacy policy, business-rule detail, acceptance behavior, implementation breakdown, or technical design, move that detail out of the idea
 
 Decision rule:
 - if a detail is only needed to explain the opportunity, value, risk, or high-level direction, keep it in the idea
-- if a detail changes exact user-visible behavior, correctness expectations, privacy handling, or scope boundaries, leave it for the spec
-- if a detail exists only so engineering can estimate, sequence, or implement the work, leave it for the plan
-- when unsure, bias toward less detail and capture the uncertainty in `Open Questions` instead of drafting the next stage early
+- if it changes exact user-visible behavior, correctness expectations, privacy handling, or scope boundaries, leave it for the spec
+- if it exists only so engineering can estimate, sequence, or implement the work, leave it for the plan
+- when unsure, bias toward less detail and capture the uncertainty in `Open Questions`
 
 Focus on:
-- the user problem or opportunity
-- the proposed product direction
+- user problem or opportunity
+- proposed product direction
 - expected value and tradeoffs
 - how success would be recognized at a high level
 - why the idea is worth pursuing or rejecting
-- open questions that still need review
-- concise phrasing over long narrative buildup
+- open questions that should be reviewed next
 
 Do not:
 - write a functional spec
 - write an implementation plan
-- settle engineering details that belong later in the workflow
-- include detailed acceptance criteria, route inventories, API contracts, data models, file/module breakdowns, migration mechanics, or task sequencing
+- settle engineering details that belong later
+- include detailed acceptance criteria, route inventories, API contracts, data models, migration mechanics, file/module breakdowns, or task sequencing
 - repeat the same framing in multiple sections when one short summary is enough
 
 Write the idea artifact with sections like:
@@ -77,7 +79,7 @@ Write the idea artifact with sections like:
 
 Before finalizing `idea.md`, perform a scope check:
 - remove or simplify any section that reads like `functional requirements`, `acceptance criteria`, `routes`, `privacy rules`, `business rules`, `implementation approach`, `milestones`, or `concrete steps`
-- convert prematurely specific downstream detail into either:
+- convert prematurely specific downstream detail into:
   - a higher-level product direction statement, or
   - an `Open Questions` entry for later stages
 - compress repeated rationale, examples, or risk descriptions when they do not materially change the decision

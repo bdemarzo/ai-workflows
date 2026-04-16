@@ -1,17 +1,22 @@
 ---
 name: spec-review
-description: Review a functional spec for clarity, completeness, user value, and implementation readiness at the contract level. Use when the user wants review feedback in ./docs/workflows/{slug}/reviews/spec/round-01.md before planning.
+description: Review a spec artifact using two substantive reviewer subagents plus one skeptic before plan creation. Use when the workflow needs review output in ./docs/workflows/{slug}/reviews/spec/round-01.md.
 ---
 
 # Spec Review
 
-Use this skill to review an existing spec and write the coordinating result to `./docs/workflows/{slug}/reviews/spec/round-XX.md`.
+Use this skill as the review playbook for the spec phase.
 
-Review the document as a functional product contract, not as an implementation plan.
+The active session should orchestrate the reviewer subagents required for the current workflow mode and write one official consolidated review round.
 
 Input:
-- the feature spec at `./docs/workflows/{slug}/spec.md`
-- any product context or constraints that should stay in view
+- the spec artifact at `./docs/workflows/{slug}/spec.md`
+- product context or constraints that should stay in view
+
+Reviewer roster:
+- `Architect Reviewer`
+- `Stakeholder / Power User Reviewer` or `UX / Product Design Reviewer`
+- `Skeptic`
 
 Requirements:
 - derive `slug` from the workflow dossier
@@ -20,53 +25,32 @@ Requirements:
 - create a new zero-padded round file for each pass rather than overwriting earlier rounds
 - state the exact reviewed artifact path in the review artifact
 - link the immediately prior review round when one exists and summarize what changed since that round
-- have reviewers form independent opening positions before converging on a recommendation
-- use persona diversity and independent opening positions as an analysis method, not as a requirement to save a long transcript of the debate
-- include at least one explicitly skeptical or risk-focused perspective that tries to find reasons the current spec should not advance
-- when the spec is non-trivial or user-facing, include at least one perspective that compares it against industry-standard patterns and how similar successful products or applications handle comparable requirements
-- explicitly check whether planning can proceed from the current `spec.md` alone without relying on prior review rounds
-- explicitly check whether accepted prior review feedback appears to have been folded back into the latest `spec.md`
-- keep the saved review artifact concise and findings-first by default
+- in `standard` and `heavy`, use exactly two substantive reviewers plus one skeptic
+- in `light`, use one substantive reviewer plus one skeptic
+- in `light`, choose the substantive reviewer by dominant risk:
+  - `Architect Reviewer` by default
+  - `Stakeholder / Power User Reviewer` when workflow fit dominates
+  - `UX / Product Design Reviewer` when the contract is heavily user-facing
+- explicitly check whether planning can proceed from the current `spec.md` alone
+- explicitly check whether accepted review feedback has been folded back into the latest `spec.md`
+- keep the saved review artifact concise and findings-first
+- make clear that the reviewers are subagents and the active session writes the consolidated official review round
 
-Default reviewer perspectives:
-- product owner
-- architect
-- scope-appropriate stakeholder or power-user personas
-
-Review adaptation:
-- choose reviewer personas based on artifact scope, risk, and affected surface area
-- use fewer perspectives for narrow changes
-- use broader perspectives for high-risk, user-facing, or cross-functional changes
-- when the workflow includes meaningful UI, UX, navigation, or interaction behavior, include an explicit UX or product-design perspective
-- for user-facing features, treat that UX or product-design perspective as expected rather than optional
-- do not optimize for reviewer consensus; preserve strong dissent when important contract risks remain
-- when using comparable products or best-practice references, use them to identify missing behavior, states, constraints, or acceptance expectations
-- preserve only consequential disagreements in the saved artifact; do not transcribe the full back-and-forth when a short summary will do
-
-Synthesize the result into:
-- what works
-- what is unclear or incomplete
-- missing user-facing behavior
-- missing interaction detail, interface states, navigation clarity, accessibility expectations, or UX edge cases when relevant
-- missing boundary conditions or edge cases that affect correctness
-- where the contract falls short of industry-standard patterns or comparable successful products when relevant
-- the strongest reasons not to advance yet
+Focus on:
+- completeness of the user-facing contract
+- missing behavior, states, constraints, or edge cases
 - whether acceptance criteria are observable enough to drive planning
-- whether the current spec is restartable enough for `plan-create` from the artifact alone
-- details that should stay out of the spec and move to planning
-- where the reviewers disagree
-- what should change before planning
-- whether the spec is ready to advance
+- whether the current spec is restartable enough for `plan-create`
+- what should stay out of the spec and move to the plan
+- the strongest reasons not to advance yet
 
-Write the review artifact as a compact findings-first review with sections like:
+Write the review artifact with sections like:
 - reviewed artifact
 - prior review rounds when relevant
-- reviewer lenses
+- reviewer roster
 - review scope
 - contract restartability
 - observable acceptance assessment
-- incorporation of prior accepted feedback
-- benchmark and best-practice comparison when relevant
 - key findings
 - meaningful disagreements
 - suggested revisions
@@ -74,13 +58,12 @@ Write the review artifact as a compact findings-first review with sections like:
 - outstanding dissent
 
 Compression rule:
-- merge overlapping findings when multiple reviewer lenses point to the same underlying issue
-- avoid repeating the same critique from multiple personas
-- summarize benchmark or comparable-product analysis into a short conclusion unless it materially changes the recommendation
-- keep persona names short and use them as reviewer lenses, not as a reason to expand the artifact into a transcript
+- merge overlapping findings across reviewers
+- avoid repeating the same critique reviewer by reviewer
+- preserve only the disagreements that materially affect the recommendation
 
 Finish with an explicit recommendation:
 - `Recommendation: revise current stage`
 - `Recommendation: ready to advance to plan-create`
 
-The review recommendation informs the next decision, but the human or `workflow-run` decides whether to advance. The recommendation should make clear whether `plan-create` can proceed from the current `spec.md` without rereading historical review rounds.
+The recommendation informs the next decision, but the orchestrator and user decide whether to advance.

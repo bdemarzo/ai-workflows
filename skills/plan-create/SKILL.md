@@ -12,6 +12,7 @@ The operator owns drafting and updating `./docs/workflows/{slug}/plan.md`.
 Requirements:
 - derive `slug` from the workflow dossier or source spec
 - update the existing plan in the dossier instead of creating duplicates
+- start the artifact with the exact H1 `# Plan - {slug}`
 - link to the source spec artifact path in the plan body
 - keep the plan self-contained enough that a later engineer can resume from the plan plus the repository without needing `run.md`
 - make clear near the top what changes for the user or system and how successful delivery will be observed

@@ -18,6 +18,7 @@ Requirements:
 - derive the workflow `slug` from the prompt or existing workflow dossier
 - use a short kebab-case name for the dossier
 - write or update `./docs/workflows/{slug}/idea.md`
+- start the artifact with the exact H1 `# Idea - {slug}`
 - keep the artifact self-contained enough that a later reader can understand the opportunity without prior thread context
 - open with outcome-first framing that states what changes for the user, why it matters, and how value would be observed if the idea succeeds
 - keep the dossier slug stable unless the workflow intentionally splits into a new dossier

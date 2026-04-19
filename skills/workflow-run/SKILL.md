@@ -57,7 +57,8 @@ Canonical phase order:
 Requirements:
 - derive one canonical `slug` from the starting prompt and keep the workflow dossier under `./docs/workflows/{slug}/`
 - treat `./docs/workflows/{slug}/run.md` as the source of truth for workflow state, current phase, artifact paths, reviewer rosters, approvals, blockers, and resume context
-- keep workflow guidance in plain text under a `### Workflow Guidelines` subsection inside `# Purpose / Big Picture`
+- start `run.md` with the exact H1 `# Run - {slug}`
+- keep workflow guidance in plain text under a `### Workflow Guidelines` subsection inside `## Purpose / Big Picture`
 - keep fixed dossier file names for:
   - `idea.md`
   - `spec.md`
@@ -205,7 +206,8 @@ Looping and reroute rules:
 
 Run ledger structure:
 - maintain these required sections:
-  - `# Purpose / Big Picture`
+  - `# Run - {slug}`
+  - `## Purpose / Big Picture`
   - `### Workflow Guidelines`
   - `## Artifact Map`
   - `## Progress`
@@ -292,7 +294,9 @@ Use `workflow_status` values such as:
 
 Run ledger example:
 ```text
-# Purpose / Big Picture
+# Run - release-notes-tool
+
+## Purpose / Big Picture
 Build a lightweight internal release notes tool for product and engineering teams.
 
 ### Workflow Guidelines

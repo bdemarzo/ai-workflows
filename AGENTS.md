@@ -89,6 +89,12 @@ After changing the workflow or skill packages, verify:
 - if `.codex/agents/` exists, the agent set covers the intended personas without changing the portable stage contract
 - if `.codex/role-registry.toml` exists, it covers every stage-to-persona assignment named in `workflow-run`, README, and the review skills, and those persona labels match `runtime/role-catalog.toml`
 - artifact path references are consistent across all skills and docs
+- source dossier artifacts use slugged H1 titles:
+  - `# Run - {slug}`
+  - `# Idea - {slug}`
+  - `# Spec - {slug}`
+  - `# Plan - {slug}`
+  - `# Execution - {slug}` when `execution.md` is used
 - review-round path references are consistent across all skills and docs
 - `workflow-run` is documented consistently as the orchestrator rather than a workflow stage
 - implementation-review specifies architecture, security, and QA / product correctness

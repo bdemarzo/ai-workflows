@@ -1,4 +1,4 @@
-# Saved Views
+# Idea - saved-views-full-workflow
 
 ## Outcome
 Let users save named dashboard filter sets so repeat reporting work is faster and less error-prone.

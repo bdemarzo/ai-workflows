@@ -15,6 +15,7 @@ Requirements:
 - treat `plan.md` as the authoritative implementation control document for the workflow
 - keep the plan current as a living document when implementation discoveries or decisions materially change the work
 - use `./docs/workflows/{slug}/execution.md` only when an evidence appendix or work log is genuinely useful
+- when `execution.md` is used, start it with the exact H1 `# Execution - {slug}`
 - treat `spec.md` as the source of truth for user-visible behavior, privacy, and correctness
 - treat review rounds as historical design input, not as active execution control documents
 - when implementation review sends remediation back, the same Software Engineer operator owns the fix pass

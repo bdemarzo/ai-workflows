@@ -1,4 +1,4 @@
-# Saved Views Spec
+# Spec - saved-views-full-workflow
 
 ## User Contract
 - Users can save the current filter state as a named saved view.

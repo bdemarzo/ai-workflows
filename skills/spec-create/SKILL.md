@@ -20,6 +20,7 @@ Requirements:
 - derive `slug` from the prompt or workflow dossier
 - create the file if it does not exist
 - update the file in place if it already exists
+- start the artifact with the exact H1 `# Spec - {slug}`
 - keep the spec self-contained enough for planning without relying on prior thread context
 - make the spec concrete enough that planning can proceed from `spec.md` alone
 - keep the permanent artifact concise and skimmable by default

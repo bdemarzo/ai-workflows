@@ -9,6 +9,8 @@ Use this skill as the `Software Architect` operator playbook.
 
 The operator owns drafting and updating `./docs/workflows/{slug}/plan.md`.
 
+Use [assets/template.md](./assets/template.md) as the default output skeleton when creating a new artifact. Adapt sections as needed, but preserve the slugged title format.
+
 Requirements:
 - derive `slug` from the workflow dossier or source spec
 - update the existing plan in the dossier instead of creating duplicates

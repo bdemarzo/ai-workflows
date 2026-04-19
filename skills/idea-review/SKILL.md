@@ -9,6 +9,8 @@ Use this skill as the review playbook for the idea phase.
 
 The active session should orchestrate the required reviewer subagents and write one official consolidated review round.
 
+Use [assets/review-template.md](./assets/review-template.md) as the default saved review-round skeleton. Adapt sections as needed for the actual findings and recommendation.
+
 Input:
 - the idea artifact at `./docs/workflows/{slug}/idea.md`
 - product context or constraints that should stay in view

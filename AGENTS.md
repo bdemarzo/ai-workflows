@@ -17,12 +17,11 @@ Use this file for repo-specific operating guidance when changing the skills or d
 ## Repo Layout
 
 - `skills/<skill-name>/SKILL.md` - canonical skill packages
-- `runtime/role-catalog.toml` - runtime-neutral shared persona catalog
 - `.codex/agents/*.toml` - optional Codex-specific persona implementations
-- `.codex/role-registry.toml` - optional Codex-specific registry mapping workflow stages to personas from `runtime/role-catalog.toml` and then to concrete agent names
+- `.codex/role-registry.toml` - optional Codex-specific registry mapping workflow stages to persona labels and then to concrete agent names
 - `.codex/config.toml` - optional Codex-specific runtime settings for subagent orchestration
-- `docs/examples/` - example workflow dossiers showing the expected shape of real runs
-- `docs/` - supporting docs and artifact examples only
+- `skills/<skill-name>/assets/` - optional skill-local templates or reference assets that support standalone use
+- `docs/` - supporting docs only
 - `README.md` - workflow model and install guidance
 
 ## Editing Rules
@@ -31,9 +30,8 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - Operators and reviewers are subagents.
 - Keep skill bodies client-neutral even if this repo also ships optional Codex runtime agent definitions.
 - Treat `skills/` as the portable workflow contract and `.codex/` as an adapter layer, not as a second source of truth for stage behavior.
-- If `runtime/role-catalog.toml` exists, treat it as the shared persona catalog that adapters must implement.
 - If `.codex/agents/` exists, treat it as the Codex implementation layer for those personas.
-- If `.codex/role-registry.toml` exists, treat it as the Codex binding layer from workflow stages to personas and then to concrete agent names.
+- If `.codex/role-registry.toml` exists, treat it as the Codex binding layer from workflow stages to persona labels and then to concrete agent names.
 - `workflow-run` is a meta-skill, not a stage.
 - Agents define persona behavior; skills define stage procedure.
 - Operators own drafting or implementation work for their phase.
@@ -84,10 +82,9 @@ After changing the workflow or skill packages, verify:
 - every skill directory contains `SKILL.md`
 - each skill's `name:` matches its folder name
 - `README.md` and the skill package surface describe the same stage names and order
-- if `runtime/role-catalog.toml` exists, it covers the personas used by the workflow
 - `implementation-review` exists as a real skill and is included in the documented phase order
 - if `.codex/agents/` exists, the agent set covers the intended personas without changing the portable stage contract
-- if `.codex/role-registry.toml` exists, it covers every stage-to-persona assignment named in `workflow-run`, README, and the review skills, and those persona labels match `runtime/role-catalog.toml`
+- if `.codex/role-registry.toml` exists, it covers every stage-to-persona assignment named in `workflow-run`, README, and the review skills
 - artifact path references are consistent across all skills and docs
 - source dossier artifacts use slugged H1 titles:
   - `# Run - {slug}`
@@ -111,10 +108,10 @@ After changing the workflow or skill packages, verify:
   - implementation-review satisfaction state
   - documentation close-out status
 - docs close-out is represented consistently across README and workflow-run guidance
-- example dossiers under `docs/examples/` reflect the documented workflow and dossier shape
+- skill-local templates under `skills/<skill-name>/assets/` reflect the documented artifact shape and current workflow contract
 - skill folders can still be copied as-is into local Codex skill directories
 
 ## Current Limitations
 
-- The portable workflow contract lives in `skills/`; the shipped persona adapter in this repo is Codex-specific.
+- The portable workflow contract lives in `skills/`; the shipped persona layer in this repo is Codex-specific.
 - There is no dedicated automated test harness yet; consistency is enforced by careful doc and package alignment.

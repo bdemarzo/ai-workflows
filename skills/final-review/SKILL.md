@@ -9,6 +9,8 @@ Use this skill as the final fidelity-review playbook.
 
 The active session owns the final synthesis. Reviewer subagents provide critique, but the active session writes the official review round and coordinates gap resolution with the user.
 
+Use [assets/review-template.md](./assets/review-template.md) as the default saved review-round skeleton. Adapt sections as needed for the actual findings and recommendation.
+
 Input:
 - the implemented change, diff, or implementation summary
 - the relevant `idea.md`, `spec.md`, and `plan.md`

@@ -16,6 +16,8 @@ Use this skill to coordinate the full workflow from a starting prompt by using t
 - `implementation-review`
 - `final-review`
 
+Use [assets/run-template.md](./assets/run-template.md) as the default `run.md` skeleton when creating a new workflow dossier. Keep the section names aligned with the run-ledger contract in this skill.
+
 This skill is the orchestrator. It stays in the active session, asks clarifying questions, delegates work to subagents, consolidates outputs, and asks the user when it is time to proceed.
 
 Role model:

@@ -1,6 +1,6 @@
 # Codex stage-to-persona binding layer.
-# The shared persona definitions live in ../runtime/role-catalog.toml.
-# This file maps workflow stages to concrete Codex persona agents.
+# This file is the persona label source of truth for the shipped Codex adapter.
+# It maps workflow stages to concrete Codex persona agents.
 
 version = 1
 

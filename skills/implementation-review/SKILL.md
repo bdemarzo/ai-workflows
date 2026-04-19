@@ -9,6 +9,8 @@ Use this skill to review the implemented change after `implement-plan` and write
 
 This is a consolidated implementation review. The active orchestrator should gather findings from the required reviewer subagents and write one official review round.
 
+Use [assets/review-template.md](./assets/review-template.md) as the default saved review-round skeleton. Adapt sections as needed for the actual findings and recommendation.
+
 Input:
 - the implemented change, diff, or implementation summary
 - `./docs/workflows/{slug}/plan.md`

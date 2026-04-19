@@ -38,9 +38,6 @@ This repo is organized in layers:
 - `skills/`
   - the portable workflow contract
   - copy these into an agent's skills folder
-- `runtime/`
-  - runtime-neutral alignment files such as the shared persona catalog
-  - use this layer to keep multiple adapters aligned to the same personas
 - `.codex/`
   - the Codex-specific adapter layer
   - copy this into a target repository when you want Codex to execute the workflow with named subagents
@@ -53,10 +50,10 @@ This follows the OpenAI Codex subagents model: custom agents can be defined as s
 
 The Codex adapter layer in this repo has three pieces:
 - [.codex/agents/](/C:/git/bdcf/ai-workflows/.codex/agents) for concrete persona agents
-- [.codex/role-registry.toml](/C:/git/bdcf/ai-workflows/.codex/role-registry.toml) for mapping workflow stages to the shared personas from [runtime/role-catalog.toml](/C:/git/bdcf/ai-workflows/runtime/role-catalog.toml) and then to concrete Codex agent names
+- [.codex/role-registry.toml](/C:/git/bdcf/ai-workflows/.codex/role-registry.toml) for mapping workflow stages to persona labels and then to concrete Codex agent names
 - [.codex/config.toml](/C:/git/bdcf/ai-workflows/.codex/config.toml) for global subagent limits
 
-The starter scaffold included here maps the shared personas to named Codex agents such as:
+The starter scaffold included here maps workflow personas to named Codex agents such as:
 - `product_strategist`
 - `product_manager`
 - `software_architect`
@@ -85,8 +82,6 @@ The intended split is:
 - agent = persona/stable behavior
 - skill = stage procedure, inputs, outputs, and boundaries
 - orchestrator = stage-to-persona assignment plus gating
-
-If you later add another adapter such as `.claude/`, it should bind the same shared personas from [runtime/role-catalog.toml](/C:/git/bdcf/ai-workflows/runtime/role-catalog.toml) to that runtime's equivalent agent/persona system.
 
 ## Workflow
 
@@ -272,24 +267,21 @@ That adapter layer is what makes the stage-assigned personas resolve to stable n
 ## Repository Layout
 
 - `skills/` - canonical skill packages
-- `runtime/` - runtime-neutral persona definitions shared across adapters
 - `.codex/agents/` - optional Codex-specific subagent runtime definitions
 - `.codex/role-registry.toml` - optional Codex-specific stage-to-persona-to-agent binding registry
 - `.codex/config.toml` - optional Codex-specific subagent runtime settings
-- `docs/examples/` - example workflow dossiers
-- `docs/` - supporting docs and artifact examples
+- `skills/<skill-name>/assets/` - optional skill-local templates and reference assets
+- `docs/` - supporting docs
 - `README.md` - human-facing workflow overview
 
-## Examples
+## Skill Templates
 
-The repo includes example dossiers under [docs/examples/](/C:/git/bdcf/ai-workflows/docs/examples):
-- [saved-views-full-workflow](/C:/git/bdcf/ai-workflows/docs/examples/saved-views-full-workflow) as a canonical full-workflow example
-
-Each example shows the expected dossier shape, review rounds, and run-ledger recording style.
+Artifact-producing skills may include skill-local templates under `assets/` so the skill remains usable when copied on its own. Keep long templates in `assets/` and have `SKILL.md` point to them explicitly when they should be used.
 
 ## Notes
 
 - The workflow skills are portable by design; the shipped adapter layer in this repo is Codex-specific.
+- The repo no longer ships a runtime-neutral persona catalog; `.codex/` is the only persona binding layer included here.
 - `plan.md` is the authoritative implementation document for the workflow once implementation starts.
 - `execution.md` is optional and should be used as an evidence appendix rather than a second control document.
 - Repo-local `PLANS.md` can be useful project context, but it should not silently override this workflow contract.

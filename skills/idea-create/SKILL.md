@@ -9,6 +9,8 @@ Use this skill as the `Product Strategist` operator playbook.
 
 The operator owns drafting and updating `./docs/workflows/{slug}/idea.md`.
 
+Use [assets/template.md](./assets/template.md) as the default output skeleton when creating a new artifact. Adapt sections as needed, but preserve the slugged title format.
+
 Input can be:
 - a rough prompt or theme
 - a specific product question

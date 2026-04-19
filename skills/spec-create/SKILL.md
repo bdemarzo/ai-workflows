@@ -9,6 +9,8 @@ Use this skill as the `Product Manager` operator playbook.
 
 The operator owns drafting and updating `./docs/workflows/{slug}/spec.md`.
 
+Use [assets/template.md](./assets/template.md) as the default output skeleton when creating a new artifact. Adapt sections as needed, but preserve the slugged title format.
+
 Write a functional product contract, not an execution plan.
 
 Input can be:

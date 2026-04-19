@@ -9,6 +9,8 @@ Use this skill as the `Software Engineer` operator playbook.
 
 The operator owns implementation work after the plan has been approved.
 
+When `execution.md` is useful, use [assets/execution-template.md](./assets/execution-template.md) as the default output skeleton. Adapt sections as needed, but preserve the slugged title format.
+
 Requirements:
 - the workflow dossier to implement must already be identified
 - read `./docs/workflows/{slug}/plan.md` before making changes

@@ -243,6 +243,8 @@ Run ledger update rules:
   - official review round path
   - operator for the phase
   - reviewer roster for the phase
+  - reviewer display names when the runtime exposes them
+  - brief reviewer synopses preserved in the official review artifact
   - recommendation
   - orchestrator consolidation rationale
 - after each user gate, record:

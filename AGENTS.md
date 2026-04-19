@@ -93,6 +93,8 @@ After changing the workflow or skill packages, verify:
   - `# Plan - {slug}`
   - `# Execution - {slug}` when `execution.md` is used
 - review-round path references are consistent across all skills and docs
+- saved review rounds record reviewer persona, concrete agent name, and display name when the runtime exposes one
+- saved review rounds preserve brief reviewer synopses in addition to the orchestrator's merged findings
 - `workflow-run` is documented consistently as the orchestrator rather than a workflow stage
 - implementation-review specifies architecture, security, and QA / product correctness
 - final-review reviewer personas are covered by the Codex runtime layer when `.codex/agents/` is present

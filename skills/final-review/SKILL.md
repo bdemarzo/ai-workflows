@@ -33,6 +33,8 @@ Requirements:
 - keep the reviewer roster explicit in the saved artifact
 - keep the saved review artifact concise and findings-first
 - focus on fidelity, regressions, and unresolved gaps rather than rerunning all prior stage debate
+- identify each reviewer in the roster with persona, concrete agent name, and subagent display name when the runtime exposes one
+- preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
 
 Focus on:
 - fidelity of code and delivered behavior against `idea.md`, `spec.md`, and `plan.md`
@@ -46,6 +48,7 @@ Write the review artifact with sections like:
 - reviewed artifacts
 - prior review rounds when relevant
 - reviewer roster
+- reviewer synopses
 - review scope
 - key findings
 - meaningful disagreements
@@ -57,6 +60,7 @@ Compression rule:
 - merge overlapping findings across reviewer lenses
 - avoid repeating the same critique in multiple voices
 - keep only the disagreements that materially affect closure readiness
+- keep each reviewer synopsis brief and high-signal rather than turning the artifact into a transcript
 
 Finish with an explicit recommendation:
 - `Recommendation: loop back to implement-plan`

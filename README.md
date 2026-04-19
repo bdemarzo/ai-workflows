@@ -164,6 +164,8 @@ For `implementation-review`:
 
 Saved review rounds should stay concise and findings-first:
 - keep reviewer rosters visible
+- include the concrete agent id and display name when the runtime exposes one
+- preserve a short synopsis of what each reviewer actually argued, not just the merged conclusion
 - merge overlapping findings
 - preserve only disagreements that materially affect the recommendation
 

@@ -30,6 +30,8 @@ Requirements:
 - use exactly two substantive reviewers plus one skeptic
 - keep the saved review artifact concise and findings-first
 - make clear that the reviewers are subagents and the active session writes the consolidated official review round
+- identify each reviewer in the roster with persona, concrete agent name, and subagent display name when the runtime exposes one
+- preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
 
 Focus on:
 - value and user relevance
@@ -43,6 +45,7 @@ Write the review artifact with sections like:
 - reviewed artifact
 - prior review rounds when relevant
 - reviewer roster
+- reviewer synopses
 - review scope
 - self-containment assessment
 - observability of value
@@ -56,6 +59,7 @@ Compression rule:
 - merge overlapping findings across reviewers
 - avoid repeating the same critique reviewer by reviewer
 - preserve only the disagreements that materially affect the recommendation
+- keep each reviewer synopsis brief and high-signal rather than turning the artifact into a transcript
 
 Finish with an explicit recommendation:
 - `Recommendation: revise current stage`

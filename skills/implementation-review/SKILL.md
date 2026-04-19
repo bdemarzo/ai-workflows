@@ -38,6 +38,8 @@ Requirements:
   - unit-test coverage expectations
 - keep the saved review artifact concise and findings-first
 - preserve meaningful disagreement when one or more of the three reviewer lenses is not satisfied
+- identify each reviewer in the roster with persona, concrete agent name, and subagent display name when the runtime exposes one
+- preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
 
 Focus on:
 - architectural soundness against the approved plan
@@ -53,6 +55,7 @@ Write the review artifact with sections like:
 - reviewed artifacts
 - prior implementation review rounds when relevant
 - reviewer lenses
+- reviewer synopses
 - review scope
 - key findings
 - meaningful disagreements
@@ -64,6 +67,7 @@ Compression rule:
 - merge overlapping findings when multiple reviewer lenses point to the same underlying issue
 - avoid repeating the same critique across lenses
 - summarize validation or test concerns into clear actionable gaps rather than long transcripts
+- keep each reviewer synopsis brief and high-signal rather than turning the artifact into a transcript
 
 Finish with an explicit recommendation:
 - `Recommendation: revise implement-plan`

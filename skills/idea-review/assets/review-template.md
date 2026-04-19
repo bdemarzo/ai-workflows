@@ -7,7 +7,10 @@
 - [Optional prior round path and what changed since then.]
 
 ## Reviewer Roster
-- [Reviewer persona] -> [Agent used]
+- [Reviewer persona] -> [Agent id] -> [Display name when available]
+
+## Reviewer Synopses
+- [Display name / persona]: [1-2 sentence synopsis of the reviewer's main points and tone.]
 
 ## Review Scope
 - [What was reviewed and what constraints stayed in view.]

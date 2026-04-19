@@ -1,11 +1,11 @@
 ---
 name: spec-create
-description: Draft or refine the functional product contract as the Technical Product Manager operator before spec-review. Use when the workflow needs `./docs/workflows/{slug}/spec.md`.
+description: Draft or refine the functional product contract as the Product Manager operator before spec-review. Use when the workflow needs `./docs/workflows/{slug}/spec.md`.
 ---
 
 # Spec Create
 
-Use this skill as the `Technical Product Manager` operator playbook.
+Use this skill as the `Product Manager` operator playbook.
 
 The operator owns drafting and updating `./docs/workflows/{slug}/spec.md`.
 

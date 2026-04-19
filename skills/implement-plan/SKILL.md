@@ -1,11 +1,11 @@
 ---
 name: implement-plan
-description: Carry out an approved engineering plan as the expert engineer operator, in bounded validated steps, before handing the result to implementation-review. Use when the user wants to implement `./docs/workflows/{slug}/plan.md`.
+description: Carry out an approved engineering plan as the Software Engineer operator, in bounded validated steps, before handing the result to implementation-review. Use when the user wants to implement `./docs/workflows/{slug}/plan.md`.
 ---
 
 # Implement Plan
 
-Use this skill as the `Expert Engineer` operator playbook.
+Use this skill as the `Software Engineer` operator playbook.
 
 The operator owns implementation work after the plan has been approved.
 
@@ -17,7 +17,7 @@ Requirements:
 - use `./docs/workflows/{slug}/execution.md` only when an evidence appendix or work log is genuinely useful
 - treat `spec.md` as the source of truth for user-visible behavior, privacy, and correctness
 - treat review rounds as historical design input, not as active execution control documents
-- when implementation review sends remediation back, the same expert engineer operator owns the fix pass
+- when implementation review sends remediation back, the same Software Engineer operator owns the fix pass
 
 Operator responsibilities:
 - follow the ordered work in `plan.md`

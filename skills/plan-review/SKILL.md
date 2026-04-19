@@ -7,15 +7,15 @@ description: Review an engineering plan using two substantive reviewer subagents
 
 Use this skill as the review playbook for the plan phase.
 
-The active session should orchestrate the reviewer subagents required for the current workflow mode and write one official consolidated review round.
+The active session should orchestrate the required reviewer subagents and write one official consolidated review round.
 
 Input:
 - the plan at `./docs/workflows/{slug}/plan.md`
 - technical context or constraints that should stay in view
 
 Reviewer roster:
-- `Senior Engineer Reviewer`
-- `Delivery / Systems Reviewer` or `Frontend Delivery Reviewer`
+- `Software Architect`
+- `Software Engineer`
 - `Skeptic`
 
 Requirements:
@@ -25,12 +25,7 @@ Requirements:
 - create a new zero-padded round file for each pass rather than overwriting earlier rounds
 - state the exact reviewed artifact path in the review artifact
 - link the immediately prior review round when one exists and summarize what changed since that round
-- in `standard` and `heavy`, use exactly two substantive reviewers plus one skeptic
-- in `light`, use one substantive reviewer plus one skeptic
-- in `light`, choose the substantive reviewer by dominant risk:
-  - `Senior Engineer Reviewer` by default
-  - `Delivery / Systems Reviewer` for integration or operationally sensitive work
-  - `Frontend Delivery Reviewer` for UI-heavy delivery risk
+- use exactly two substantive reviewers plus one skeptic
 - keep the saved review artifact concise and findings-first
 - make clear that the reviewers are subagents and the active session writes the consolidated official review round
 
@@ -41,6 +36,10 @@ Focus on:
 - validation realism
 - risky assumptions or missing gaps
 - whether the plan is self-contained enough for a later engineer to implement safely
+- whether the plan chooses the simplest viable architecture that satisfies the spec
+- whether every proposed layer, service, abstraction, dependency, and integration is justified by the current need
+- whether the plan reuses existing repository patterns before inventing new architecture
+- whether the plan introduces repetition, split responsibility, or indirection that could be collapsed without losing clarity
 - the strongest reasons not to advance yet
 
 Write the review artifact with sections like:

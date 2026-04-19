@@ -7,15 +7,15 @@ description: Review an idea artifact using two substantive reviewer subagents pl
 
 Use this skill as the review playbook for the idea phase.
 
-The active session should orchestrate the reviewer subagents required for the current workflow mode and write one official consolidated review round.
+The active session should orchestrate the required reviewer subagents and write one official consolidated review round.
 
 Input:
 - the idea artifact at `./docs/workflows/{slug}/idea.md`
 - product context or constraints that should stay in view
 
 Reviewer roster:
-- `Stakeholder Value Reviewer`
-- `UX / Product Design Reviewer` or `Domain Reviewer`
+- `Stakeholder Advocate`
+- `Product Designer` or `Domain Expert`
 - `Skeptic`
 
 Requirements:
@@ -25,12 +25,7 @@ Requirements:
 - create a new zero-padded round file for each pass rather than overwriting earlier rounds
 - state the exact reviewed artifact path in the review artifact
 - link the immediately prior review round when one exists and summarize what changed since that round
-- in `standard` and `heavy`, use exactly two substantive reviewers plus one skeptic
-- in `light`, use one substantive reviewer plus one skeptic
-- in `light`, choose the substantive reviewer by dominant risk:
-  - `Stakeholder Value Reviewer` by default
-  - `UX / Product Design Reviewer` when the idea is meaningfully user-facing and interaction-heavy
-  - `Domain Reviewer` when domain constraints dominate
+- use exactly two substantive reviewers plus one skeptic
 - keep the saved review artifact concise and findings-first
 - make clear that the reviewers are subagents and the active session writes the consolidated official review round
 

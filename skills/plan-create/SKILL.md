@@ -1,11 +1,11 @@
 ---
 name: plan-create
-description: Draft or refine the implementation-ready engineering plan as the Architect / Implementation Planner operator before plan-review. Use when the workflow needs `./docs/workflows/{slug}/plan.md`.
+description: Draft or refine the implementation-ready engineering plan as the Software Architect operator before plan-review. Use when the workflow needs `./docs/workflows/{slug}/plan.md`.
 ---
 
 # Plan Create
 
-Use this skill as the `Architect / Implementation Planner` operator playbook.
+Use this skill as the `Software Architect` operator playbook.
 
 The operator owns drafting and updating `./docs/workflows/{slug}/plan.md`.
 
@@ -26,6 +26,10 @@ Requirements:
 - define non-obvious terms in plain language instead of assuming prior repo knowledge
 - when revising after `plan-review`, fold accepted review decisions back into `plan.md`
 - when the plan is ready for execution, mark that state clearly in the plan body
+- prefer the simplest plan that can credibly satisfy the approved spec
+- reuse existing repository patterns, abstractions, and infrastructure before introducing new ones
+- justify each non-trivial layer, service, dependency, job, or abstraction in present-tense terms
+- do not add speculative extensibility, future-proofing layers, or optional platformization unless the current spec clearly requires them
 
 Operator responsibility:
 - draft the source artifact for later review
@@ -39,6 +43,8 @@ Decision rule:
 - if a missing detail is only needed for implementation, decide it in the plan
 - if the plan would introduce a new architectural direction, major architectural constraint, or a new third-party service, SDK, hosted platform, or external tool, treat that as materially important and route it back through the orchestrator for clarification or approval when needed
 - when unsure, do not backfill product discovery into the plan; push unclear user-facing contract questions back to the spec
+- if an existing repo pattern can solve the problem safely, prefer it over inventing a new architectural shape
+- if a proposed component cannot be justified by the current spec, cut it from the plan
 
 Write the plan with sections like:
 - title
@@ -64,6 +70,8 @@ Style rule:
 - focus on decisions, sequencing, interfaces, validation, and recovery
 - prefer compact bullets or short prose blocks over long explanatory narrative
 - avoid restating the same intent, dependency, or risk in multiple sections unless the repetition materially improves implementation safety
+- make design tradeoffs legible with the shortest explanation that still justifies the choice
+- prefer one recommended approach over broad option catalogs unless the decision is still intentionally open
 
 Require these expectations:
 - the plan must be restartable from `plan.md` plus the repository alone
@@ -78,5 +86,7 @@ Do not:
 - begin implementation
 - silently repair product-contract gaps that should have been clarified in the spec
 - expand straightforward decisions into essay-style rationale unless the tradeoff is non-obvious or high risk
+- introduce architecture that is primarily justified by hypothetical future needs
+- duplicate the same control point across multiple layers unless the redundancy is intentional and clearly justified
 
 The output of this stage should be ready for `plan-review`.

@@ -19,9 +19,9 @@ Use this skill to coordinate the full workflow from a starting prompt by using t
 This skill is the orchestrator. It stays in the active session, asks clarifying questions, delegates work to subagents, consolidates outputs, and asks the user when it is time to proceed.
 
 Role model:
-- agents define durable role behavior
+- agents define durable persona behavior
 - skills define stage procedure and artifact contract
-- the orchestrator assigns roles to stage skills and manages gating
+- the orchestrator assigns personas to stage skills and manages gating
 
 Core model:
 - the active session is always the orchestrator
@@ -36,7 +36,7 @@ Core model:
 - operators own source-artifact drafting or implementation work for their phase
 - reviewers provide findings and recommendations but do not own the source artifact
 
-Canonical phase order in `standard` and `heavy` mode:
+Canonical phase order:
 1. `idea-create`
 2. `idea-review`
 3. user gate
@@ -53,22 +53,6 @@ Canonical phase order in `standard` and `heavy` mode:
 14. resolve final gaps with the user
 15. docs close-out
 16. final user approval and workflow closure
-
-`light` mode uses the same dossier files but may compress the early discovery path:
-1. `idea-create`
-2. `spec-create`
-3. `idea-review`
-4. `spec-review`
-5. first user gate
-6. `plan-create`
-7. `plan-review`
-8. user gate
-9. `implement-plan`
-10. `implementation-review`
-11. user gate
-12. `final-review`
-13. docs close-out
-14. final user approval and workflow closure
 
 Requirements:
 - derive one canonical `slug` from the starting prompt and keep the workflow dossier under `./docs/workflows/{slug}/`
@@ -88,81 +72,67 @@ Requirements:
 - treat this workflow dossier contract as authoritative when this skill is active
 - keep the run ledger restartable enough that another orchestrator session can resume from `run.md` plus linked artifacts without prior chat history
 - if the runtime does not support subagents well enough to run this model, stop and tell the user instead of silently degrading into a different workflow
-- if a runtime-specific role registry exists, resolve concrete subagent bindings through it and record the actual bindings used
+- if a runtime-specific role registry exists, resolve stage-to-persona bindings through it and record the actual bindings used
 - if a required concrete binding is missing and there is no valid substitute, stop and tell the user instead of silently inventing a replacement
 
 Default phase ownership:
 - `idea-create`
   - operator: `Product Strategist`
   - reviewers:
-    - `Stakeholder Value Reviewer`
-    - `UX / Product Design Reviewer` or `Domain Reviewer`
+    - `Stakeholder Advocate`
+    - `Product Designer` or `Domain Expert`
     - `Skeptic`
 - `spec-create`
-  - operator: `Technical Product Manager`
+  - operator: `Product Manager`
   - reviewers:
-    - `Architect Reviewer`
-    - `Stakeholder / Power User Reviewer` or `UX / Product Design Reviewer`
+    - `Software Architect`
+    - `Stakeholder Advocate` or `Product Designer`
     - `Skeptic`
 - `plan-create`
-  - operator: `Architect / Implementation Planner`
+  - operator: `Software Architect`
   - reviewers:
-    - `Senior Engineer Reviewer`
-    - `Delivery / Systems Reviewer` or `Frontend Delivery Reviewer`
+    - `Software Architect`
+    - `Software Engineer`
     - `Skeptic`
 - `implement-plan`
-  - operator: `Expert Engineer`
+  - operator: `Software Engineer`
 - `implementation-review`
   - reviewers:
-    - `Architecture Reviewer`
-    - `Security Reviewer`
-    - `QA / Product Correctness Reviewer`
+    - `Software Architect`
+    - `Security Engineer`
+    - `QA Engineer`
 - `final-review`
   - reviewers:
-    - `Product Fidelity Reviewer`
-    - `Plan Fidelity Reviewer`
-    - `QA / Regression Reviewer`
+    - `Product Manager` or `Product Strategist`
+    - `Software Architect`
+    - `QA Engineer`
 - `docs close-out`
   - operator: `Documentation Maintainer`
 
 Reviewer-count rule:
-- in `standard` and `heavy`, idea, spec, and plan reviews always use exactly:
+- idea, spec, and plan reviews always use exactly:
   - two substantive reviewers
   - one skeptic
 - the second substantive reviewer may adapt to the workflow type, but the count does not change
-- in `light`, idea, spec, and plan reviews use:
-  - one substantive reviewer
-  - one skeptic
-- the substantive reviewer in `light` should be selected by dominant risk for the phase
 - implementation review always uses exactly:
-  - architecture
+  - software architecture
   - security
-  - QA / product correctness
-
-Workflow mode:
-- resolve one mode at startup:
-  - `light`
-  - `standard`
-  - `heavy`
-- prefer `standard` by default
-- use `light` only for small, localized, low-risk work where the user request is already concrete enough to support a compressed idea/spec cycle
-- use `heavy` for high-risk, cross-cutting, security-sensitive, or high-blast-radius work
+  - QA
 
 Role binding:
-- when a runtime-specific registry exists, resolve each abstract role to:
-  - the default concrete agent name
-  - any allowed substitutions
-  - whether the role is required
-- record the concrete binding decision in `run.md`
+- when a runtime-specific registry exists, resolve each stage to:
+  - the assigned personas
+  - the default concrete agent name for each persona
+  - any allowed substitutions for that assignment
+- record the stage-to-persona and persona-to-agent bindings in `run.md`
 - if a preferred agent is unavailable but an allowed substitute exists, record the substitution and continue
-- if a required role has no usable binding, stop and ask the user instead of silently weakening the review
+- if a required persona has no usable binding, stop and ask the user instead of silently weakening the review
 
 At startup:
 - treat startup as guided preflight, not as the beginning of stage execution
 - derive the slug
-- resolve workflow mode
 - clarify the workflow goal, audience, constraints, and success criteria whenever needed
-- resolve concrete role bindings when a runtime registry exists
+- resolve stage-to-persona bindings when a runtime registry exists
 - explain that the active session will orchestrate subagents through:
   - idea
   - spec
@@ -184,13 +154,12 @@ Use a plain-language startup confirmation such as:
 - `Here is how I will run this workflow:`
 - `- Workflow ask: Build a lightweight internal release notes tool for product and engineering teams.`
 - `- Canonical slug: release-notes-tool`
-- `- Workflow mode: standard`
 - `- Orchestrator: active session`
-- `- Bound product strategist agent: product_strategist`
+- `- Bound product strategist persona: product_strategist`
 - `- Idea operator: Product Strategist`
-- `- Spec operator: Technical Product Manager`
-- `- Plan operator: Architect / Implementation Planner`
-- `- Implementation operator: Expert Engineer`
+- `- Spec operator: Product Manager`
+- `- Plan operator: Software Architect`
+- `- Implementation operator: Software Engineer`
 - `- User approvals required after idea, spec, plan, implementation review, and close-out`
 - `Reply 'start' to begin, or tell me what to change.`
 
@@ -200,15 +169,14 @@ Clarification rule:
 - record meaningful questions and answers in `run.md`
 
 Execution model:
-1. confirm the workflow ask, slug, workflow mode, constraints, and guided phase order
-2. resolve the concrete subagent binding for every required role
-3. record the chosen bindings, substitutions, and workflow mode in `run.md`
-4. delegate the current stage skill to the current operator
-5. delegate the phase review skill to the required reviewer subagents for the current mode
-6. write the consolidated official review round
-7. fold accepted review decisions back into the source artifact
-8. present the result to the user at the required gate
-9. advance, loop, or reroute based on the review plus user decision
+1. confirm the workflow ask, slug, constraints, and guided phase order
+2. resolve the concrete subagent binding for every stage persona
+3. record the chosen stage-to-persona and persona-to-agent bindings in `run.md`
+4. delegate the current create stage and the matching formal review stage
+5. write the consolidated official review round
+6. fold accepted review decisions back into the source artifact
+7. present the result to the user at the required gate
+8. advance, loop, or reroute based on review and user decision
 10. after implementation, run `implementation-review`
 11. if any implementation reviewer requires material changes, route work back to `implement-plan` and repeat
 12. after implementation review approval, run `final-review`
@@ -217,7 +185,6 @@ Execution model:
 15. verify docs close-out, ask for final approval, and then close the workflow
 
 Advancement rules:
-- in `light`, the first user gate may happen after the compressed idea/spec cycle, but both `idea.md` and `spec.md` must still exist before planning
 - do not advance from idea until the idea is specific enough to support spec creation
 - do not advance from spec until the contract is specific enough to support planning
 - do not advance from plan until the implementation approach is specific enough to support engineering execution
@@ -254,9 +221,8 @@ Run ledger update rules:
 - after startup confirmation, record:
   - the original workflow ask
   - the canonical slug
-  - the workflow mode
   - the current orchestrator
-  - the concrete role-to-agent bindings used
+  - the concrete persona-to-agent bindings used
   - any substitutions or fallbacks used
   - the initial user constraints and clarifications
   - the fact that the user approved the guided workflow start
@@ -299,7 +265,6 @@ Run ledger update rules:
 Section guidance:
 - `Purpose / Big Picture`: explain what the workflow is delivering, for whom, and what success looks like
 - `Workflow Guidelines`: record the current orchestrator, current phase, workflow status, current gate decision needed when paused, and any important constraints
-- `Workflow Guidelines`: also record the workflow mode and any important role-binding substitutions that affect the run
 - `Artifact Map`: list the current paths for:
   - `idea.md`
   - latest idea review round
@@ -337,10 +302,10 @@ Build a lightweight internal release notes tool for product and engineering team
 - Current gate decision needed: approve spec review resolution before plan-create
 
 ## Phase Ownership
-- Current operator: Technical Product Manager
+- Current operator: Product Manager
 - Reviewers:
-  - Architect Reviewer
-  - Stakeholder / Power User Reviewer
+  - Software Architect
+  - Stakeholder Advocate
   - Skeptic
 ```
 

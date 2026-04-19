@@ -7,15 +7,15 @@ description: Review a spec artifact using two substantive reviewer subagents plu
 
 Use this skill as the review playbook for the spec phase.
 
-The active session should orchestrate the reviewer subagents required for the current workflow mode and write one official consolidated review round.
+The active session should orchestrate the required reviewer subagents and write one official consolidated review round.
 
 Input:
 - the spec artifact at `./docs/workflows/{slug}/spec.md`
 - product context or constraints that should stay in view
 
 Reviewer roster:
-- `Architect Reviewer`
-- `Stakeholder / Power User Reviewer` or `UX / Product Design Reviewer`
+- `Software Architect`
+- `Stakeholder Advocate` or `Product Designer`
 - `Skeptic`
 
 Requirements:
@@ -25,12 +25,7 @@ Requirements:
 - create a new zero-padded round file for each pass rather than overwriting earlier rounds
 - state the exact reviewed artifact path in the review artifact
 - link the immediately prior review round when one exists and summarize what changed since that round
-- in `standard` and `heavy`, use exactly two substantive reviewers plus one skeptic
-- in `light`, use one substantive reviewer plus one skeptic
-- in `light`, choose the substantive reviewer by dominant risk:
-  - `Architect Reviewer` by default
-  - `Stakeholder / Power User Reviewer` when workflow fit dominates
-  - `UX / Product Design Reviewer` when the contract is heavily user-facing
+- use exactly two substantive reviewers plus one skeptic
 - explicitly check whether planning can proceed from the current `spec.md` alone
 - explicitly check whether accepted review feedback has been folded back into the latest `spec.md`
 - keep the saved review artifact concise and findings-first
@@ -41,6 +36,8 @@ Focus on:
 - missing behavior, states, constraints, or edge cases
 - whether acceptance criteria are observable enough to drive planning
 - whether the current spec is restartable enough for `plan-create`
+- whether the spec is shaping the smallest sufficient solution rather than quietly requiring speculative architecture
+- whether the spec is accidentally prescribing implementation detail that belongs in the plan
 - what should stay out of the spec and move to the plan
 - the strongest reasons not to advance yet
 

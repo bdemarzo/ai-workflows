@@ -7,7 +7,7 @@ description: Apply an optional manual pressure-test lens outside the main workfl
 
 Use this skill to pressure-test an artifact with an intentionally skeptical stance.
 
-This skill remains optional and manual. It is separate from the mandatory `Skeptic` reviewer that is already part of the standard idea, spec, and plan review phases.
+This skill remains optional and manual. It is separate from the mandatory `Skeptic` reviewer that is already part of the normal idea, spec, and plan review phases.
 
 Use it on:
 - an idea artifact

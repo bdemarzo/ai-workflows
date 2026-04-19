@@ -17,9 +17,9 @@ Input:
 - validation output that should stay in view
 
 Expected reviewer roster:
-- `Product Fidelity Reviewer`
-- `Plan Fidelity Reviewer`
-- `QA / Regression Reviewer`
+- `Product Manager` or `Product Strategist`
+- `Software Architect`
+- `QA Engineer`
 
 Requirements:
 - derive `slug` from the workflow dossier being reviewed
@@ -37,6 +37,7 @@ Focus on:
 - unresolved correctness gaps
 - regressions and validation gaps
 - places where implementation drifted from the approved artifact chain
+- whether the delivered solution stayed appropriately simple and avoided unjustified architectural expansion during execution
 - what must still be fixed before docs close-out and closure
 
 Write the review artifact with sections like:

@@ -24,11 +24,11 @@ Requirements:
 - create a new zero-padded round file for each pass rather than overwriting earlier rounds
 - list the exact reviewed artifact paths in the review artifact
 - link the immediately prior implementation-review round when one exists and summarize what changed since that round
-- use exactly these three reviewer lenses:
-  - `Architecture Reviewer`
-  - `Security Reviewer`
-  - `QA / Product Correctness Reviewer`
-- treat the QA / Product Correctness reviewer as responsible for:
+- use exactly these three reviewer personas:
+  - `Software Architect`
+  - `Security Engineer`
+  - `QA Engineer`
+- treat the QA Engineer as responsible for:
   - user-visible correctness
   - regressions
   - edge cases
@@ -43,6 +43,8 @@ Focus on:
 - product correctness against spec and plan
 - regressions and missing edge-case coverage
 - sufficiency of validation and unit tests
+- accidental complexity or implementation drift that added layers, abstractions, or dependencies beyond the approved need
+- whether the delivered shape remains easy for the next engineer to follow and change safely
 - the strongest reasons not to proceed to final-review yet
 
 Write the review artifact with sections like:

@@ -1,6 +1,6 @@
 # ai-workflows
 
-Codex-first workflow skills for AI-assisted product and engineering work.
+Portable workflow skills for AI-assisted product and engineering work, plus a Codex adapter layer.
 
 This repo defines a guided workflow where the active AI session is the orchestrator and subagents act as operators and reviewers. The orchestrator asks clarifying questions when needed, presents each major phase to the user, and requires approval before moving forward.
 
@@ -24,74 +24,69 @@ This repo defines a guided workflow where the active AI session is the orchestra
 
 - The active session is always the orchestrator.
 - Operators and reviewers are always subagents.
-- Agents define durable role behavior.
+- Agents define durable persona behavior.
 - Skills define the stage procedure and artifact contract.
 - Operators own drafting or implementation work for their phase.
 - Reviewers provide findings and recommendations but do not own the source artifact.
 - The orchestrator writes the official consolidated review rounds.
 - The user gates progress between major phases.
 
-## Codex Runtime Layer
+## Repo Layers
 
-The skills in [skills/](/C:/git/bdcf/ai-workflows/skills) stay portable and role-based. For Codex, this repo now also includes an optional project-scoped runtime layer under [.codex/agents/](/C:/git/bdcf/ai-workflows/.codex/agents).
+This repo is organized in layers:
+
+- `skills/`
+  - the portable workflow contract
+  - copy these into an agent's skills folder
+- `runtime/`
+  - runtime-neutral alignment files such as the shared persona catalog
+  - use this layer to keep multiple adapters aligned to the same personas
+- `.codex/`
+  - the Codex-specific adapter layer
+  - copy this into a target repository when you want Codex to execute the workflow with named subagents
+
+## Codex Adapter Layer
+
+The skills in [skills/](/C:/git/bdcf/ai-workflows/skills) stay portable and stage-oriented. For Codex, this repo also includes an optional project-scoped adapter layer under [.codex/](/C:/git/bdcf/ai-workflows/.codex).
 
 This follows the OpenAI Codex subagents model: custom agents can be defined as standalone TOML files in `.codex/agents/`, while the parent session remains the orchestrator. See [OpenAI Codex Subagents](https://developers.openai.com/codex/subagents).
 
-The Codex runtime layer in this repo now has three pieces:
-- [.codex/agents/](/C:/git/bdcf/ai-workflows/.codex/agents) for concrete role agents
-- [.codex/role-registry.toml](/C:/git/bdcf/ai-workflows/.codex/role-registry.toml) for mapping abstract workflow roles to concrete agent names and substitutions
+The Codex adapter layer in this repo has three pieces:
+- [.codex/agents/](/C:/git/bdcf/ai-workflows/.codex/agents) for concrete persona agents
+- [.codex/role-registry.toml](/C:/git/bdcf/ai-workflows/.codex/role-registry.toml) for mapping workflow stages to the shared personas from [runtime/role-catalog.toml](/C:/git/bdcf/ai-workflows/runtime/role-catalog.toml) and then to concrete Codex agent names
 - [.codex/config.toml](/C:/git/bdcf/ai-workflows/.codex/config.toml) for global subagent limits
 
-The starter scaffold included here maps the workflow roles to named Codex agents such as:
+The starter scaffold included here maps the shared personas to named Codex agents such as:
 - `product_strategist`
-- `technical_product_manager`
-- `implementation_planner`
+- `product_manager`
+- `software_architect`
+- `software_engineer`
+- `product_designer`
+- `domain_expert`
+- `stakeholder_advocate`
 - `skeptic`
-- `expert_engineer`
-- `architecture_reviewer`
-- `security_reviewer`
-- `qa_product_correctness_reviewer`
-- `product_fidelity_reviewer`
-- `plan_fidelity_reviewer`
-- `qa_regression_reviewer`
+- `security_engineer`
+- `qa_engineer`
 - `documentation_maintainer`
 
 The included [.codex/config.toml](/C:/git/bdcf/ai-workflows/.codex/config.toml) also sets conservative global subagent limits for Codex:
 - `max_threads = 6`
 - `max_depth = 1`
 
-Use this layer when you want the orchestrator to call stable, named Codex subagents instead of reconstructing role instructions every run.
+Use this layer when you want the orchestrator to call stable, named Codex subagents instead of reconstructing persona instructions every run.
+
+The shared `Software Architect` persona in this repo is intended to drive bounded, full-stack execution planning:
+- prefer the simplest viable design that satisfies the approved contract
+- reuse existing patterns before introducing new abstractions, services, or dependencies
+- justify each layer in present-tense terms rather than future-proofing by default
+- keep recommendations concrete, defensible, and easy for the next engineer to follow
 
 The intended split is:
-- agent = role/persona/stable behavior
+- agent = persona/stable behavior
 - skill = stage procedure, inputs, outputs, and boundaries
-- orchestrator = role-to-skill assignment plus gating
+- orchestrator = stage-to-persona assignment plus gating
 
-## Workflow Modes
-
-`workflow-run` should resolve one workflow mode at startup:
-- `light`
-- `standard`
-- `heavy`
-
-`light`
-- for small, localized, low-risk work
-- may compress `idea-create` and `spec-create` into one discovery cycle before the first user gate
-- still leaves both `idea.md` and `spec.md` in the dossier
-- early reviews use one substantive reviewer plus one skeptic
-- `implementation-review`, `final-review`, and docs close-out remain mandatory
-
-`standard`
-- default mode
-- full `idea -> spec -> plan -> implement -> implementation-review -> final-review -> docs close-out`
-- early reviews use two substantive reviewers plus one skeptic
-- user gates remain between major phases
-
-`heavy`
-- for high-risk, cross-cutting, security-sensitive, or high-blast-radius work
-- same stage order as `standard`
-- early reviews use two substantive reviewers plus one skeptic
-- the orchestrator should ask more clarifying questions, preserve more dissent, and require stronger validation before advancing
+If you later add another adapter such as `.claude/`, it should bind the same shared personas from [runtime/role-catalog.toml](/C:/git/bdcf/ai-workflows/runtime/role-catalog.toml) to that runtime's equivalent agent/persona system.
 
 ## Workflow
 
@@ -121,62 +116,56 @@ The canonical workflow is:
 ### Idea
 - Operator: `Product Strategist`
 - Reviewers:
-  - `Stakeholder Value Reviewer`
-  - `UX / Product Design Reviewer` or `Domain Reviewer`
+  - `Stakeholder Advocate`
+  - `Product Designer` or `Domain Expert`
   - `Skeptic`
 
 ### Spec
-- Operator: `Technical Product Manager`
+- Operator: `Product Manager`
 - Reviewers:
-  - `Architect Reviewer`
-  - `Stakeholder / Power User Reviewer` or `UX / Product Design Reviewer`
+  - `Software Architect`
+  - `Stakeholder Advocate` or `Product Designer`
   - `Skeptic`
 
 ### Plan
-- Operator: `Architect / Implementation Planner`
+- Operator: `Software Architect`
 - Reviewers:
-  - `Senior Engineer Reviewer`
-  - `Delivery / Systems Reviewer` or `Frontend Delivery Reviewer`
+  - `Software Architect`
+  - `Software Engineer`
   - `Skeptic`
 
 ### Implementation
-- Operator: `Expert Engineer`
+- Operator: `Software Engineer`
 
 ### Implementation Review
 - Reviewers:
-  - `Architecture Reviewer`
-  - `Security Reviewer`
-  - `QA / Product Correctness Reviewer`
+  - `Software Architect`
+  - `Security Engineer`
+  - `QA Engineer`
 
 ### Final Review
 - Orchestrator-led synthesis with reviewer lenses such as:
-  - `Product Fidelity Reviewer`
-  - `Plan Fidelity Reviewer`
-  - `QA / Regression Reviewer`
+  - `Product Manager` or `Product Strategist`
+  - `Software Architect`
+  - `QA Engineer`
 
 ### Docs Close-Out
 - Operator: `Documentation Maintainer`
 
 ## Review Rules
 
-For `idea`, `spec`, and `plan` in `standard` and `heavy` mode:
+For `idea`, `spec`, and `plan`:
 - each review uses exactly:
   - two substantive reviewers
   - one skeptic
 - the second substantive reviewer may adapt to the workflow type, but the reviewer count does not change
 
-For `idea`, `spec`, and `plan` in `light` mode:
-- each review uses:
-  - one substantive reviewer
-  - one skeptic
-- the substantive reviewer should be chosen by dominant risk for the phase
-
 For `implementation-review`:
 - the reviewer set is fixed:
-  - architecture
+  - software architecture
   - security
-  - QA / product correctness
-- QA / product correctness should explicitly consider regressions, edge cases, and unit-test coverage expectations
+  - QA
+- QA should explicitly consider regressions, edge cases, and unit-test coverage expectations
 
 Saved review rounds should stay concise and findings-first:
 - keep reviewer rosters visible
@@ -208,13 +197,12 @@ Use one canonical `slug` per workflow. Create a new review round for each pass i
 
 In normal use, `workflow-run` will:
 
-- resolve `light`, `standard`, or `heavy` mode
-- resolve workflow roles through the runtime role registry when one exists
-- record the actual role-to-agent bindings used for the run
+- resolve stage-to-persona bindings through the runtime role registry when one exists
+- record the actual persona-to-agent bindings used for the run
 - clarify the goal, audience, constraints, and success criteria when needed
 - confirm the guided workflow before the first phase starts
 - delegate creation work to the current phase operator subagent
-- delegate review work to the current phase reviewer subagents
+- delegate formal review work to the current phase reviewer subagents
 - write the official review artifact for the phase
 - present the result to the user
 - ask whether to proceed
@@ -246,18 +234,17 @@ Use workflow-run for this feature.
 Ask questions whenever clarity is needed.
 Use subagents for operators and reviewers.
 Gate each major phase with me before proceeding.
-Use standard mode unless the task is clearly small enough for light mode.
 
 Build a customer-facing saved views experience for our reporting dashboard.
 ```
 
 ## Optional Manual Skill
 
-`skeptical-review` is still available as an optional manual pressure-test. It is separate from the mandatory `Skeptic` reviewer already present in the standard idea/spec/plan review phases.
+`skeptical-review` is still available as an optional manual pressure-test. It is separate from the mandatory `Skeptic` reviewer already present in the normal idea/spec/plan review phases.
 
 ## Install for Codex
 
-Copy any skill folder from `skills/` into your Codex skills directory:
+Copy any skill folder from `skills/` into your agent's skills directory. For Codex, that is typically:
 
 ```text
 skills/workflow-run -> ~/.codex/skills/workflow-run
@@ -272,7 +259,7 @@ To install everything, copy each folder under `skills/` into:
 ~/.codex/skills/
 ```
 
-If you want the Codex-first runtime behavior in a target repository, also copy the project-scoped Codex runtime layer into that repository root:
+If you want the Codex adapter behavior in a target repository, also copy the project-scoped `.codex/` folder into that repository root:
 
 ```text
 .codex/agents/
@@ -280,13 +267,14 @@ If you want the Codex-first runtime behavior in a target repository, also copy t
 .codex/config.toml
 ```
 
-That runtime layer is what makes the abstract workflow roles resolve to stable named Codex subagents.
+That adapter layer is what makes the stage-assigned personas resolve to stable named Codex subagents.
 
 ## Repository Layout
 
 - `skills/` - canonical skill packages
+- `runtime/` - runtime-neutral persona definitions shared across adapters
 - `.codex/agents/` - optional Codex-specific subagent runtime definitions
-- `.codex/role-registry.toml` - optional Codex-specific role-to-agent binding registry
+- `.codex/role-registry.toml` - optional Codex-specific stage-to-persona-to-agent binding registry
 - `.codex/config.toml` - optional Codex-specific subagent runtime settings
 - `docs/examples/` - example workflow dossiers
 - `docs/` - supporting docs and artifact examples
@@ -295,14 +283,13 @@ That runtime layer is what makes the abstract workflow roles resolve to stable n
 ## Examples
 
 The repo includes example dossiers under [docs/examples/](/C:/git/bdcf/ai-workflows/docs/examples):
-- [standard-saved-views](/C:/git/bdcf/ai-workflows/docs/examples/standard-saved-views) for a `standard` workflow
-- [light-profile-copy-refresh](/C:/git/bdcf/ai-workflows/docs/examples/light-profile-copy-refresh) for a `light` workflow
+- [saved-views-full-workflow](/C:/git/bdcf/ai-workflows/docs/examples/saved-views-full-workflow) as a canonical full-workflow example
 
 Each example shows the expected dossier shape, review rounds, and run-ledger recording style.
 
 ## Notes
 
-- This repo now prioritizes Codex-first orchestration with subagents.
+- The workflow skills are portable by design; the shipped adapter layer in this repo is Codex-specific.
 - `plan.md` is the authoritative implementation document for the workflow once implementation starts.
 - `execution.md` is optional and should be used as an evidence appendix rather than a second control document.
 - Repo-local `PLANS.md` can be useful project context, but it should not silently override this workflow contract.

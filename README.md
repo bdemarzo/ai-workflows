@@ -201,6 +201,7 @@ In normal use, `workflow-run` will:
 - record the actual persona-to-agent bindings used for the run
 - clarify the goal, audience, constraints, and success criteria when needed
 - confirm the guided workflow before the first phase starts
+- re-ground on `run.md` and the current markdown artifacts at phase boundaries instead of trusting long chat history
 - delegate creation work to the current phase operator subagent
 - delegate formal review work to the current phase reviewer subagents
 - write the official review artifact for the phase
@@ -209,6 +210,10 @@ In normal use, `workflow-run` will:
 - keep `docs/workflows/{slug}/run.md` current as the restartable workflow ledger
 
 The orchestrator should ask questions whenever clarity is needed. The workflow should not rely on autonomous straight-through execution as its primary mode.
+
+The orchestrator should treat the repo markdown artifacts as the authoritative working context. If chat history conflicts with the saved artifacts, the saved artifacts win and the discrepancy should be recorded.
+
+Accepted user feedback and accepted review outcomes should not remain chat-only. Before the next phase begins, they should be written into `run.md` or the relevant workflow artifact, and subagent delegation should be grounded in those saved artifacts.
 
 If a runtime-specific role registry is missing or incomplete, the orchestrator should fall back explicitly and record that fallback in `run.md` instead of silently improvising.
 

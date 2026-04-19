@@ -171,27 +171,39 @@ Clarification rule:
 - do not defer material ambiguity simply to stay moving
 - record meaningful questions and answers in `run.md`
 
+Re-grounding rule:
+- treat repo markdown artifacts as the authoritative working context and treat long chat history as convenience context only
+- before each stage transition, re-read `run.md` and the source artifacts for the next stage and continue from those files rather than from memory alone
+- after each user gate, reroute, or remediation loop, explicitly re-ground on the current markdown artifacts before making the next stage decision
+- if chat context conflicts with the current repo markdown artifacts, prefer the markdown artifacts and record the discrepancy in `run.md`
+- when the thread has become long, repetitive, or contradictory, perform a concise artifact-based restatement of the current truth before proceeding
+- do not carry accepted decisions, constraints, or clarifications forward as chat-only context; write them into `run.md` or the relevant source artifact before relying on them
+- before starting a new phase, confirm that accepted user feedback and accepted review outcomes are reflected in the repo markdown artifacts
+- when delegating to subagents, ground the task in artifact paths and saved decisions rather than relying on conversational recap alone
+
 Execution model:
 1. confirm the workflow ask, slug, constraints, and guided phase order
 2. resolve the concrete subagent binding for every stage persona
 3. record the chosen stage-to-persona and persona-to-agent bindings in `run.md`
-4. delegate the current create stage and the matching formal review stage
-5. write the consolidated official review round
-6. fold accepted review decisions back into the source artifact
-7. present the result to the user at the required gate
-8. advance, loop, or reroute based on review and user decision
+4. re-ground on `run.md` plus the source artifacts for the current stage and restate the current artifact-based truth before delegating work
+5. delegate the current create stage and the matching formal review stage using artifact paths and saved decisions as the primary task context
+6. write the consolidated official review round
+7. fold accepted review decisions back into the source artifact
+8. present the result to the user at the required gate
+9. after the user gate, record the user's feedback, ensure accepted feedback is written into repo markdown artifacts, and then re-ground on the updated artifacts before advancing, looping, or rerouting
 10. after implementation, run `implementation-review`
-11. if any implementation reviewer requires material changes, route work back to `implement-plan` and repeat
+11. if any implementation reviewer requires material changes, route work back to `implement-plan`, re-ground on the updated artifacts, and repeat
 12. after implementation review approval, run `final-review`
-13. if final review finds fidelity gaps, route fixes back to the owning operator and rerun review as needed
+13. if final review finds fidelity gaps, route fixes back to the owning operator, re-ground on the updated artifacts, and rerun review as needed
 14. delegate docs close-out to the documentation maintainer
-15. verify docs close-out, ask for final approval, and then close the workflow
+15. verify docs close-out, re-ground on the final markdown artifacts, ask for final approval, and then close the workflow
 
 Advancement rules:
 - do not advance from idea until the idea is specific enough to support spec creation
 - do not advance from spec until the contract is specific enough to support planning
 - do not advance from plan until the implementation approach is specific enough to support engineering execution
 - do not advance when the markdown artifacts in the repo are insufficient for the next stage to continue without chat history
+- do not advance when accepted user feedback or accepted review outcomes still live only in chat context
 - do not leave implementation review until architecture, security, and QA all recommend proceeding
 - do not close the workflow until:
   - final-review gaps are resolved
@@ -206,6 +218,8 @@ Looping and reroute rules:
   - rerun `implement-plan`
   - then rerun `implementation-review`
 - if final review finds fidelity gaps, route the fixes back to the operator who owns the affected work
+- after any reroute or remediation cycle, re-ground on `run.md` plus the updated markdown artifacts before resuming orchestration
+- after any user feedback that changes the direction, ensure the accepted change is written into repo markdown artifacts before delegating more work
 
 Run ledger structure:
 - maintain these required sections:
@@ -235,6 +249,7 @@ Run ledger update rules:
   - current operator
   - current reviewer roster
   - current phase objective
+  - the artifact-based restatement of current truth used to start the phase
 - after each create stage, update:
   - `Artifact Map`
   - `Progress`
@@ -252,6 +267,8 @@ Run ledger update rules:
   - what the user reviewed
   - approval or revision decision
   - any conditions the user attached to proceeding
+  - the artifact-based re-grounding summary used before the next step when one was needed
+  - where accepted feedback was written in the repo markdown artifacts
 - during implementation review, record:
   - satisfaction status for architecture
   - satisfaction status for security
@@ -268,6 +285,7 @@ Run ledger update rules:
   - why it mattered
   - the answer
   - what changed because of it
+  - any correction where repo markdown artifacts overrode stale chat context
 
 Section guidance:
 - `Purpose / Big Picture`: explain what the workflow is delivering, for whom, and what success looks like
@@ -289,6 +307,8 @@ Section guidance:
 - `Current Blockers`: list active blockers and whether the workflow is waiting on the user or on remediation
 - `Resume Instructions`: state the exact next action and the exact approval decision needed when paused
 - `Outcomes & Retrospective`: summarize what was delivered, deferred, learned, and documented
+- when useful after long or messy threads, add a concise artifact-based restatement of current truth to `Resume Instructions` or `Questions and Decisions`
+- when delegating, prefer artifact paths and saved decision summaries in `Questions and Decisions` over chat-history recap
 
 Use `workflow_status` values such as:
 - `in-progress`

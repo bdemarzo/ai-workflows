@@ -37,6 +37,8 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - Operators own drafting or implementation work for their phase.
 - Reviewers provide findings and recommendations but do not own the source artifact.
 - The orchestrator writes the official consolidated review rounds and owns stage advancement.
+- The orchestrator should periodically re-ground on the repo markdown artifacts rather than trusting long chat history, especially at phase boundaries and after reroutes.
+- The orchestrator should not rely on accepted decisions that exist only in chat; accepted user feedback and review outcomes should be written into repo markdown artifacts before more work is delegated.
 - Keep the dossier layout:
   - `docs/workflows/{slug}/run.md`
   - `docs/workflows/{slug}/idea.md`

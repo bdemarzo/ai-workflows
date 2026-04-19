@@ -73,7 +73,7 @@ Requirements:
   - `reviews/implementation/round-XX.md`
   - `reviews/final/round-XX.md`
 - treat this workflow dossier contract as authoritative when this skill is active
-- keep the run ledger restartable enough that another orchestrator session can resume from `run.md` plus linked artifacts without prior chat history
+- keep the repo markdown artifacts sufficient for another operator or orchestrator session to resume the workflow without prior chat history
 - if the runtime does not support subagents well enough to run this model, stop and tell the user instead of silently degrading into a different workflow
 - if a runtime-specific role registry exists, resolve stage-to-persona bindings through it and record the actual bindings used
 - if a required concrete binding is missing and there is no valid substitute, stop and tell the user instead of silently inventing a replacement
@@ -191,6 +191,7 @@ Advancement rules:
 - do not advance from idea until the idea is specific enough to support spec creation
 - do not advance from spec until the contract is specific enough to support planning
 - do not advance from plan until the implementation approach is specific enough to support engineering execution
+- do not advance when the markdown artifacts in the repo are insufficient for the next stage to continue without chat history
 - do not leave implementation review until architecture, security, and QA all recommend proceeding
 - do not close the workflow until:
   - final-review gaps are resolved

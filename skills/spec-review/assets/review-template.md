@@ -15,14 +15,11 @@
 ## Review Scope
 - [What was reviewed and what constraints stayed in view.]
 
-## Contract Restartability
-- [Can planning proceed from `spec.md` alone? Why or why not?]
-
 ## Observable Acceptance Assessment
 - [Are the acceptance criteria concrete enough for planning?]
 
 ## Key Findings
-- [Merged, findings-first summary.]
+- [Merged, findings-first summary, including any markdown-artifact gaps that would block the next stage.]
 
 ## Meaningful Disagreements
 - [Only disagreements that materially affect the recommendation.]
@@ -31,7 +28,7 @@
 - [Concrete change to make before advancing.]
 
 ## Recommendation
-- `Recommendation: revise current stage`
+- [Use one allowed recommendation exactly as written in this skill.]
 
 ## Outstanding Dissent
 - [Any unresolved reviewer concern.]

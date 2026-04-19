@@ -48,8 +48,8 @@ Write the review artifact with sections like:
 - reviewed artifacts
 - prior review rounds when relevant
 - reviewer roster
-- reviewer synopses
 - review scope
+- reviewer synopses
 - key findings
 - meaningful disagreements
 - suggested revisions

@@ -28,7 +28,7 @@
 - [Concrete change to make before docs close-out.]
 
 ## Recommendation
-- `Recommendation: ready for docs close-out`
+- [Use one allowed recommendation exactly as written in this skill.]
 
 ## Outstanding Dissent
 - [Any unresolved reviewer concern.]

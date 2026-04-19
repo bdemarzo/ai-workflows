@@ -55,8 +55,8 @@ Write the review artifact with sections like:
 - reviewed artifacts
 - prior implementation review rounds when relevant
 - reviewer lenses
-- reviewer synopses
 - review scope
+- reviewer synopses
 - key findings
 - meaningful disagreements
 - suggested revisions

@@ -28,7 +28,7 @@
 - [Concrete change to make before advancing.]
 
 ## Recommendation
-- `Recommendation: revise implement-plan`
+- [Use one allowed recommendation exactly as written in this skill.]
 
 ## Outstanding Dissent
 - [Any unresolved reviewer concern.]

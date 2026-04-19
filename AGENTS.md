@@ -65,6 +65,7 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - `execution.md` stays optional and should be used sparingly as an evidence appendix.
 - Create-stage skills should remain concise, self-contained, and stage-bounded.
 - Review rounds should remain concise, findings-first, and recommendation-driven.
+- A person should be able to continue the workflow from the markdown artifacts in the repo alone; if not, reviewers should call that out as a key finding rather than a separate restartability section.
 - User gates are required after:
   - idea review resolution
   - spec review resolution

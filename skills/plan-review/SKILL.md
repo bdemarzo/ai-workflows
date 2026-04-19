@@ -39,7 +39,7 @@ Focus on:
 - architectural soundness
 - validation realism
 - risky assumptions or missing gaps
-- whether the plan is self-contained enough for a later engineer to implement safely
+- whether the markdown artifacts in the repo are sufficient for a later operator to continue to `implement-plan` without chat history
 - whether the plan chooses the simplest viable architecture that satisfies the spec
 - whether every proposed layer, service, abstraction, dependency, and integration is justified by the current need
 - whether the plan reuses existing repository patterns before inventing new architecture
@@ -50,8 +50,8 @@ Write the review artifact with sections like:
 - reviewed artifact
 - prior review rounds when relevant
 - reviewer roster
-- reviewer synopses
 - review scope
+- reviewer synopses
 - key findings
 - meaningful disagreements
 - suggested revisions
@@ -63,6 +63,7 @@ Compression rule:
 - avoid repeating the same critique reviewer by reviewer
 - preserve only the disagreements that materially affect the recommendation
 - keep each reviewer synopsis brief and high-signal rather than turning the artifact into a transcript
+- if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding rather than creating a separate restartability section
 
 Finish with an explicit recommendation:
 - `Recommendation: revise current stage`

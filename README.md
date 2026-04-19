@@ -168,6 +168,7 @@ Saved review rounds should stay concise and findings-first:
 - preserve a short synopsis of what each reviewer actually argued, not just the merged conclusion
 - merge overlapping findings
 - preserve only disagreements that materially affect the recommendation
+- if the markdown artifacts in the repo are insufficient for the next stage to continue, record that as a key finding rather than a standalone restartability section
 
 ## Workflow Dossier
 
@@ -189,6 +190,8 @@ docs/workflows/{slug}/
 ```
 
 Use one canonical `slug` per workflow. Create a new review round for each pass instead of overwriting earlier review files.
+
+The workflow must remain resumable from the markdown artifacts in the repo alone. Reviewers should treat any gap in that handoff chain as a key finding.
 
 ## How It Works
 

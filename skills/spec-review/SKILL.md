@@ -28,7 +28,6 @@ Requirements:
 - state the exact reviewed artifact path in the review artifact
 - link the immediately prior review round when one exists and summarize what changed since that round
 - use exactly two substantive reviewers plus one skeptic
-- explicitly check whether planning can proceed from the current `spec.md` alone
 - explicitly check whether accepted review feedback has been folded back into the latest `spec.md`
 - keep the saved review artifact concise and findings-first
 - make clear that the reviewers are subagents and the active session writes the consolidated official review round
@@ -39,7 +38,7 @@ Focus on:
 - completeness of the user-facing contract
 - missing behavior, states, constraints, or edge cases
 - whether acceptance criteria are observable enough to drive planning
-- whether the current spec is restartable enough for `plan-create`
+- whether the markdown artifacts in the repo are sufficient for a later operator to continue to `plan-create` without chat history
 - whether the spec is shaping the smallest sufficient solution rather than quietly requiring speculative architecture
 - whether the spec is accidentally prescribing implementation detail that belongs in the plan
 - what should stay out of the spec and move to the plan
@@ -49,9 +48,8 @@ Write the review artifact with sections like:
 - reviewed artifact
 - prior review rounds when relevant
 - reviewer roster
-- reviewer synopses
 - review scope
-- contract restartability
+- reviewer synopses
 - observable acceptance assessment
 - key findings
 - meaningful disagreements
@@ -64,6 +62,7 @@ Compression rule:
 - avoid repeating the same critique reviewer by reviewer
 - preserve only the disagreements that materially affect the recommendation
 - keep each reviewer synopsis brief and high-signal rather than turning the artifact into a transcript
+- if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding rather than creating a separate restartability section
 
 Finish with an explicit recommendation:
 - `Recommendation: revise current stage`

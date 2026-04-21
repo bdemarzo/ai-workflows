@@ -188,6 +188,12 @@ Delegation scope rule:
 - when broader inspection is necessary, keep it targeted to named paths, symbols, or terms and ask the subagent to report what it inspected
 - prefer compact subagent outputs: the conclusion, the reasoning needed to support it, and the smallest useful set of findings or edits
 
+Subagent runtime hygiene:
+- prefer sequential reviewer execution on constrained hosts; use parallel reviewers only when host responsiveness is acceptable and faster wall-clock review matters
+- keep active subagent count no higher than the runtime needs for the current phase
+- after a subagent's output has been captured in the relevant markdown artifact, close or release that subagent when the runtime supports it
+- do not keep completed reviewers or operators alive across user gates unless they are actively needed for the next delegated task
+
 Execution model:
 1. confirm the workflow ask, slug, constraints, and guided phase order
 2. resolve the concrete subagent binding for every stage persona

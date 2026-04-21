@@ -70,6 +70,10 @@ The included [.codex/config.toml](/C:/git/bdcf/ai-workflows/.codex/config.toml) 
 - `max_threads = 6`
 - `max_depth = 1`
 
+For better host responsiveness, run reviewer subagents sequentially or lower `max_threads` when parallel reviews cause CPU, memory, or UI contention. Parallel review is still valid when wall-clock speed matters more than local system impact.
+
+When the runtime supports explicit subagent shutdown, close or release operators and reviewers after their output has been captured in the relevant markdown artifact. Do not keep completed subagents alive across user gates unless they are actively needed for the next delegated task.
+
 Subagent reasoning effort is configured per concrete persona file in [.codex/agents/](/C:/git/bdcf/ai-workflows/.codex/agents), not in `.codex/config.toml`. To lower a subagent from high reasoning to medium reasoning, edit the relevant TOML file and change:
 
 ```toml

@@ -68,6 +68,8 @@ Compression rule:
 - avoid repeating the same critique across lenses
 - summarize validation or test concerns into clear actionable gaps rather than long transcripts
 - keep each reviewer synopsis brief and high-signal rather than turning the artifact into a transcript
+- keep reviewer inputs compact: ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
+- keep each reviewer within their assigned lens and avoid duplicating another lens unless the disagreement changes the recommendation
 
 Finish with an explicit recommendation:
 - `Recommendation: revise implement-plan`

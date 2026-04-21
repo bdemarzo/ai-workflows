@@ -181,6 +181,13 @@ Re-grounding rule:
 - before starting a new phase, confirm that accepted user feedback and accepted review outcomes are reflected in the repo markdown artifacts
 - when delegating to subagents, ground the task in artifact paths and saved decisions rather than relying on conversational recap alone
 
+Delegation scope rule:
+- delegate with exact artifact paths, the assigned persona/lens, and the specific decision or artifact needed next
+- instruct subagents to read the named markdown artifacts first and treat them as the primary context
+- avoid broad repo scans unless the task requires implementation evidence, unresolved source context, or a finding depends on code-level detail
+- when broader inspection is necessary, keep it targeted to named paths, symbols, or terms and ask the subagent to report what it inspected
+- prefer compact subagent outputs: the conclusion, the reasoning needed to support it, and the smallest useful set of findings or edits
+
 Execution model:
 1. confirm the workflow ask, slug, constraints, and guided phase order
 2. resolve the concrete subagent binding for every stage persona

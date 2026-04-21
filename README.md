@@ -70,6 +70,23 @@ The included [.codex/config.toml](/C:/git/bdcf/ai-workflows/.codex/config.toml) 
 - `max_threads = 6`
 - `max_depth = 1`
 
+Subagent reasoning effort is configured per concrete persona file in [.codex/agents/](/C:/git/bdcf/ai-workflows/.codex/agents), not in `.codex/config.toml`. To lower a subagent from high reasoning to medium reasoning, edit the relevant TOML file and change:
+
+```toml
+model_reasoning_effort = "high"
+```
+
+to:
+
+```toml
+model_reasoning_effort = "medium"
+```
+
+Recommended defaults depend on whether the adapter is optimized for quality or speed:
+- Keep `software_architect`, `software_engineer`, `security_engineer`, `qa_engineer`, `product_manager`, and `skeptic` at `high` when correctness matters most. These personas make or review consequential contract, architecture, implementation, security, and regression decisions.
+- `documentation_maintainer` can stay `medium` by default because close-out work should be bounded to existing artifacts and repository documentation.
+- `product_strategist`, `product_designer`, `stakeholder_advocate`, and `domain_expert` are reasonable `medium` candidates when host performance or turnaround time matters more than exhaustive critique. Raise `domain_expert` back to `high` for specialized, regulated, or high-stakes domains.
+
 Use this layer when you want the orchestrator to call stable, named Codex subagents instead of reconstructing persona instructions every run.
 
 The shared `Software Architect` persona in this repo is intended to drive bounded, full-stack execution planning:
@@ -168,6 +185,9 @@ Saved review rounds should stay concise and findings-first:
 - preserve a short synopsis of what each reviewer actually argued, not just the merged conclusion
 - merge overlapping findings
 - preserve only disagreements that materially affect the recommendation
+- delegate reviews from exact artifact paths and assigned reviewer lenses rather than broad chat-history recap
+- keep reviewer inputs compact: up to three consequential findings, one explicit recommendation, and only the rationale needed to support it
+- avoid broad repo scans unless implementation evidence or source-level context is needed for the assigned lens
 - if the markdown artifacts in the repo are insufficient for the next stage to continue, record that as a key finding rather than a standalone restartability section
 
 ## Workflow Dossier

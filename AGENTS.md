@@ -39,6 +39,8 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - The orchestrator writes the official consolidated review rounds and owns stage advancement.
 - The orchestrator should periodically re-ground on the repo markdown artifacts rather than trusting long chat history, especially at phase boundaries and after reroutes.
 - The orchestrator should not rely on accepted decisions that exist only in chat; accepted user feedback and review outcomes should be written into repo markdown artifacts before more work is delegated.
+- Delegate subagent work from exact artifact paths, assigned persona/lens, and saved decisions rather than broad chat-history recap.
+- Keep subagent work bounded; avoid broad repo scans unless implementation evidence, source context, or a specific finding requires them.
 - Keep the dossier layout:
   - `docs/workflows/{slug}/run.md`
   - `docs/workflows/{slug}/idea.md`
@@ -67,6 +69,7 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - `execution.md` stays optional and should be used sparingly as an evidence appendix.
 - Create-stage skills should remain concise, self-contained, and stage-bounded.
 - Review rounds should remain concise, findings-first, and recommendation-driven.
+- Reviewer inputs should stay compact: up to three consequential findings, one explicit recommendation, and only the rationale needed to support it.
 - A person should be able to continue the workflow from the markdown artifacts in the repo alone; if not, reviewers should call that out as a key finding rather than a separate restartability section.
 - User gates are required after:
   - idea review resolution
@@ -98,6 +101,7 @@ After changing the workflow or skill packages, verify:
 - review-round path references are consistent across all skills and docs
 - saved review rounds record reviewer persona, concrete agent name, and display name when the runtime exposes one
 - saved review rounds preserve brief reviewer synopses in addition to the orchestrator's merged findings
+- saved review rounds reflect compact, lens-specific reviewer inputs rather than full reviewer transcripts
 - `workflow-run` is documented consistently as the orchestrator rather than a workflow stage
 - implementation-review specifies architecture, security, and QA / product correctness
 - final-review reviewer personas are covered by the Codex runtime layer when `.codex/agents/` is present

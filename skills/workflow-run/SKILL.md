@@ -35,7 +35,7 @@ Core model:
   - official review-round files
   - run-ledger updates
   - reroute decisions
-- operators own source-artifact drafting or implementation work for their phase
+- operators own source-artifact drafting, accepted source-artifact revisions, implementation work, and implementation remediations for their phase
 - reviewers provide findings and recommendations but do not own the source artifact
 
 Canonical phase order:
@@ -201,15 +201,16 @@ Execution model:
 4. re-ground on `run.md` plus the source artifacts for the current stage and restate the current artifact-based truth before delegating work
 5. delegate the current create stage and the matching formal review stage using artifact paths and saved decisions as the primary task context
 6. write the consolidated official review round
-7. fold accepted review decisions back into the source artifact
-8. present the result to the user at the required gate
-9. after the user gate, record the user's feedback, ensure accepted feedback is written into repo markdown artifacts, and then re-ground on the updated artifacts before advancing, looping, or rerouting
-10. after implementation, run `implementation-review`
-11. if any implementation reviewer requires material changes, route work back to `implement-plan`, re-ground on the updated artifacts, and repeat
-12. after implementation review approval, run `final-review`
-13. if final review finds fidelity gaps, route fixes back to the owning operator, re-ground on the updated artifacts, and rerun review as needed
-14. delegate docs close-out to the documentation maintainer
-15. verify docs close-out, re-ground on the final markdown artifacts, ask for final approval, and then close the workflow
+7. delegate accepted source-artifact revisions or implementation remediations back to the owning operator subagent
+8. verify the updated artifact or implementation diff, then update `run.md` with the accepted decision and revision outcome
+9. present the result to the user at the required gate
+10. after the user gate, record the user's feedback, ensure accepted feedback is written into repo markdown artifacts through the owning operator when artifact edits are needed, and then re-ground on the updated artifacts before advancing, looping, or rerouting
+11. after implementation, run `implementation-review`
+12. if any implementation reviewer requires material changes, route remediation back to the implementation operator, re-ground on the updated artifacts, and repeat
+13. after implementation review approval, run `final-review`
+14. if final review finds fidelity gaps, route fixes back to the owning operator, re-ground on the updated artifacts, and rerun review as needed
+15. delegate docs close-out to the documentation maintainer
+16. verify docs close-out, re-ground on the final markdown artifacts, ask for final approval, and then close the workflow
 
 Advancement rules:
 - do not advance from idea until the idea is specific enough to support spec creation

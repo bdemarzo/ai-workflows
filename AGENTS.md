@@ -34,7 +34,7 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - If `.codex/role-registry.toml` exists, treat it as the Codex binding layer from workflow stages to persona labels and then to concrete agent names.
 - `workflow-run` is a meta-skill, not a stage.
 - Agents define persona behavior; skills define stage procedure.
-- Operators own drafting or implementation work for their phase.
+- Operators own drafting, accepted artifact revisions, implementation work, and implementation remediations for their phase.
 - Reviewers provide findings and recommendations but do not own the source artifact.
 - The orchestrator writes the official consolidated review rounds and owns stage advancement.
 - The orchestrator should periodically re-ground on the repo markdown artifacts rather than trusting long chat history, especially at phase boundaries and after reroutes.

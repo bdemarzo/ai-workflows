@@ -26,7 +26,7 @@ This repo defines a guided workflow where the active AI session is the orchestra
 - Operators and reviewers are always subagents.
 - Agents define durable persona behavior.
 - Skills define the stage procedure and artifact contract.
-- Operators own drafting or implementation work for their phase.
+- Operators own drafting, accepted artifact revisions, implementation work, and implementation remediations for their phase.
 - Reviewers provide findings and recommendations but do not own the source artifact.
 - The orchestrator writes the official consolidated review rounds.
 - The user gates progress between major phases.
@@ -231,6 +231,8 @@ In normal use, `workflow-run` will:
 - delegate creation work to the current phase operator subagent
 - delegate formal review work to the current phase reviewer subagents
 - write the official review artifact for the phase
+- delegate accepted source-artifact revisions and implementation remediations back to the owning operator subagent
+- verify updated artifacts or implementation diffs before advancing
 - present the result to the user
 - ask whether to proceed
 - keep `docs/workflows/{slug}/run.md` current as the restartable workflow ledger
@@ -239,7 +241,7 @@ The orchestrator should ask questions whenever clarity is needed. The workflow s
 
 The orchestrator should treat the repo markdown artifacts as the authoritative working context. If chat history conflicts with the saved artifacts, the saved artifacts win and the discrepancy should be recorded.
 
-Accepted user feedback and accepted review outcomes should not remain chat-only. Before the next phase begins, they should be written into `run.md` or the relevant workflow artifact, and subagent delegation should be grounded in those saved artifacts.
+Accepted user feedback and accepted review outcomes should not remain chat-only. Before the next phase begins, they should be written into `run.md` or the relevant workflow artifact. When artifact edits or implementation changes are needed, the orchestrator should delegate that work to the owning operator subagent, then verify the result and ground later delegation in the saved artifacts.
 
 If a runtime-specific role registry is missing or incomplete, the orchestrator should fall back explicitly and record that fallback in `run.md` instead of silently improvising.
 
@@ -275,7 +277,23 @@ Build a customer-facing saved views experience for our reporting dashboard.
 
 ## Install for Codex
 
-Copy any skill folder from `skills/` into your agent's skills directory. For Codex, that is typically:
+From the target repository root, run the installer from this repo:
+
+```powershell
+python C:\path\to\ai-workflows\install.py
+```
+
+By default this installs:
+- skill packages into `.codex/skills/`
+- persona agents, role registry, and runtime config into `.codex/`
+
+The installer is conservative:
+- existing managed files are skipped unless `--force` is passed
+- `--dry-run` shows planned changes without writing files
+- `--global-skills` installs skills to `~/.codex/skills` instead of the target repo's `.codex/skills`
+- `--no-adapter` or `--no-skills` can install only one side of the package
+
+Manual install is also supported. Copy any skill folder from `skills/` into your agent's skills directory. For Codex, that is typically:
 
 ```text
 skills/workflow-run -> ~/.codex/skills/workflow-run

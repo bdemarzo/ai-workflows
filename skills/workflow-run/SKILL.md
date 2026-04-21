@@ -169,7 +169,7 @@ Use a plain-language startup confirmation such as:
 Clarification rule:
 - ask questions whenever clarity is needed for correctness, scope, contract fidelity, or implementation safety
 - do not defer material ambiguity simply to stay moving
-- record meaningful questions and answers in `run.md`
+- record resolved decisions and material clarifications in `run.md`
 
 Re-grounding rule:
 - treat repo markdown artifacts as the authoritative working context and treat long chat history as convenience context only
@@ -230,8 +230,7 @@ Run ledger structure:
   - `## Progress`
   - `## Phase Ownership`
   - `## Stage Assessments`
-  - `## Questions and Decisions`
-  - `## Validation Evidence`
+  - `## Decision Log`
   - `## Current Blockers`
   - `## Resume Instructions`
   - `## Outcomes & Retrospective`
@@ -302,13 +301,12 @@ Section guidance:
   - latest final review round
 - `Phase Ownership`: record the current operator subagent and the reviewer roster for the phase
 - `Stage Assessments`: summarize phase readiness, recommendations, and why the orchestrator advanced or looped
-- `Questions and Decisions`: keep materially important questions, answers, and resulting decisions
-- `Validation Evidence`: record commands, checks, observed outcomes, and what they proved
+- `Decision Log`: record resolved decisions, accepted user feedback, material clarifications, and what changed because of them
 - `Current Blockers`: list active blockers and whether the workflow is waiting on the user or on remediation
 - `Resume Instructions`: state the exact next action and the exact approval decision needed when paused
 - `Outcomes & Retrospective`: summarize what was delivered, deferred, learned, and documented
-- when useful after long or messy threads, add a concise artifact-based restatement of current truth to `Resume Instructions` or `Questions and Decisions`
-- when delegating, prefer artifact paths and saved decision summaries in `Questions and Decisions` over chat-history recap
+- when useful after long or messy threads, add a concise artifact-based restatement of current truth to `Resume Instructions` or `Decision Log`
+- when delegating, prefer artifact paths and saved decision summaries in `Decision Log` over chat-history recap
 
 Use `workflow_status` values such as:
 - `in-progress`

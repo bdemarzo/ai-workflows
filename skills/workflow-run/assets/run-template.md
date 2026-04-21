@@ -33,11 +33,8 @@
 ## Stage Assessments
 - [Phase] -> [Readiness, recommendation, and orchestrator rationale.]
 
-## Questions And Decisions
-- [Question] -> [Answer] -> [What changed]
-
-## Validation Evidence
-- [Command or check] -> [Observed result] -> [What it proved]
+## Decision Log
+- [Decision or accepted clarification] -> [What changed in the workflow artifacts]
 
 ## Current Blockers
 - [Blocker and whether the workflow is waiting on the user or remediation.]

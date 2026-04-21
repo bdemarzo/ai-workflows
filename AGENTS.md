@@ -112,6 +112,8 @@ After changing the workflow or skill packages, verify:
   - current gate decision needed
   - implementation-review satisfaction state
   - documentation close-out status
+- run ledger guidance uses `Decision Log` for resolved decisions and clarifications rather than implying open questions
+- `Validation Evidence` is not required in `run.md`; validation belongs in the plan, execution appendix, or review artifacts when needed
 - docs close-out is represented consistently across README and workflow-run guidance
 - skill-local templates under `skills/<skill-name>/assets/` reflect the documented artifact shape and current workflow contract
 - skill folders can still be copied as-is into local Codex skill directories

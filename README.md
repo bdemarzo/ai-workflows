@@ -193,6 +193,8 @@ Use one canonical `slug` per workflow. Create a new review round for each pass i
 
 The workflow must remain resumable from the markdown artifacts in the repo alone. Reviewers should treat any gap in that handoff chain as a key finding.
 
+Use `run.md` as the workflow ledger, not as a test report. It should include a `Decision Log` for resolved decisions, accepted feedback, and material clarifications. Validation details belong in `plan.md`, `execution.md`, or review artifacts when they are needed for that phase.
+
 ## How It Works
 
 In normal use, `workflow-run` will:

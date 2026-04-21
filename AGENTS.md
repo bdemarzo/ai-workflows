@@ -34,6 +34,7 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - If `.codex/role-registry.toml` exists, treat it as the Codex binding layer from workflow stages to persona labels and then to concrete agent names.
 - `workflow-run` is a meta-skill, not a stage.
 - Agents define persona behavior; skills define stage procedure.
+- Official operators and reviewers must resolve to concrete persona agents or explicitly allowed substitutes; generic helper agent types such as `explorer` do not satisfy required workflow personas.
 - Operators own drafting, accepted artifact revisions, implementation work, and implementation remediations for their phase.
 - Reviewers provide findings and recommendations but do not own the source artifact.
 - The orchestrator writes the official consolidated review rounds and owns stage advancement.
@@ -102,6 +103,7 @@ After changing the workflow or skill packages, verify:
   - `# Execution - {slug}` when `execution.md` is used
 - review-round path references are consistent across all skills and docs
 - saved review rounds record reviewer persona, concrete agent name, and display name when the runtime exposes one
+- saved review rounds do not count generic helper agents as official reviewers unless explicitly allowed by the role registry
 - saved review rounds preserve brief reviewer synopses in addition to the orchestrator's merged findings
 - saved review rounds reflect compact, lens-specific reviewer inputs rather than full reviewer transcripts
 - `workflow-run` is documented consistently as the orchestrator rather than a workflow stage

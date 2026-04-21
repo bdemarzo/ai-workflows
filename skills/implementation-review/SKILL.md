@@ -39,6 +39,7 @@ Requirements:
 - keep the saved review artifact concise and findings-first
 - preserve meaningful disagreement when one or more of the three reviewer lenses is not satisfied
 - identify each reviewer in the roster with persona, concrete agent name, and subagent display name when the runtime exposes one
+- record only resolved persona agents or explicitly allowed substitutes as official reviewers; generic helper agents such as `explorer` do not satisfy required reviewer personas
 - preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
 
 Focus on:

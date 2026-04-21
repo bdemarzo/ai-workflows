@@ -186,6 +186,8 @@ For `implementation-review`:
 Saved review rounds should stay concise and findings-first:
 - keep reviewer rosters visible
 - include the concrete agent id and display name when the runtime exposes one
+- record only resolved persona agents or explicitly allowed substitutes as official reviewers
+- do not count generic helper agents such as `explorer`, `worker`, or runtime-default agents as satisfying required workflow personas
 - preserve a short synopsis of what each reviewer actually argued, not just the merged conclusion
 - merge overlapping findings
 - preserve only disagreements that materially affect the recommendation
@@ -244,6 +246,8 @@ The orchestrator should treat the repo markdown artifacts as the authoritative w
 Accepted user feedback and accepted review outcomes should not remain chat-only. Before the next phase begins, they should be written into `run.md` or the relevant workflow artifact. When artifact edits or implementation changes are needed, the orchestrator should delegate that work to the owning operator subagent, then verify the result and ground later delegation in the saved artifacts.
 
 If a runtime-specific role registry is missing or incomplete, the orchestrator should fall back explicitly and record that fallback in `run.md` instead of silently improvising.
+
+Generic helper agents such as `explorer` can be used for sidecar discovery or bounded support work, but they should not be presented as official workflow operators or reviewers unless they are explicitly bound as an allowed substitute in the runtime role registry.
 
 ## Stage Outputs
 

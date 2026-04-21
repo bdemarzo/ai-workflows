@@ -130,6 +130,9 @@ Role binding:
 - record the stage-to-persona and persona-to-agent bindings in `run.md`
 - if a preferred agent is unavailable but an allowed substitute exists, record the substitution and continue
 - if a required persona has no usable binding, stop and ask the user instead of silently weakening the review
+- official operator and reviewer delegations must use the resolved concrete persona agent or an explicitly allowed substitute
+- generic helper agents such as `explorer`, `worker`, or runtime-default agents may be used only for sidecar discovery or bounded support work, not as official operators or reviewers
+- if a generic helper is used for support work, record it separately from the official reviewer roster and do not present it as fulfilling a required workflow persona
 
 At startup:
 - treat startup as guided preflight, not as the beginning of stage execution

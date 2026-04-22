@@ -1,6 +1,6 @@
 ---
 name: plan-create
-description: Draft or refine the implementation-ready engineering plan as the Software Architect operator before plan-review. Use when the workflow needs `./docs/workflows/{slug}/plan.md`.
+description: Draft, revise, or update the implementation-ready engineering plan as the Software Architect operator before plan-review. Use when turning an approved spec into `./docs/workflows/{slug}/plan.md`, updating an existing plan, or incorporating accepted plan-review feedback before implementation.
 ---
 
 # Plan Create
@@ -14,6 +14,7 @@ Use [assets/template.md](./assets/template.md) as the default output skeleton wh
 Requirements:
 - derive `slug` from the workflow dossier or source spec
 - update the existing plan in the dossier instead of creating duplicates
+- preserve the dossier slug unless the workflow intentionally splits into a new dossier
 - start the artifact with the exact H1 `# Plan - {slug}`
 - link to the source spec artifact path in the plan body
 - keep the plan self-contained enough that a later engineer can resume from the plan plus the repository without needing `run.md`
@@ -27,47 +28,31 @@ Requirements:
   - `Decision Log`
   - `Outcomes & Retrospective`
 - define non-obvious terms in plain language instead of assuming prior repo knowledge
-- when revising after `plan-review`, fold accepted review decisions back into `plan.md`
+- when revising after `plan-review`, incorporate accepted review outcomes into `plan.md`
 - when the plan is ready for execution, mark that state clearly in the plan body
-- prefer the simplest plan that can credibly satisfy the approved spec
-- reuse existing repository patterns, abstractions, and infrastructure before introducing new ones
-- justify each non-trivial layer, service, dependency, job, or abstraction in present-tense terms
-- do not add speculative extensibility, future-proofing layers, or optional platformization unless the current spec clearly requires them
 
 Operator responsibility:
 - draft the source artifact for later review
 - do not try to review or approve your own work
 - leave material objections for `plan-review`
 
-Use the spec to define what must be true for users. Use the plan to define how engineering will achieve it.
+Plan boundary:
+- use the spec to define what must be true for users
+- use the plan to define engineering decisions, sequencing, interfaces, validation, idempotence, and recovery
+- send user-visible behavior, privacy, correctness, or scope gaps back to `spec-create`
 
 Decision rule:
 - if a missing detail affects user-visible behavior, privacy, or correctness, stop and send it back to the spec
 - if a missing detail is only needed for implementation, decide it in the plan
 - if the plan would introduce a new architectural direction, major architectural constraint, or a new third-party service, SDK, hosted platform, or external tool, treat that as materially important and route it back through the orchestrator for clarification or approval when needed
 - when unsure, do not backfill product discovery into the plan; push unclear user-facing contract questions back to the spec
-- if an existing repo pattern can solve the problem safely, prefer it over inventing a new architectural shape
-- if a proposed component cannot be justified by the current spec, cut it from the plan
 
-Write the plan with sections like:
-- title
-- source spec
-- status
-- purpose / big picture
-- observable success framing
-- progress
-- surprises & discoveries
-- decision log
-- outcomes & retrospective
-- context and orientation
-- plan of work
-- milestones when useful
-- concrete steps
-- validation and acceptance
-- idempotence and recovery
-- interfaces and dependencies
-- open questions
-- revision history
+Architecture standard:
+- prefer the simplest plan that can credibly satisfy the approved spec
+- reuse existing repository patterns, abstractions, and infrastructure before introducing new ones
+- justify each non-trivial layer, service, dependency, job, external tool, or abstraction in present-tense terms
+- cut any proposed component that cannot be justified by the current spec
+- do not add speculative extensibility, future-proofing layers, or optional platformization unless the current spec clearly requires them
 
 Style rule:
 - focus on decisions, sequencing, interfaces, validation, and recovery

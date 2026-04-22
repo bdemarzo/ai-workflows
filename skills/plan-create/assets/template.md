@@ -19,7 +19,7 @@
 - [Important implementation discovery.]
 
 ## Decision Log
-- [Decision] [Why it was chosen now.]
+- [Decision that materially shapes implementation] -> [Why it was chosen now.]
 
 ## Outcomes & Retrospective
 - [Fill in during or after execution.]
@@ -31,13 +31,13 @@
 - [High-level workstream or phase.]
 
 ## Milestones
-- [Optional milestone when useful.]
+- [Optional. Add only when milestone structure improves execution clarity.]
 
 ## Concrete Steps
 - [Ordered step the engineer can execute.]
 
 ## Validation And Acceptance
-- [Command or check] -> [Expected observable result]
+- [Concrete command or check when available] -> [Expected observable result]
 
 ## Idempotence And Recovery
 - [How to resume, rerun, or recover safely.]
@@ -46,7 +46,7 @@
 - [Relevant boundary, service, dependency, or contract.]
 
 ## Open Questions
-- [Question that still needs resolution.]
+- [Unresolved implementation question. Product-contract gaps should go back to spec-create.]
 
 ## Revision History
 - [YYYY-MM-DD] [What changed.]

@@ -34,7 +34,7 @@ Requirements:
 - keep the saved review artifact concise and findings-first
 - focus on fidelity, regressions, and unresolved gaps rather than rerunning all prior stage debate
 - identify each reviewer in the roster with persona, concrete agent name, and subagent display name when the runtime exposes one
-- record only resolved persona agents or explicitly allowed substitutes as official reviewers; generic helper agents such as `explorer` do not satisfy required reviewer personas
+- validate that each official reviewer matches the resolved role binding from `workflow-run`
 - preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
 
 Focus on:

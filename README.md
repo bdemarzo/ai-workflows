@@ -186,8 +186,7 @@ For `implementation-review`:
 Saved review rounds should stay concise and findings-first:
 - keep reviewer rosters visible
 - include the concrete agent id and display name when the runtime exposes one
-- record only resolved persona agents or explicitly allowed substitutes as official reviewers
-- do not count generic helper agents such as `explorer`, `worker`, or runtime-default agents as satisfying required workflow personas
+- record only reviewers that match the resolved role binding from `workflow-run`
 - preserve a short synopsis of what each reviewer actually argued, not just the merged conclusion
 - merge overlapping findings
 - preserve only disagreements that materially affect the recommendation
@@ -247,7 +246,7 @@ Accepted user feedback and accepted review outcomes should not remain chat-only.
 
 If a runtime-specific role registry is missing or incomplete, the orchestrator should fall back explicitly and record that fallback in `run.md` instead of silently improvising.
 
-Generic helper agents such as `explorer` can be used for sidecar discovery or bounded support work, but they should not be presented as official workflow operators or reviewers unless they are explicitly bound as an allowed substitute in the runtime role registry.
+Official workflow delegation must use the concrete agent resolved from the role registry. For Codex, that means passing the registry's `agent` value as the spawned subagent `agent_type`, such as `software_architect`, `software_engineer`, or `product_manager`. Generic helpers such as `worker`, `explorer`, or `default` may support sidecar discovery, but prompt text alone does not make them official workflow operators or reviewers.
 
 ## Stage Outputs
 

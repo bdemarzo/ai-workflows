@@ -9,6 +9,8 @@
 - Workflow status: [in-progress | awaiting-user-approval | awaiting-clarification | blocked | complete]
 - Current gate decision needed: [exact approval or revision decision]
 - Important constraints: [constraint]
+- Implementation-review satisfaction: [not-started | architecture/security/QA status]
+- Documentation close-out status: [not-started | in-progress | complete]
 
 ## Artifact Map
 - `./docs/workflows/{slug}/idea.md`
@@ -27,8 +29,12 @@
 
 ## Phase Ownership
 - Current operator: [Persona -> Agent]
-- Reviewers:
+- Official reviewers:
   - [Persona -> Agent]
+- Sidecar/helper agents:
+  - [Helper purpose -> Agent/display name, or none]
+- Substitutions or fallbacks:
+  - [Persona -> substituted persona/agent and reason, or none]
 
 ## Stage Assessments
 - [Phase] -> [Readiness, recommendation, and orchestrator rationale.]

@@ -20,7 +20,8 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - `.codex/agents/*.toml` - optional Codex-specific persona implementations
 - `.codex/role-registry.toml` - optional Codex-specific registry mapping workflow stages to persona labels and then to concrete agent names
 - `.codex/config.toml` - optional Codex-specific runtime settings for subagent orchestration
-- `skills/<skill-name>/assets/` - optional skill-local templates or reference assets that support standalone use
+- `skills/<skill-name>/assets/` - optional skill-local templates or output resources that support standalone use
+- `skills/<skill-name>/references/` - optional skill-local reference docs loaded only when needed
 - `docs/` - supporting docs only
 - `README.md` - workflow model and install guidance
 
@@ -124,6 +125,7 @@ After changing the workflow or skill packages, verify:
 - `Validation Evidence` is not required in `run.md`; validation belongs in the plan, execution appendix, or review artifacts when needed
 - docs close-out is represented consistently across README and workflow-run guidance
 - skill-local templates under `skills/<skill-name>/assets/` reflect the documented artifact shape and current workflow contract
+- skill-local references under `skills/<skill-name>/references/` are linked from `SKILL.md` and used for progressive disclosure rather than duplicating core instructions
 - skill folders can still be copied as-is into local Codex skill directories
 
 ## Current Limitations

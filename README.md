@@ -329,13 +329,16 @@ That adapter layer is what makes the stage-assigned personas resolve to stable n
 - `.codex/agents/` - optional Codex-specific subagent runtime definitions
 - `.codex/role-registry.toml` - optional Codex-specific stage-to-persona-to-agent binding registry
 - `.codex/config.toml` - optional Codex-specific subagent runtime settings
-- `skills/<skill-name>/assets/` - optional skill-local templates and reference assets
+- `skills/<skill-name>/assets/` - optional skill-local templates or output resources
+- `skills/<skill-name>/references/` - optional skill-local reference docs loaded only when needed
 - `docs/` - supporting docs
 - `README.md` - human-facing workflow overview
 
-## Skill Templates
+## Skill Resources
 
 Artifact-producing skills may include skill-local templates under `assets/` so the skill remains usable when copied on its own. Keep long templates in `assets/` and have `SKILL.md` point to them explicitly when they should be used.
+
+Long procedural detail may live under `references/` when it supports progressive disclosure. Keep `SKILL.md` focused on the core workflow and point to reference files only for situations where they should be read.
 
 ## Notes
 

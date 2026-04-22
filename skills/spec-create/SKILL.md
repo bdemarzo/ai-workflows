@@ -1,6 +1,6 @@
 ---
 name: spec-create
-description: Draft or refine the functional product contract as the Product Manager operator before spec-review. Use when the workflow needs `./docs/workflows/{slug}/spec.md`.
+description: Draft, revise, or update the functional product contract as the Product Manager operator before spec-review. Use when turning an approved idea into `./docs/workflows/{slug}/spec.md`, updating an existing spec, or incorporating accepted spec-review feedback before planning.
 ---
 
 # Spec Create
@@ -22,6 +22,7 @@ Requirements:
 - derive `slug` from the prompt or workflow dossier
 - create the file if it does not exist
 - update the file in place if it already exists
+- preserve the dossier slug unless the workflow intentionally splits into a new dossier
 - start the artifact with the exact H1 `# Spec - {slug}`
 - keep the spec self-contained enough for planning without relying on prior thread context
 - make the spec concrete enough that planning can proceed from `spec.md` alone
@@ -33,7 +34,8 @@ Requirements:
   - `Status`
   - `Open Questions`
   - `Revision History`
-- fold accepted review decisions back into the spec so `spec.md` remains the current contract
+- incorporate accepted review outcomes into the spec so `spec.md` remains the current contract
+- retain useful revision history when updating an existing artifact
 - keep the spec as the source of truth for user-visible behavior, scope, and correctness
 
 Operator responsibility:
@@ -41,56 +43,16 @@ Operator responsibility:
 - do not try to review or approve your own work
 - leave material objections for `spec-review`
 
-Stage boundary rule:
-- `spec.md` defines what must be true for the user and product
-- it should be concrete about behavior, correctness, scope, and constraints
-- it should not turn into an implementation plan
-- when a detail starts to read like sequencing, work packages, code structure, integration mechanics, migration steps, or validation command lists, move that detail out of the spec
-
-Keep these details in the spec:
-- user-visible behavior
-- scope
-- constraints
-- privacy rules
-- business rules
-- user-facing routes or URLs
-- acceptance criteria
-- concrete scenarios or examples
-- boundary conditions and edge cases that affect correctness
-- observable acceptance behavior
-
-Do not put these details in the spec:
-- implementation sequencing
-- task breakdown
-- file or module lists
-- detailed execution logs
-- migration mechanics unless they change user-visible outcomes
+Spec boundary:
+- `spec.md` defines the user-visible contract: behavior, scope, constraints, privacy and business rules, routes or URLs when relevant, acceptance criteria, scenarios, edge cases, and observable acceptance behavior
+- `plan.md` owns sequencing, task breakdown, code structure, file/module lists, implementation mechanics, migration steps, detailed execution logs, and validation commands
+- when a detail reads like implementation mechanics, move it out of the spec unless it changes user-visible outcomes, privacy, or correctness
 
 Decision rule:
 - if a detail is only needed so engineering can implement it, leave it for the plan
 - if it changes user expectations, privacy, or correctness, keep it in the spec
 - when unsure, preserve the user-facing contract and leave engineering mechanics unresolved
 - if a short requirement list, example list, or table is enough, do not expand it into long prose
-
-Write the spec with sections like:
-- title
-- source idea
-- status
-- summary
-- context and orientation when needed
-- problem statement
-- goals
-- non-goals
-- target users
-- key scenarios or user flows
-- functional requirements
-- constraints and guardrails
-- boundary conditions and edge cases
-- privacy rules, business rules, and user-facing routes or URLs when relevant
-- acceptance criteria
-- observable acceptance behavior or examples
-- open questions
-- revision history
 
 Before finalizing `spec.md`, perform a scope check:
 - remove or simplify sections that read like `plan of work`, `milestones`, `concrete steps`, `module ownership`, `file lists`, `dependency rollout`, `migration sequence`, or `validation commands`

@@ -10,7 +10,7 @@
 [One-paragraph summary of the user-visible contract.]
 
 ## Context And Orientation
-[Optional. Add only when a later planner would otherwise miss important context.]
+[Optional. Add only when a later planner would otherwise miss important product or workflow context.]
 
 ## Problem Statement
 - [What problem the spec solves.]
@@ -40,13 +40,13 @@
 - [Add only when relevant.]
 
 ## Acceptance Criteria
-- [Observable acceptance criterion.]
+- [Observable user or product outcome that must be true.]
 
 ## Observable Acceptance Behavior Or Examples
-- [Concrete example or scenario.]
+- [Concrete user-visible example or scenario, not an implementation validation command.]
 
 ## Open Questions
-- [Question to resolve before or during planning.]
+- [Product-contract question to resolve before or during planning. Implementation-only questions belong in plan.md.]
 
 ## Revision History
 - [YYYY-MM-DD] [What changed.]

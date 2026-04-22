@@ -295,6 +295,8 @@ The installer is conservative:
 - `--dry-run` shows planned changes without writing files
 - `--global-skills` installs skills to `~/.codex/skills` instead of the target repo's `.codex/skills`
 - `--no-adapter` or `--no-skills` can install only one side of the package
+- `--target` must point to an existing directory
+- writes into the `ai-workflows` source repo or its subdirectories are blocked unless `--dry-run` is used
 
 Manual install is also supported. Copy any skill folder from `skills/` into your agent's skills directory. For Codex, that is typically:
 

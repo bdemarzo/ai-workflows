@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import sys
 from dataclasses import dataclass
@@ -75,6 +76,14 @@ def remove_destination(path: Path) -> None:
         shutil.rmtree(path)
     else:
         path.unlink()
+
+
+def is_same_or_child(path: Path, parent: Path) -> bool:
+    try:
+        common = os.path.commonpath([str(path.resolve()), str(parent.resolve())])
+    except ValueError:
+        return False
+    return os.path.normcase(common) == os.path.normcase(str(parent.resolve()))
 
 
 def copy_path(src: Path, dest: Path, force: bool, dry_run: bool, result: InstallResult) -> None:
@@ -150,15 +159,19 @@ def main() -> int:
 
     try:
         ensure_source_layout(source_root)
+        if args.no_skills and args.no_adapter:
+            raise ValueError("Nothing to install: both --no-skills and --no-adapter were passed.")
         if not target_root.is_dir():
             raise FileNotFoundError(f"Target repository root does not exist: {target_root}")
 
         writes_target_skills = not args.no_skills and not args.global_skills
         writes_target_adapter = not args.no_adapter
-        writes_to_source_repo = target_root == source_root and (writes_target_skills or writes_target_adapter)
+        writes_to_source_repo = is_same_or_child(target_root, source_root) and (
+            writes_target_skills or writes_target_adapter
+        )
         if writes_to_source_repo and not args.dry_run:
             raise ValueError(
-                "Target is the ai-workflows source repo. Run this from a target repo, "
+                "Target is the ai-workflows source repo or one of its subdirectories. Run this from a target repo, "
                 "pass --target, or use --dry-run to inspect planned changes."
             )
 

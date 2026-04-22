@@ -13,10 +13,10 @@
 - [Display name / persona]: [1-2 sentence synopsis of the reviewer's main points and tone.]
 
 ## Review Scope
-- [What was reviewed and what constraints stayed in view.]
+- [What was reviewed: plan.md, source spec context when needed, and relevant technical constraints.]
 
 ## Key Findings
-- [Merged, findings-first summary, including any markdown-artifact gaps that would block the next stage.]
+- [Merged, findings-first summary, including implementation-readiness, restartability, and unnecessary-complexity blockers.]
 
 ## Meaningful Disagreements
 - [Only disagreements that materially affect the recommendation.]

@@ -10,16 +10,16 @@
 - [What was implemented in this pass.]
 
 ## Validation Evidence
-- [Command or check] -> [Observed result]
+- [Relevant command or check] -> [Summarized observed result; do not paste long logs.]
 
 ## Deviations From Plan
-- [Deviation and reason.]
+- [Material deviation, reason, and whether `plan.md` was updated.]
 
 ## Files Changed
-- `[path/to/file]`
+- `[path/to/file]` - [Purpose of the change.]
 
 ## Blockers
 - [Current blocker and why it matters.]
 
 ## Follow-Up Work
-- [Remaining work or remediation to handle later.]
+- [Remaining approved work or remediation; avoid speculative backlog.]

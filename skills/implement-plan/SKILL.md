@@ -1,6 +1,6 @@
 ---
 name: implement-plan
-description: Carry out an approved engineering plan as the Software Engineer operator, in bounded validated steps, before handing the result to implementation-review. Use when the user wants to implement `./docs/workflows/{slug}/plan.md`.
+description: Implement or remediate an approved `./docs/workflows/{slug}/plan.md` as the Software Engineer operator using bounded validated code changes, optional execution evidence, and handoff to implementation-review.
 ---
 
 # Implement Plan
@@ -11,51 +11,38 @@ The operator owns implementation work after the plan has been approved.
 
 When `execution.md` is useful, use [assets/execution-template.md](./assets/execution-template.md) as the default output skeleton. Adapt sections as needed, but preserve the slugged title format.
 
-Requirements:
-- the workflow dossier to implement must already be identified
-- read `./docs/workflows/{slug}/plan.md` before making changes
-- treat `plan.md` as the authoritative implementation control document for the workflow
-- keep the plan current as a living document when implementation discoveries or decisions materially change the work
-- use `./docs/workflows/{slug}/execution.md` only when an evidence appendix or work log is genuinely useful
-- when `execution.md` is used, start it with the exact H1 `# Execution - {slug}`
-- treat `spec.md` as the source of truth for user-visible behavior, privacy, and correctness
-- treat review rounds as historical design input, not as active execution control documents
-- when implementation review sends remediation back, the same Software Engineer operator owns the fix pass
+## Inputs And Source Of Truth
 
-Operator responsibilities:
+- Work from an identified workflow dossier.
+- Read `./docs/workflows/{slug}/plan.md` before changing code.
+- Treat `plan.md` as the authoritative implementation control document.
+- Treat `spec.md` as the source of truth for user-visible behavior, privacy, and correctness.
+- Treat review rounds as historical design input, not active execution control documents.
+
+## Implementation Boundary
+
 - follow the ordered work in `plan.md`
 - keep changes small and bounded
-- stop if the plan is no longer valid
-- ask the orchestrator to get user clarification when a blocker or contract ambiguity materially affects correctness
 - do not invent product behavior during implementation
-- if engineering realities require a plan change, update `plan.md`
+- stop if the plan is no longer valid or a contract ambiguity materially affects correctness
+- ask the orchestrator to get user clarification when blocked
 - if user-visible behavior must change, send the change back through the spec before continuing
+- if engineering realities require an implementation change but the product contract still holds, update `plan.md`
 
-During implementation:
-- make the minimum change required for the current step
-- run repo-appropriate validation
-- record deviations from the plan
-- update the plan's living sections when discoveries materially change the work
-- if implementation reveals a new architectural direction, major architectural constraint, or new third-party dependency:
-  - treat that as materially important
-  - route it back through the orchestrator for clarification or approval unless it is already clearly authorized by the approved plan
+## Execution Discipline
+
+- make the minimum change required for the current approved step
+- run repo-appropriate validation for the change
+- keep `plan.md` current when material discoveries, decisions, or deviations change the work
+- route new architectural direction, major constraints, or third-party dependencies back through the orchestrator unless already authorized by the approved plan
 - if a Git commit policy exists in the workflow guidelines, follow it carefully
 
-When you keep `execution.md`, use sections like:
-- title
-- source plan
-- status
-- implementation summary
-- validation evidence
-- deviations from plan
-- files changed
-- blockers
-- follow-up work
+## Evidence And Handoff
 
-Finish with:
-- files changed
-- tests or checks run
-- deviations from the plan
-- remaining follow-up work
+- use `./docs/workflows/{slug}/execution.md` only when material validation, deviations, blockers, or follow-up evidence should be preserved
+- when `execution.md` is used, start it with the exact H1 `# Execution - {slug}`
+- keep evidence concise; do not paste long logs, transcripts, or repeated plan/spec content
+- finish with files changed, checks run, deviations from the plan, and remaining follow-up work
+- when implementation review sends remediation back, the same Software Engineer operator owns the fix pass and hands off again to `implementation-review`
 
 The output of this stage should be ready for `implementation-review`, not directly for `final-review`.

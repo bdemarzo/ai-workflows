@@ -39,10 +39,11 @@ When `execution.md` is useful, use [assets/execution-template.md](./assets/execu
 
 ## Evidence And Handoff
 
-- use `./docs/workflows/{slug}/execution.md` only when material validation, deviations, blockers, or follow-up evidence should be preserved
+- use `./docs/workflows/{slug}/execution.md` when implementation has more than one approved step, multiple validation commands, remediation rounds, material validation, deviations, blockers, or follow-up evidence
 - when `execution.md` is used, start it with the exact H1 `# Execution - {slug}`
 - keep evidence concise; do not paste long logs, transcripts, or repeated plan/spec content
-- finish with files changed, checks run, deviations from the plan, and remaining follow-up work
+- record changed areas, checks run, failures fixed, deviations from the plan, and the next handoff
+- keep `plan.md` as the implementation control document, not a detailed execution journal
 - when implementation review sends remediation back, the same Software Engineer operator owns the fix pass and hands off again to `implementation-review`
 
 The output of this stage should be ready for `implementation-review`, not directly for `final-review`.

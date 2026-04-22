@@ -19,13 +19,13 @@
 - [Merged, findings-first summary, including implementation-readiness, restartability, and unnecessary-complexity blockers.]
 
 ## Meaningful Disagreements
-- [Only disagreements that materially affect the recommendation.]
+- [Only disagreements that materially affect the recommendation. Omit this section when none.]
 
 ## Suggested Revisions
-- [Concrete change to make before advancing.]
+- [Concrete change to make before advancing. Omit this section when no revision is needed.]
 
 ## Recommendation
 - [Use one allowed recommendation exactly as written in this skill.]
 
 ## Outstanding Dissent
-- [Any unresolved reviewer concern.]
+- [Any unresolved reviewer concern. Omit this section when none.]

@@ -26,6 +26,7 @@ Requirements:
 - keep the artifact self-contained enough that a later reader can understand the opportunity without prior thread context
 - open with outcome-first framing that states what changes for the user, why it matters, and how value would be observed if the idea succeeds
 - keep the permanent artifact concise and skimmable by default
+- target under roughly 1,000 words unless the user asks for deeper discovery
 - include local tracking with:
   - `Source Context` when relevant
   - `Status`
@@ -45,6 +46,7 @@ Idea boundary:
 - `idea.md` explains the opportunity, expected value, high-level direction, risks, and intentionally deferred questions
 - `spec.md` owns exact user-visible behavior, scope boundaries, privacy handling, business rules, and acceptance expectations
 - `plan.md` owns engineering sequencing, implementation structure, validation commands, migration mechanics, and delivery steps
+- `execution.md` owns implementation evidence, checks run, remediation history, and deviations after implementation starts
 
 Decision rule:
 - if a detail is only needed to explain the opportunity, value, risk, or high-level direction, keep it in the idea
@@ -74,5 +76,6 @@ Before finalizing `idea.md`, perform a scope check:
   - a higher-level product direction statement, or
   - an `Open Questions` entry for later stages
 - compress repeated rationale, examples, or risk descriptions when they do not materially change the decision
+- when revising after later-stage decisions, remove stale idea-level wording that now contradicts the accepted spec or delivered behavior
 
 The output of this stage should be ready for `idea-review`.

@@ -5,7 +5,7 @@
 - `./docs/workflows/{slug}/spec.md`
 - `./docs/workflows/{slug}/idea.md`
 - `./docs/workflows/{slug}/execution.md` when present
-- [Implementation diff, summary, or execution evidence reviewed.]
+- [Implementation diff, summary, or grouped code paths reviewed.]
 
 ## Prior Implementation Review Rounds
 - [Optional prior round path and what changed since then.]
@@ -23,13 +23,13 @@
 - [Merged findings-first summary covering architecture, security, QA/product correctness, validation gaps, implementation drift, or markdown-artifact gaps.]
 
 ## Meaningful Disagreements
-- [Only disagreements that materially affect the recommendation.]
+- [Only disagreements that materially affect the recommendation. Omit this section when none.]
 
 ## Suggested Revisions
-- [Concrete revision to route back through `implement-plan` before advancing.]
+- [Concrete revision to route back through `implement-plan` before advancing. Omit this section when no revision is needed.]
 
 ## Recommendation
 - [Use one allowed recommendation exactly as written in this skill.]
 
 ## Outstanding Dissent
-- [Any unresolved reviewer concern.]
+- [Any unresolved reviewer concern. Omit this section when none.]

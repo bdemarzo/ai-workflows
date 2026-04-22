@@ -57,6 +57,8 @@ Requirements:
 - derive one canonical `slug` from the starting prompt and keep the workflow dossier under `./docs/workflows/{slug}/`
 - treat `./docs/workflows/{slug}/run.md` as the source of truth for workflow state, artifact paths, role bindings, approvals, blockers, and resume context
 - start `run.md` with the exact H1 `# Run - {slug}`
+- keep `run.md` as a compact restart ledger, not a chronology, validation log, or implementation journal
+- do not add `Validation Evidence` to `run.md`; point to `plan.md`, `execution.md`, or review artifacts instead
 - keep fixed dossier file names: `idea.md`, `spec.md`, `plan.md`, and optional `execution.md`
 - create new zero-padded review rounds under:
   - `reviews/idea/round-XX.md`
@@ -125,6 +127,7 @@ Use a plain-language startup confirmation such as:
 - after each user gate, reroute, or remediation loop, explicitly re-ground on the current markdown artifacts before making the next stage decision
 - if chat context conflicts with repo markdown artifacts, prefer the artifacts and record the discrepancy in `run.md`
 - do not carry accepted decisions, constraints, or clarifications forward as chat-only context; write them into `run.md` or the relevant source artifact before relying on them
+- do not duplicate the same accepted decision across every artifact; write it to the artifact that owns it and point other artifacts to that source when needed
 
 ## Delegation And Context Budget
 
@@ -134,6 +137,8 @@ Use a plain-language startup confirmation such as:
 - do not include long chat-history summaries when `run.md` and source artifacts contain the needed context
 - ask subagents to return only decisions, findings, edits made, and unresolved blockers
 - prohibit long restatements of artifacts, chat history, or reviewer transcripts
+- for focused re-reviews, ask reviewers to inspect only the prior finding, current artifact, and changed area
+- target saved review rounds at roughly 250-500 words unless material findings require more
 - idea, spec, and plan reviews should normally inspect only `run.md` plus the relevant workflow artifacts
 - codebase inspection should be targeted and usually reserved for implementation, implementation-review, final-review fidelity checks, or a specific blocking question
 - generic helper agents may be used only for narrow blocking questions with named paths, symbols, or terms
@@ -159,8 +164,9 @@ Use a plain-language startup confirmation such as:
 11. After the user gate, record feedback, ensure accepted feedback is written into repo markdown artifacts through the owning operator when edits are needed, and re-ground before advancing, looping, or rerouting.
 12. After implementation, run `implementation-review`; if any implementation reviewer requires material changes, route remediation back to the implementation operator and repeat.
 13. After implementation-review approval, run `final-review`; if it finds fidelity gaps, route fixes back to the owning operator and rerun review as needed.
-14. Delegate docs close-out to the documentation maintainer.
-15. Verify docs close-out, re-ground on final markdown artifacts, ask for final approval, and close the workflow.
+14. Before docs close-out, run a drift sweep across `idea.md`, `spec.md`, `plan.md`, `execution.md` when present, and latest reviews to catch stale wording after later decisions.
+15. Delegate docs close-out to the documentation maintainer.
+16. Verify docs close-out, re-ground on final markdown artifacts, ask for final approval, and close the workflow.
 
 ## Advancement And Reroute Rules
 
@@ -177,6 +183,7 @@ Use a plain-language startup confirmation such as:
 - if implementation review fails, rerun `implement-plan` and then rerun `implementation-review`
 - if final review finds fidelity gaps, route fixes back to the operator who owns the affected work
 - after any reroute, remediation cycle, or direction-changing user feedback, update the relevant repo markdown artifacts before delegating more work
+- if later accepted decisions make earlier artifacts stale, route a concise correction to that artifact's owning operator before closure
 
 Finish the workflow with:
 - final artifact paths

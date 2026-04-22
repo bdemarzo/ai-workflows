@@ -33,6 +33,8 @@ Requirements:
 - validate that each official reviewer matches the resolved role binding from `workflow-run`
 - identify each reviewer with persona, concrete agent name, and display name when the runtime exposes one
 - preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
+- omit empty boilerplate sections from the saved artifact when they would only say `None`
+- keep normal saved rounds around 250-500 words unless material findings require more
 
 Focus on:
 - completeness of the user-facing contract
@@ -48,6 +50,7 @@ Reviewer budget:
 - ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
 - merge overlapping findings, keep synopses brief, and preserve only disagreements that materially affect the recommendation
 - if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding
+- for focused re-reviews, ask reviewers to inspect only the prior finding, current artifact, and changed area
 
 Finish with an explicit recommendation:
 - `Recommendation: revise current stage`

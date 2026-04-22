@@ -1,7 +1,7 @@
 # Idea - {slug}
 
 ## Purpose / Big Picture
-[State what changes for the user, why it matters, and how value would be observed if the idea succeeds.]
+[One short outcome-first paragraph: what changes for the user, why it matters, and how value would be observed. Target <= 1,000 words for the whole artifact unless deeper discovery is requested.]
 
 ## Context And Orientation
 [Optional. Add only when repo, business, or workflow context is needed for a later reader.]
@@ -13,7 +13,7 @@
 - [Core user problem or opportunity.]
 
 ## Proposed Direction
-- [High-level product direction worth exploring.]
+- [High-level product direction worth exploring. Do not define detailed behavior, routes, data models, or implementation steps here.]
 
 ## Expected Value
 - [Primary user or business value.]
@@ -28,7 +28,7 @@
 - [Draft | In review | Approved for spec | Rejected]
 
 ## Open Questions
-- [Intentional uncertainty to review or defer. Do not use this for blockers that make the idea unsafe to review.]
+- [Intentional uncertainty to review or defer. Product-contract questions move to spec; implementation questions move to plan.]
 
 ## Reasons Not To Do This
 - [Short, direct reasons to kill, narrow, or defer the idea.]

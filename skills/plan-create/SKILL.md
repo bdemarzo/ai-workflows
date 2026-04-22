@@ -27,6 +27,7 @@ Requirements:
   - `Surprises & Discoveries`
   - `Decision Log`
   - `Outcomes & Retrospective`
+- keep living sections compact; once implementation starts, detailed step evidence belongs in `execution.md`
 - define non-obvious terms in plain language instead of assuming prior repo knowledge
 - when revising after `plan-review`, incorporate accepted review outcomes into `plan.md`
 - when the plan is ready for execution, mark that state clearly in the plan body
@@ -39,6 +40,7 @@ Operator responsibility:
 Plan boundary:
 - use the spec to define what must be true for users
 - use the plan to define engineering decisions, sequencing, interfaces, validation, idempotence, and recovery
+- use `execution.md` for checks run, changed areas, remediation history, and deviations during multi-step implementation
 - send user-visible behavior, privacy, correctness, or scope gaps back to `spec-create`
 
 Decision rule:
@@ -67,6 +69,7 @@ Require these expectations:
 - `Progress`, `Decision Log`, `Surprises & Discoveries`, `Validation and Acceptance`, and `Outcomes & Retrospective` are mandatory living sections
 - validation should include concrete commands or checks with expected observable outcomes when the project permits them
 - accepted review outcomes must be incorporated into the plan before implementation begins
+- do not append a long implementation journal to the plan; summarize progress and point to `execution.md`
 
 Do not:
 - restate product policy unless the spec is ambiguous
@@ -76,5 +79,6 @@ Do not:
 - expand straightforward decisions into essay-style rationale unless the tradeoff is non-obvious or high risk
 - introduce architecture that is primarily justified by hypothetical future needs
 - duplicate the same control point across multiple layers unless the redundancy is intentional and clearly justified
+- repeat spec acceptance criteria only when the repetition materially reduces implementation risk
 
 The output of this stage should be ready for `plan-review`.

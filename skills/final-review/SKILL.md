@@ -34,12 +34,16 @@ Requirements:
 - identify each reviewer with persona, concrete agent name, and display name when the runtime exposes one
 - validate that each official reviewer matches the resolved role binding from `workflow-run`
 - preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
+- omit empty boilerplate sections from the saved artifact when they would only say `None`
+- keep normal saved rounds around 250-500 words unless material findings require more
 
 Focus on:
 - fidelity of code and delivered behavior against `idea.md`, `spec.md`, and `plan.md`
 - unresolved correctness gaps, regressions, and validation gaps
 - places where implementation drifted from the approved artifact chain
 - whether the delivered solution stayed simple and the repo markdown artifacts support docs close-out without chat history
+- stale wording in earlier artifacts after later accepted decisions, especially idea/spec statements superseded by planning or implementation review
+- whether `run.md` stayed a compact restart ledger without validation evidence or implementation journaling
 - the strongest reasons not to begin docs close-out yet
 
 Reviewer budget:
@@ -47,6 +51,7 @@ Reviewer budget:
 - merge overlapping findings, keep synopses brief, and preserve only disagreements that materially affect closure readiness
 - summarize validation or regression concerns as actionable gaps rather than long transcripts
 - if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding
+- when many code files were reviewed, group paths by subsystem and rely on `execution.md` for exact changed-file evidence
 
 Finish with an explicit recommendation:
 - `Recommendation: loop back to implement-plan`

@@ -35,6 +35,8 @@ Requirements:
 - identify each reviewer with persona, concrete agent name, and display name when the runtime exposes one
 - validate that each official reviewer matches the resolved role binding from `workflow-run`
 - preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
+- omit empty boilerplate sections from the saved artifact when they would only say `None`
+- keep normal saved rounds around 250-500 words unless material findings require more
 
 Focus on:
 - architectural soundness against the approved plan
@@ -50,6 +52,8 @@ Reviewer budget:
 - merge overlapping findings, keep synopses brief, and preserve only disagreements that materially affect the recommendation
 - summarize validation or test concerns as actionable gaps rather than long transcripts
 - if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding
+- group reviewed code paths by subsystem when many files were touched; rely on `execution.md` for exact changed-file evidence
+- for focused re-reviews, ask reviewers to inspect only the prior finding, current diff/evidence, and changed area
 
 Finish with an explicit recommendation:
 - `Recommendation: revise implement-plan`

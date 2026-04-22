@@ -33,6 +33,8 @@ Requirements:
 - identify each reviewer in the roster with persona, concrete agent name, and subagent display name when the runtime exposes one
 - validate that each official reviewer matches the resolved role binding from `workflow-run`
 - preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
+- omit empty boilerplate sections from the saved artifact when they would only say `None`
+- keep normal saved rounds around 250-500 words unless material findings require more
 
 Focus on:
 - value and user relevance
@@ -63,6 +65,7 @@ Compression rule:
 - keep reviewer inputs compact: ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
 - keep each reviewer within their assigned lens and avoid duplicating another lens unless the disagreement changes the recommendation
 - if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding rather than creating a separate restartability section
+- for focused re-reviews, ask reviewers to inspect only the prior finding, current artifact, and changed area
 
 Finish with an explicit recommendation:
 - `Recommendation: revise current stage`

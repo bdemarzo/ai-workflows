@@ -19,6 +19,10 @@ Maintain these sections:
 - `## Resume Instructions`
 - `## Outcomes & Retrospective`
 
+Do not add `## Validation Evidence` to `run.md`. Validation belongs in `plan.md`, `execution.md`, or review artifacts when needed.
+
+Keep `run.md` under roughly 120 lines. It is a restart ledger, not a chronology, test report, or implementation journal.
+
 ## Update Timing
 
 After startup confirmation, record:
@@ -40,6 +44,7 @@ After each create stage, update:
 - `Artifact Map`
 - `Progress`
 - `Resume Instructions`
+Do not append every minor step to `Progress`; replace it with the current state.
 
 After each review stage, record:
 - reviewed artifact path
@@ -49,7 +54,7 @@ After each review stage, record:
 - reviewer display names when the runtime exposes them
 - brief reviewer synopses preserved in the official review artifact
 - recommendation
-- orchestrator consolidation rationale
+- one-sentence orchestrator consolidation rationale
 
 After each user gate, record:
 - what the user reviewed
@@ -80,15 +85,16 @@ After any material clarification or blocker, record:
 
 ## Section Guidance
 
-- `Purpose / Big Picture`: explain what the workflow is delivering, for whom, and what success looks like.
+- `Purpose / Big Picture`: explain what the workflow is delivering, for whom, and what success looks like in one short paragraph.
 - `Workflow Guidelines`: record the current orchestrator, current phase, workflow status, current gate decision needed when paused, and important constraints.
-- `Artifact Map`: list the current source artifact paths and latest review-round paths.
+- `Artifact Map`: list the current source artifact paths and latest review-round paths in a compact table.
+- `Progress`: use a compact current-state table, not a dated checklist.
 - `Phase Ownership`: record the current operator, official reviewer roster, and sidecar/helper agents separately.
-- `Stage Assessments`: summarize phase readiness, recommendations, and why the orchestrator advanced or looped.
+- `Stage Assessments`: keep only the latest stage assessment plus unresolved prior warnings that still matter.
 - `Decision Log`: record resolved decisions, accepted user feedback, material clarifications, and what changed because of them.
 - `Current Blockers`: list active blockers and whether the workflow is waiting on the user or on remediation.
 - `Resume Instructions`: state the exact next action and exact approval decision needed when paused.
-- `Outcomes & Retrospective`: summarize what was delivered, deferred, learned, and documented.
+- `Outcomes & Retrospective`: summarize what was delivered, deferred, learned, and documented only at completion.
 
 When useful after long or messy threads, add a concise artifact-based restatement of current truth to `Resume Instructions` or `Decision Log`.
 
@@ -96,12 +102,19 @@ When delegating, prefer artifact paths and saved decision summaries in `Decision
 
 ## Status Values
 
-Use `workflow_status` values such as:
+Use only these `workflow_status` values:
 - `in-progress`
 - `awaiting-user-approval`
 - `awaiting-clarification`
 - `blocked`
 - `complete`
+
+## Evidence Placement
+
+- Put planned validation commands in `plan.md`.
+- Put command results, changed areas, remediation evidence, and implementation deviations in `execution.md` when implementation has multiple steps, multiple validation commands, or remediation rounds.
+- Put reviewer conclusions in review-round files.
+- Record only pointers and current readiness in `run.md`.
 
 ## Example
 

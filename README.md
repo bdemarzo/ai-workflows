@@ -1,112 +1,41 @@
 # ai-workflows
 
-Portable workflow skills for AI-assisted product and engineering work, plus a Codex adapter layer.
+Portable workflow skills for AI-assisted product and engineering work, plus an optional Codex adapter layer for named subagents.
 
-This repo defines a guided workflow where the active AI session is the orchestrator and subagents act as operators and reviewers. The orchestrator asks clarifying questions when needed, presents each major phase to the user, and requires approval before moving forward.
+This repository defines a guided workflow where the active AI session is the orchestrator and subagents act as operators and reviewers. The workflow moves through idea, spec, plan, implementation, implementation review, final review, and docs close-out with explicit user gates between major phases.
 
-## What You Get
+## What Ships
 
-- `workflow-run` to orchestrate the full workflow
-- operator playbooks for:
+- `workflow-run`: orchestrates the full workflow.
+- Create-stage skills:
   - `idea-create`
   - `spec-create`
   - `plan-create`
   - `implement-plan`
-- review playbooks for:
+- Review-stage skills:
   - `idea-review`
   - `spec-review`
   - `plan-review`
   - `implementation-review`
   - `final-review`
-- `skeptical-review` as an optional manual pressure-test outside the main workflow
+- `skeptical-review`: optional manual pressure-test outside the main workflow.
+- `.codex/`: optional Codex adapter with persona agents, role registry, and runtime settings.
+- `scripts/check_workflow_artifacts.py`: lightweight consistency checker for skill packages and workflow dossiers.
 
 ## Core Model
 
 - The active session is always the orchestrator.
 - Operators and reviewers are always subagents.
 - Agents define durable persona behavior.
-- Skills define the stage procedure and artifact contract.
-- Operators own drafting, accepted artifact revisions, implementation work, and implementation remediations for their phase.
-- Reviewers provide findings and recommendations but do not own the source artifact.
-- The orchestrator writes the official consolidated review rounds.
-- The user gates progress between major phases.
-
-## Repo Layers
-
-This repo is organized in layers:
-
-- `skills/`
-  - the portable workflow contract
-  - copy these into an agent's skills folder
-- `.codex/`
-  - the Codex-specific adapter layer
-  - copy this into a target repository when you want Codex to execute the workflow with named subagents
-
-## Codex Adapter Layer
-
-The skills in [skills/](/C:/git/bdcf/ai-workflows/skills) stay portable and stage-oriented. For Codex, this repo also includes an optional project-scoped adapter layer under [.codex/](/C:/git/bdcf/ai-workflows/.codex).
-
-This follows the OpenAI Codex subagents model: custom agents can be defined as standalone TOML files in `.codex/agents/`, while the parent session remains the orchestrator. See [OpenAI Codex Subagents](https://developers.openai.com/codex/subagents).
-
-The Codex adapter layer in this repo has three pieces:
-- [.codex/agents/](/C:/git/bdcf/ai-workflows/.codex/agents) for concrete persona agents
-- [.codex/role-registry.toml](/C:/git/bdcf/ai-workflows/.codex/role-registry.toml) for mapping workflow stages to persona labels and then to concrete Codex agent names
-- [.codex/config.toml](/C:/git/bdcf/ai-workflows/.codex/config.toml) for global subagent limits
-
-The starter scaffold included here maps workflow personas to named Codex agents such as:
-- `product_strategist`
-- `product_manager`
-- `software_architect`
-- `software_engineer`
-- `product_designer`
-- `domain_expert`
-- `stakeholder_advocate`
-- `skeptic`
-- `security_engineer`
-- `qa_engineer`
-- `documentation_maintainer`
-
-The included [.codex/config.toml](/C:/git/bdcf/ai-workflows/.codex/config.toml) also sets conservative global subagent limits for Codex:
-- `max_threads = 6`
-- `max_depth = 1`
-
-For better host responsiveness, run reviewer subagents sequentially or lower `max_threads` when parallel reviews cause CPU, memory, or UI contention. Parallel review is still valid when wall-clock speed matters more than local system impact.
-
-When the runtime supports explicit subagent shutdown, close or release operators and reviewers after their output has been captured in the relevant markdown artifact. Do not keep completed subagents alive across user gates unless they are actively needed for the next delegated task.
-
-Subagent reasoning effort is configured per concrete persona file in [.codex/agents/](/C:/git/bdcf/ai-workflows/.codex/agents), not in `.codex/config.toml`. To lower a subagent from high reasoning to medium reasoning, edit the relevant TOML file and change:
-
-```toml
-model_reasoning_effort = "high"
-```
-
-to:
-
-```toml
-model_reasoning_effort = "medium"
-```
-
-Recommended defaults depend on whether the adapter is optimized for quality or speed:
-- Keep `software_architect`, `software_engineer`, `security_engineer`, `qa_engineer`, `product_manager`, and `skeptic` at `high` when correctness matters most. These personas make or review consequential contract, architecture, implementation, security, and regression decisions.
-- `documentation_maintainer` can stay `medium` by default because close-out work should be bounded to existing artifacts and repository documentation.
-- `product_strategist`, `product_designer`, `stakeholder_advocate`, and `domain_expert` are reasonable `medium` candidates when host performance or turnaround time matters more than exhaustive critique. Raise `domain_expert` back to `high` for specialized, regulated, or high-stakes domains.
-
-Use this layer when you want the orchestrator to call stable, named Codex subagents instead of reconstructing persona instructions every run.
-
-The shared `Software Architect` persona in this repo is intended to drive bounded, full-stack execution planning:
-- prefer the simplest viable design that satisfies the approved contract
-- reuse existing patterns before introducing new abstractions, services, or dependencies
-- justify each layer in present-tense terms rather than future-proofing by default
-- keep recommendations concrete, defensible, and easy for the next engineer to follow
-
-The intended split is:
-- agent = persona/stable behavior
-- skill = stage procedure, inputs, outputs, and boundaries
-- orchestrator = stage-to-persona assignment plus gating
+- Skills define stage procedure, inputs, outputs, and artifact boundaries.
+- Operators own source artifacts, accepted revisions, implementation work, and remediation work.
+- Reviewers provide findings and recommendations; they do not own source artifacts.
+- The orchestrator writes official consolidated review rounds and owns stage advancement.
+- User approval is required after idea review resolution, spec review resolution, plan review resolution, implementation-review resolution, and final-review gap resolution plus docs close-out.
 
 ## Workflow
 
-The canonical workflow is:
+Canonical phase order:
 
 1. `idea-create`
 2. `idea-review`
@@ -125,79 +54,25 @@ The canonical workflow is:
 15. docs close-out
 16. final user approval and workflow closure
 
-`workflow-run` is the orchestrator. It is not a stage.
+`workflow-run` is the orchestrator, not a stage.
 
 ## Stage Ownership
 
-### Idea
-- Operator: `Product Strategist`
-- Reviewers:
-  - `Stakeholder Advocate`
-  - `Product Designer` or `Domain Expert`
-  - `Skeptic`
+| Stage | Operator | Reviewers |
+| --- | --- | --- |
+| `idea-create` / `idea-review` | Product Strategist | Stakeholder Advocate, Product Designer or Domain Expert, Skeptic |
+| `spec-create` / `spec-review` | Product Manager | Software Architect, Stakeholder Advocate or Product Designer, Skeptic |
+| `plan-create` / `plan-review` | Software Architect | Software Architect, Software Engineer, Skeptic |
+| `implement-plan` | Software Engineer | n/a |
+| `implementation-review` | n/a | Software Architect, Security Engineer, QA Engineer |
+| `final-review` | Orchestrator synthesis | Product Manager or Product Strategist, Software Architect, QA Engineer |
+| docs close-out | Documentation Maintainer | n/a |
 
-### Spec
-- Operator: `Product Manager`
-- Reviewers:
-  - `Software Architect`
-  - `Stakeholder Advocate` or `Product Designer`
-  - `Skeptic`
-
-### Plan
-- Operator: `Software Architect`
-- Reviewers:
-  - `Software Architect`
-  - `Software Engineer`
-  - `Skeptic`
-
-### Implementation
-- Operator: `Software Engineer`
-
-### Implementation Review
-- Reviewers:
-  - `Software Architect`
-  - `Security Engineer`
-  - `QA Engineer`
-
-### Final Review
-- Orchestrator-led synthesis with reviewer lenses such as:
-  - `Product Manager` or `Product Strategist`
-  - `Software Architect`
-  - `QA Engineer`
-
-### Docs Close-Out
-- Operator: `Documentation Maintainer`
-
-## Review Rules
-
-For `idea`, `spec`, and `plan`:
-- each review uses exactly:
-  - two substantive reviewers
-  - one skeptic
-- the second substantive reviewer may adapt to the workflow type, but the reviewer count does not change
-
-For `implementation-review`:
-- the reviewer set is fixed:
-  - software architecture
-  - security
-  - QA
-- QA should explicitly consider regressions, edge cases, and unit-test coverage expectations
-
-Saved review rounds should stay concise and findings-first:
-- keep reviewer rosters visible
-- include the concrete agent id and display name when the runtime exposes one
-- record only reviewers that match the resolved role binding from `workflow-run`
-- preserve a short synopsis of what each reviewer actually argued, not just the merged conclusion
-- merge overlapping findings
-- preserve only disagreements that materially affect the recommendation
-- delegate reviews from exact artifact paths and assigned reviewer lenses rather than broad chat-history recap
-- keep reviewer inputs compact: up to three consequential findings, one explicit recommendation, and only the rationale needed to support it
-- avoid broad repo scans unless implementation evidence or source-level context is needed for the assigned lens
-- if the markdown artifacts in the repo are insufficient for the next stage to continue, record that as a key finding rather than a standalone restartability section
+For `idea`, `spec`, and `plan`, reviews use exactly two substantive reviewers plus one skeptic. `implementation-review` always uses architecture, security, and QA / product correctness.
 
 ## Workflow Dossier
 
-Each workflow should live under one dossier:
+Each workflow lives under one dossier:
 
 ```text
 docs/workflows/{slug}/
@@ -214,136 +89,96 @@ docs/workflows/{slug}/
     final/round-01.md
 ```
 
-Use one canonical `slug` per workflow. Create a new review round for each pass instead of overwriting earlier review files.
+Create a new zero-padded review round for each pass. Do not overwrite older review files.
 
-The workflow must remain resumable from the markdown artifacts in the repo alone. Reviewers should treat any gap in that handoff chain as a key finding.
+Source artifacts use slugged H1 titles:
 
-Use `run.md` as the workflow ledger, not as a test report. It should include a `Decision Log` for resolved decisions, accepted feedback, and material clarifications. Validation details belong in `plan.md`, `execution.md`, or review artifacts when they are needed for that phase.
+- `# Run - {slug}`
+- `# Idea - {slug}`
+- `# Spec - {slug}`
+- `# Plan - {slug}`
+- `# Execution - {slug}` when `execution.md` is used
 
-## How It Works
+## Artifact Ownership
 
-In normal use, `workflow-run` will:
+- `run.md` is the compact restart ledger. Keep it under roughly 120 lines, use a current-state summary instead of a long chronology, and do not add `Validation Evidence`.
+- `idea.md` owns opportunity, value, risks, and intentionally deferred questions. Keep it under roughly 1,000 words unless deeper discovery is requested.
+- `spec.md` owns the user-visible contract, acceptance behavior, privacy/business rules, and scope boundaries.
+- `plan.md` owns implementation decisions, sequencing, interfaces, validation plan, idempotence, and recovery.
+- `execution.md` owns implementation evidence, checks run, changed areas, remediation history, and deviations during multi-step work.
+- Review rounds own reviewer findings, recommendation, and brief reviewer synopses.
 
-- resolve stage-to-persona bindings through the runtime role registry when one exists
-- record the actual persona-to-agent bindings used for the run
-- clarify the goal, audience, constraints, and success criteria when needed
-- confirm the guided workflow before the first phase starts
-- re-ground on `run.md` and the current markdown artifacts at phase boundaries instead of trusting long chat history
-- delegate creation work to the current phase operator subagent
-- delegate formal review work to the current phase reviewer subagents
-- write the official review artifact for the phase
-- delegate accepted source-artifact revisions and implementation remediations back to the owning operator subagent
-- verify updated artifacts or implementation diffs before advancing
-- present the result to the user
-- ask whether to proceed
-- keep `docs/workflows/{slug}/run.md` current as the restartable workflow ledger
+The repo markdown artifacts must be sufficient for another operator or orchestrator to resume without chat history. Accepted decisions and review outcomes should be written into the owning artifact before later work depends on them.
 
-The orchestrator should ask questions whenever clarity is needed. The workflow should not rely on autonomous straight-through execution as its primary mode.
+## Review Output Rules
 
-The orchestrator should treat the repo markdown artifacts as the authoritative working context. If chat history conflicts with the saved artifacts, the saved artifacts win and the discrepancy should be recorded.
+Saved review rounds should be concise and findings-first:
 
-Accepted user feedback and accepted review outcomes should not remain chat-only. Before the next phase begins, they should be written into `run.md` or the relevant workflow artifact. When artifact edits or implementation changes are needed, the orchestrator should delegate that work to the owning operator subagent, then verify the result and ground later delegation in the saved artifacts.
+- keep reviewer rosters visible
+- record concrete agent id and display name when the runtime exposes them
+- keep reviewer inputs to up to three consequential findings, one recommendation, and only necessary rationale
+- preserve brief reviewer synopses without transcript-style detail
+- merge overlapping findings
+- omit empty boilerplate sections such as `Meaningful Disagreements`, `Suggested Revisions`, or `Outstanding Dissent`
+- keep normal review rounds around 250-500 words unless material findings require more
+- for focused re-reviews, inspect only the prior finding, current artifact, and changed area
+- record markdown-artifact handoff gaps as findings when they would block restartability
 
-If a runtime-specific role registry is missing or incomplete, the orchestrator should fall back explicitly and record that fallback in `run.md` instead of silently improvising.
+Before docs close-out, run a drift sweep across the idea, spec, plan, execution evidence when present, and latest review rounds. Fix stale wording where later accepted decisions superseded earlier artifact language.
 
-Official workflow delegation must use the concrete agent resolved from the role registry. For Codex, that means passing the registry's `agent` value as the spawned subagent `agent_type`, such as `software_architect`, `software_engineer`, or `product_manager`. Generic helpers such as `worker`, `explorer`, or `default` may support sidecar discovery, but prompt text alone does not make them official workflow operators or reviewers.
+## Codex Adapter
 
-## Stage Outputs
+The portable workflow contract lives in `skills/`. The optional Codex adapter lives in `.codex/`:
 
-| Stage | Purpose | Output |
-| --- | --- | --- |
-| `idea-create` | Shape the product idea and expected value. | `docs/workflows/{slug}/idea.md` |
-| `idea-review` | Review the idea before spec work. | `docs/workflows/{slug}/reviews/idea/round-01.md` |
-| `spec-create` | Turn the idea into a functional product contract. | `docs/workflows/{slug}/spec.md` |
-| `spec-review` | Review the spec before planning. | `docs/workflows/{slug}/reviews/spec/round-01.md` |
-| `plan-create` | Turn the spec into an implementation-ready plan. | `docs/workflows/{slug}/plan.md` |
-| `plan-review` | Review the plan before implementation. | `docs/workflows/{slug}/reviews/plan/round-01.md` |
-| `implement-plan` | Implement the approved plan. | code changes plus optional `docs/workflows/{slug}/execution.md` |
-| `implementation-review` | Review implementation with architecture, security, and QA/product-correctness lenses. | `docs/workflows/{slug}/reviews/implementation/round-01.md` |
-| `final-review` | Check fidelity against idea, spec, plan, and implementation evidence. | `docs/workflows/{slug}/reviews/final/round-01.md` |
-| docs close-out | Update repository documentation before closure. | repo docs updates plus closure recorded in `run.md` |
+- `.codex/agents/`: concrete persona agent definitions
+- `.codex/role-registry.toml`: stage-to-persona-to-agent bindings
+- `.codex/config.toml`: subagent runtime settings
 
-## Example Prompt
+Official Codex workflow delegation must use the concrete `agent` value resolved from `.codex/role-registry.toml`. Generic helpers such as `worker`, `explorer`, or `default` may support sidecar discovery, but prompt text alone does not make them official workflow operators or reviewers.
 
-```text
-Use workflow-run for this feature.
-Ask questions whenever clarity is needed.
-Use subagents for operators and reviewers.
-Gate each major phase with me before proceeding.
+## Install
 
-Build a customer-facing saved views experience for our reporting dashboard.
-```
-
-## Optional Manual Skill
-
-`skeptical-review` is still available as an optional manual pressure-test. It is separate from the mandatory `Skeptic` reviewer already present in the normal idea/spec/plan review phases.
-
-## Install for Codex
-
-From the target repository root, run the installer from this repo:
+From a target repository root:
 
 ```powershell
 python C:\path\to\ai-workflows\install.py
 ```
 
 By default this installs:
+
 - skill packages into `.codex/skills/`
 - persona agents, role registry, and runtime config into `.codex/`
 
-The installer is conservative:
-- existing managed files are skipped unless `--force` is passed
-- `--dry-run` shows planned changes without writing files
-- `--global-skills` installs skills to `~/.codex/skills` instead of the target repo's `.codex/skills`
-- `--no-adapter` or `--no-skills` can install only one side of the package
-- `--target` must point to an existing directory
-- writes into the `ai-workflows` source repo or its subdirectories are blocked unless `--dry-run` is used
+Useful installer options:
 
-Manual install is also supported. Copy any skill folder from `skills/` into your agent's skills directory. For Codex, that is typically:
+- `--dry-run`: show planned changes without writing files
+- `--force`: overwrite existing managed files
+- `--global-skills`: install skills to `~/.codex/skills`
+- `--no-adapter`: install only skills
+- `--no-skills`: install only the adapter
+- `--target <path>`: install into a specific existing directory
 
-```text
-skills/workflow-run -> ~/.codex/skills/workflow-run
-skills/implement-plan -> ~/.codex/skills/implement-plan
-skills/implementation-review -> ~/.codex/skills/implementation-review
-skills/skeptical-review -> ~/.codex/skills/skeptical-review
+Manual install is also supported. Copy folders from `skills/` into your agent's skills directory. For Codex project-local use, copy `.codex/` into the target repository root as well.
+
+## Consistency Checker
+
+Run the checker from this repository root:
+
+```powershell
+python scripts/check_workflow_artifacts.py --root .
 ```
 
-To install everything, copy each folder under `skills/` into:
+Check a workflow dossier:
 
-```text
-~/.codex/skills/
+```powershell
+python scripts/check_workflow_artifacts.py --root . --dossier C:\path\to\repo\docs\workflows\my-slug --stale-term per-band
 ```
 
-If you want the Codex adapter behavior in a target repository, also copy the project-scoped `.codex/` folder into that repository root:
-
-```text
-.codex/agents/
-.codex/role-registry.toml
-.codex/config.toml
-```
-
-That adapter layer is what makes the stage-assigned personas resolve to stable named Codex subagents.
+The checker fails on structural errors such as missing skill files, mismatched skill names, or invalid artifact H1s. It reports warnings for budget drift, forbidden `run.md` sections, missing latest-review references, oversized review rounds, and configured stale terms.
 
 ## Repository Layout
 
-- `skills/` - canonical skill packages
-- `.codex/agents/` - optional Codex-specific subagent runtime definitions
-- `.codex/role-registry.toml` - optional Codex-specific stage-to-persona-to-agent binding registry
-- `.codex/config.toml` - optional Codex-specific subagent runtime settings
-- `skills/<skill-name>/assets/` - optional skill-local templates or output resources
-- `skills/<skill-name>/references/` - optional skill-local reference docs loaded only when needed
-- `docs/` - supporting docs
-- `README.md` - human-facing workflow overview
-
-## Skill Resources
-
-Artifact-producing skills may include skill-local templates under `assets/` so the skill remains usable when copied on its own. Keep long templates in `assets/` and have `SKILL.md` point to them explicitly when they should be used.
-
-Long procedural detail may live under `references/` when it supports progressive disclosure. Keep `SKILL.md` focused on the core workflow and point to reference files only for situations where they should be read.
-
-## Notes
-
-- The workflow skills are portable by design; the shipped adapter layer in this repo is Codex-specific.
-- The repo no longer ships a runtime-neutral persona catalog; `.codex/` is the only persona binding layer included here.
-- `plan.md` is the authoritative implementation document for the workflow once implementation starts.
-- `execution.md` is optional and should be used as an evidence appendix rather than a second control document.
-- Repo-local `PLANS.md` can be useful project context, but it should not silently override this workflow contract.
+- `skills/`: canonical portable skill packages
+- `.codex/`: optional Codex adapter layer
+- `scripts/`: lightweight repository and workflow checks
+- `README.md`: human-facing workflow overview and install guidance

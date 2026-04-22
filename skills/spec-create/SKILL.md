@@ -27,6 +27,7 @@ Requirements:
 - keep the spec self-contained enough for planning without relying on prior thread context
 - make the spec concrete enough that planning can proceed from `spec.md` alone
 - keep the permanent artifact concise and skimmable by default
+- avoid copying idea rationale into the spec when a short source link or summary is enough
 - link back to the source idea artifact path when the spec was created from one
 - if a workflow split created this dossier, explain that relationship in the spec body
 - include local tracking with:
@@ -46,6 +47,7 @@ Operator responsibility:
 Spec boundary:
 - `spec.md` defines the user-visible contract: behavior, scope, constraints, privacy and business rules, routes or URLs when relevant, acceptance criteria, scenarios, edge cases, and observable acceptance behavior
 - `plan.md` owns sequencing, task breakdown, code structure, file/module lists, implementation mechanics, migration steps, detailed execution logs, and validation commands
+- `execution.md` owns implementation evidence and validation results after work begins
 - when a detail reads like implementation mechanics, move it out of the spec unless it changes user-visible outcomes, privacy, or correctness
 
 Decision rule:
@@ -60,5 +62,6 @@ Before finalizing `spec.md`, perform a scope check:
   - a product-facing constraint or requirement if it truly affects user expectations, privacy, or correctness, or
   - an `Open Questions` item to be decided in planning
 - compress repeated examples, requirement restatements, or rationale when one clear statement is sufficient
+- keep acceptance criteria observable but compact; do not duplicate every functional requirement as a second full list unless that improves planning safety
 
 The output of this stage should be ready for `spec-review`.

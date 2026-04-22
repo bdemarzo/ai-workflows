@@ -4,10 +4,10 @@
 [State what changes for the user, why it matters, and how value would be observed if the idea succeeds.]
 
 ## Context And Orientation
-[Optional. Add only when repo or business context is needed for a later reader.]
+[Optional. Add only when repo, business, or workflow context is needed for a later reader.]
 
 ## Source Context
-- [Prompt, request, or upstream artifact that motivated this idea.]
+- [Optional. Prompt, request, upstream artifact, or accepted feedback that motivated this idea.]
 
 ## User Problem Or Opportunity
 - [Core user problem or opportunity.]
@@ -28,7 +28,7 @@
 - [Draft | In review | Approved for spec | Rejected]
 
 ## Open Questions
-- [Question that should be resolved in review or later stages.]
+- [Intentional uncertainty to review or defer. Do not use this for blockers that make the idea unsafe to review.]
 
 ## Reasons Not To Do This
 - [Short, direct reasons to kill, narrow, or defer the idea.]

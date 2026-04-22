@@ -1,6 +1,6 @@
 ---
 name: idea-create
-description: Draft or refine the idea artifact as the Product Strategist operator before idea-review. Use when the workflow needs `./docs/workflows/{slug}/idea.md`.
+description: Draft, revise, or refine the workflow idea artifact as the Product Strategist operator before idea-review. Use when shaping an early product opportunity, turning a rough prompt into `./docs/workflows/{slug}/idea.md`, or updating an existing idea artifact with accepted user or review feedback.
 ---
 
 # Idea Create
@@ -21,15 +21,18 @@ Requirements:
 - use a short kebab-case name for the dossier
 - write or update `./docs/workflows/{slug}/idea.md`
 - start the artifact with the exact H1 `# Idea - {slug}`
+- update an existing `idea.md` in place rather than creating duplicates
+- keep the dossier slug stable unless the workflow intentionally splits into a new dossier
 - keep the artifact self-contained enough that a later reader can understand the opportunity without prior thread context
 - open with outcome-first framing that states what changes for the user, why it matters, and how value would be observed if the idea succeeds
-- keep the dossier slug stable unless the workflow intentionally splits into a new dossier
 - keep the permanent artifact concise and skimmable by default
 - include local tracking with:
   - `Source Context` when relevant
   - `Status`
   - `Open Questions`
   - `Revision History`
+- fold accepted user or review feedback into the artifact instead of leaving it chat-only
+- retain useful revision history when updating an existing artifact
 - include lightweight success signals without turning the idea into a metric plan
 - keep the output focused on the idea itself, not on spec or plan detail
 
@@ -38,17 +41,17 @@ Operator responsibility:
 - do not try to review or approve your own work
 - leave material concerns for `idea-review`
 
-Stage boundary rule:
-- `idea.md` explains why the idea matters and what direction is worth exploring
-- it does not fully define exact user-visible behavior; that belongs in `spec.md`
-- it does not define engineering delivery; that belongs in `plan.md`
-- when a detail starts to read like product contract language, route definition, privacy policy, business-rule detail, acceptance behavior, implementation breakdown, or technical design, move that detail out of the idea
+Idea boundary:
+- `idea.md` explains the opportunity, expected value, high-level direction, risks, and intentionally deferred questions
+- `spec.md` owns exact user-visible behavior, scope boundaries, privacy handling, business rules, and acceptance expectations
+- `plan.md` owns engineering sequencing, implementation structure, validation commands, migration mechanics, and delivery steps
 
 Decision rule:
 - if a detail is only needed to explain the opportunity, value, risk, or high-level direction, keep it in the idea
 - if it changes exact user-visible behavior, correctness expectations, privacy handling, or scope boundaries, leave it for the spec
 - if it exists only so engineering can estimate, sequence, or implement the work, leave it for the plan
-- when unsure, bias toward less detail and capture the uncertainty in `Open Questions`
+- when unsure, bias toward less detail and capture intentional uncertainty in `Open Questions`
+- use `Open Questions` for uncertainties to review or defer, not for blockers that make the idea artifact unsafe to review
 
 Focus on:
 - user problem or opportunity
@@ -64,21 +67,6 @@ Do not:
 - settle engineering details that belong later
 - include detailed acceptance criteria, route inventories, API contracts, data models, migration mechanics, file/module breakdowns, or task sequencing
 - repeat the same framing in multiple sections when one short summary is enough
-
-Write the idea artifact with sections like:
-- title
-- purpose / big picture
-- context and orientation when needed
-- source context when relevant
-- user problem or opportunity
-- proposed direction
-- expected value
-- success signals or evidence of value
-- tradeoffs and risks
-- status
-- open questions
-- revision history
-- reasons not to do this
 
 Before finalizing `idea.md`, perform a scope check:
 - remove or simplify any section that reads like `functional requirements`, `acceptance criteria`, `routes`, `privacy rules`, `business rules`, `implementation approach`, `milestones`, or `concrete steps`

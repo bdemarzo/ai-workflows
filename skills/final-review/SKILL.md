@@ -1,13 +1,11 @@
 ---
 name: final-review
-description: Run an orchestrator-led fidelity review against the idea, spec, plan, implementation, and validation chain before docs close-out and workflow closure.
+description: Run final fidelity review against implemented behavior, idea/spec/plan alignment, validation and regression gaps, unresolved implementation drift, and docs close-out readiness. Use before workflow closure, and write output to `./docs/workflows/{slug}/reviews/final/round-XX.md`.
 ---
 
 # Final Review
 
-Use this skill as the final fidelity-review playbook.
-
-The active session owns the final synthesis. Reviewer subagents provide critique, but the active session writes the official review round and coordinates gap resolution with the user.
+Use this skill as the final fidelity-review playbook; the active session synthesizes reviewer critique into one official review round.
 
 Use [assets/review-template.md](./assets/review-template.md) as the default saved review-round skeleton. Adapt sections as needed for the actual findings and recommendation.
 
@@ -18,7 +16,7 @@ Input:
 - `execution.md` when present
 - validation output that should stay in view
 
-Expected reviewer roster:
+Reviewer roster:
 - `Product Manager` or `Product Strategist`
 - `Software Architect`
 - `QA Engineer`
@@ -33,37 +31,22 @@ Requirements:
 - keep the reviewer roster explicit in the saved artifact
 - keep the saved review artifact concise and findings-first
 - focus on fidelity, regressions, and unresolved gaps rather than rerunning all prior stage debate
-- identify each reviewer in the roster with persona, concrete agent name, and subagent display name when the runtime exposes one
+- identify each reviewer with persona, concrete agent name, and display name when the runtime exposes one
 - validate that each official reviewer matches the resolved role binding from `workflow-run`
 - preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
 
 Focus on:
 - fidelity of code and delivered behavior against `idea.md`, `spec.md`, and `plan.md`
-- unresolved correctness gaps
-- regressions and validation gaps
+- unresolved correctness gaps, regressions, and validation gaps
 - places where implementation drifted from the approved artifact chain
-- whether the delivered solution stayed appropriately simple and avoided unjustified architectural expansion during execution
-- what must still be fixed before docs close-out and closure
+- whether the delivered solution stayed simple and the repo markdown artifacts support docs close-out without chat history
+- the strongest reasons not to begin docs close-out yet
 
-Write the review artifact with sections like:
-- reviewed artifacts
-- prior review rounds when relevant
-- reviewer roster
-- review scope
-- reviewer synopses
-- key findings
-- meaningful disagreements
-- suggested revisions
-- recommendation
-- outstanding dissent
-
-Compression rule:
-- merge overlapping findings across reviewer lenses
-- avoid repeating the same critique in multiple voices
-- keep only the disagreements that materially affect closure readiness
-- keep each reviewer synopsis brief and high-signal rather than turning the artifact into a transcript
-- keep reviewer inputs compact: ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
-- keep each reviewer within their assigned lens and avoid duplicating another lens unless the disagreement changes the recommendation
+Reviewer budget:
+- ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
+- merge overlapping findings, keep synopses brief, and preserve only disagreements that materially affect closure readiness
+- summarize validation or regression concerns as actionable gaps rather than long transcripts
+- if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding
 
 Finish with an explicit recommendation:
 - `Recommendation: loop back to implement-plan`
@@ -72,4 +55,4 @@ Finish with an explicit recommendation:
 - `Recommendation: loop back to idea-create`
 - `Recommendation: ready for docs close-out`
 
-The recommendation informs the next decision, but the orchestrator and user decide whether to reroute, continue remediation, or begin close-out.
+The recommendation informs the next decision, but the orchestrator and user decide whether to reroute, continue remediation, or begin close-out. This phase checks readiness for docs close-out; it does not perform docs close-out or close the workflow.

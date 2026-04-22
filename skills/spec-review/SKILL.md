@@ -1,6 +1,6 @@
 ---
 name: spec-review
-description: Review a spec artifact using two substantive reviewer subagents plus one skeptic before plan creation. Use when the workflow needs review output in ./docs/workflows/{slug}/reviews/spec/round-01.md.
+description: Review `./docs/workflows/{slug}/spec.md` using two substantive reviewer subagents plus one skeptic before plan creation. Use when validating the functional product contract, observable acceptance, readiness for `plan-create`, or whether the workflow can advance, and write output to `./docs/workflows/{slug}/reviews/spec/round-XX.md`.
 ---
 
 # Spec Review
@@ -28,11 +28,10 @@ Requirements:
 - state the exact reviewed artifact path in the review artifact
 - link the immediately prior review round when one exists and summarize what changed since that round
 - use exactly two substantive reviewers plus one skeptic
-- explicitly check whether accepted review feedback has been folded back into the latest `spec.md`
+- explicitly check whether accepted review outcomes have been incorporated into the latest `spec.md`
 - keep the saved review artifact concise and findings-first
-- make clear that the reviewers are subagents and the active session writes the consolidated official review round
-- identify each reviewer in the roster with persona, concrete agent name, and subagent display name when the runtime exposes one
 - validate that each official reviewer matches the resolved role binding from `workflow-run`
+- identify each reviewer with persona, concrete agent name, and display name when the runtime exposes one
 - preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
 
 Focus on:
@@ -45,27 +44,10 @@ Focus on:
 - what should stay out of the spec and move to the plan
 - the strongest reasons not to advance yet
 
-Write the review artifact with sections like:
-- reviewed artifact
-- prior review rounds when relevant
-- reviewer roster
-- review scope
-- reviewer synopses
-- observable acceptance assessment
-- key findings
-- meaningful disagreements
-- suggested revisions
-- recommendation
-- outstanding dissent
-
-Compression rule:
-- merge overlapping findings across reviewers
-- avoid repeating the same critique reviewer by reviewer
-- preserve only the disagreements that materially affect the recommendation
-- keep each reviewer synopsis brief and high-signal rather than turning the artifact into a transcript
-- keep reviewer inputs compact: ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
-- keep each reviewer within their assigned lens and avoid duplicating another lens unless the disagreement changes the recommendation
-- if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding rather than creating a separate restartability section
+Reviewer budget:
+- ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
+- merge overlapping findings, keep synopses brief, and preserve only disagreements that materially affect the recommendation
+- if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding
 
 Finish with an explicit recommendation:
 - `Recommendation: revise current stage`

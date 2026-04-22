@@ -13,13 +13,13 @@
 - [Display name / persona]: [1-2 sentence synopsis of the reviewer's main points and tone.]
 
 ## Review Scope
-- [What was reviewed and what constraints stayed in view.]
+- [What was reviewed: spec.md, source idea context when needed, and relevant product constraints.]
 
 ## Observable Acceptance Assessment
-- [Are the acceptance criteria concrete enough for planning?]
+- [Are acceptance criteria concrete enough for planning and later validation without becoming validation commands?]
 
 ## Key Findings
-- [Merged, findings-first summary, including any markdown-artifact gaps that would block the next stage.]
+- [Merged, findings-first summary, including product-contract gaps, observable-acceptance gaps, markdown-artifact gaps, and accidental implementation-detail/spec-boundary issues.]
 
 ## Meaningful Disagreements
 - [Only disagreements that materially affect the recommendation.]

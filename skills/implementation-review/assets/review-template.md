@@ -4,7 +4,8 @@
 - `./docs/workflows/{slug}/plan.md`
 - `./docs/workflows/{slug}/spec.md`
 - `./docs/workflows/{slug}/idea.md`
-- [Implementation diff, summary, or additional evidence]
+- `./docs/workflows/{slug}/execution.md` when present
+- [Implementation diff, summary, or execution evidence reviewed.]
 
 ## Prior Implementation Review Rounds
 - [Optional prior round path and what changed since then.]
@@ -16,16 +17,16 @@
 - [Display name / persona]: [1-2 sentence synopsis of the reviewer's main points and tone.]
 
 ## Review Scope
-- [What was reviewed and what validation stayed in view.]
+- [Implemented change reviewed, plan/spec context considered, and summarized validation evidence kept in view.]
 
 ## Key Findings
-- [Merged, findings-first summary.]
+- [Merged findings-first summary covering architecture, security, QA/product correctness, validation gaps, implementation drift, or markdown-artifact gaps.]
 
 ## Meaningful Disagreements
 - [Only disagreements that materially affect the recommendation.]
 
 ## Suggested Revisions
-- [Concrete change to make before advancing.]
+- [Concrete revision to route back through `implement-plan` before advancing.]
 
 ## Recommendation
 - [Use one allowed recommendation exactly as written in this skill.]

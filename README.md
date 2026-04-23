@@ -136,6 +136,8 @@ The portable workflow contract lives in `skills/`. The optional Codex adapter li
 
 Official Codex workflow delegation must use the concrete `agent` value resolved from `.codex/role-registry.toml`. Generic helpers such as `worker`, `explorer`, or `default` may support sidecar discovery, but prompt text alone does not make them official workflow operators or reviewers.
 
+Current Codex runtime limitation: repo-scoped `.codex/agents/*.toml` discovery appears unreliable in some sessions. This package keeps the project-scoped role registry and runtime config in the target repository, but installs persona agent files to `~/.codex/agents/` by default so the named workflow personas are consistently spawnable.
+
 ## Install
 
 From a target repository root:
@@ -147,7 +149,8 @@ python C:\path\to\ai-workflows\install.py
 By default this installs:
 
 - skill packages into `.codex/skills/`
-- persona agents, role registry, and runtime config into `.codex/`
+- persona agents into `~/.codex/agents/`
+- role registry and runtime config into the target repo's `.codex/`
 
 Useful installer options:
 
@@ -158,7 +161,7 @@ Useful installer options:
 - `--no-skills`: install only the adapter
 - `--target <path>`: install into a specific existing directory
 
-Manual install is also supported. Copy folders from `skills/` into your agent's skills directory. For Codex project-local use, copy `.codex/` into the target repository root as well.
+Manual install is also supported. Copy folders from `skills/` into your agent's skills directory. For Codex use, copy `.codex/agents/*.toml` into `~/.codex/agents/`, then copy `.codex/role-registry.toml` and `.codex/config.toml` into the target repository root under `.codex/`.
 
 ## Consistency Checker
 

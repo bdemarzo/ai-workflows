@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import List
 
 
-ADAPTER_ENTRIES = ("agents", "role-registry.toml", "config.toml")
+PROJECT_ADAPTER_ENTRIES = ("role-registry.toml", "config.toml")
 
 
 @dataclass
@@ -52,7 +52,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--no-adapter",
         action="store_true",
-        help="Do not install the project-scoped .codex adapter layer.",
+        help="Do not install the Codex adapter layer.",
     )
     parser.add_argument(
         "--global-skills",
@@ -123,18 +123,21 @@ def install_skills(source_root: Path, target_root: Path, args: argparse.Namespac
 
 def install_adapter(source_root: Path, target_root: Path, args: argparse.Namespace, result: InstallResult) -> None:
     source_adapter = source_root / ".codex"
-    dest_adapter = target_root / ".codex"
+    dest_project_adapter = target_root / ".codex"
+    dest_user_agents = Path.home() / ".codex" / "agents"
 
-    for entry_name in ADAPTER_ENTRIES:
+    source_agents = source_adapter / "agents"
+    if not source_agents.is_dir():
+        raise FileNotFoundError(f"Missing source adapter entry: {source_agents}")
+
+    for child in sorted(source_agents.iterdir()):
+        copy_path(child, dest_user_agents / child.name, args.force, args.dry_run, result)
+
+    for entry_name in PROJECT_ADAPTER_ENTRIES:
         source_entry = source_adapter / entry_name
         if not source_entry.exists():
             raise FileNotFoundError(f"Missing source adapter entry: {source_entry}")
-
-        if source_entry.is_dir():
-            for child in sorted(source_entry.iterdir()):
-                copy_path(child, dest_adapter / entry_name / child.name, args.force, args.dry_run, result)
-        else:
-            copy_path(source_entry, dest_adapter / entry_name, args.force, args.dry_run, result)
+        copy_path(source_entry, dest_project_adapter / entry_name, args.force, args.dry_run, result)
 
 
 def print_summary(result: InstallResult, dry_run: bool) -> None:

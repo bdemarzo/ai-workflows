@@ -93,6 +93,7 @@ Reviewer-count rule:
 - if a required persona has no usable binding, stop and ask the user instead of silently weakening the review
 - official operators and reviewers must be spawned as the resolved concrete persona agent, or an explicitly allowed substitute, and the spawned agent type must match before the output is treated as official workflow work
 - for Codex, use the registry `agent` value as the spawned subagent `agent_type`; prompt text such as "you are {Persona}" does not turn `worker`, `explorer`, or `default` into an official workflow persona
+- for GitHub Copilot, use the registry `agent` value from `.github/ai-workflows/role-registry.toml` as the selected or invoked custom agent; prompt text alone does not turn the default Copilot agent into an official workflow persona
 - generic helper agents may be used only for sidecar discovery or bounded support work; record them separately from official operator/reviewer rosters
 
 ## Startup

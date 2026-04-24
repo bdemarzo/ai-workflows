@@ -8,6 +8,12 @@ import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
+
+try:
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover - Python < 3.11 fallback
+    tomllib = None
 
 
 DEFAULT_BUDGETS = {
@@ -80,6 +86,89 @@ def find_frontmatter_name(text: str) -> str | None:
     return None
 
 
+def find_frontmatter_value(text: str, key: str) -> str | None:
+    if not text.startswith("---"):
+        return None
+
+    end = text.find("\n---", 3)
+    if end == -1:
+        return None
+
+    for line in text[3:end].splitlines():
+        match = re.match(rf"\s*{re.escape(key)}:\s*(.+?)\s*$", line)
+        if match:
+            return match.group(1).strip().strip('"').strip("'")
+    return None
+
+
+def parse_minimal_toml_value(raw: str) -> Any:
+    raw = raw.strip()
+    if raw.startswith('"') and raw.endswith('"'):
+        return raw[1:-1]
+    if raw.startswith("'") and raw.endswith("'"):
+        return raw[1:-1]
+    if raw.startswith("[") and raw.endswith("]"):
+        values: list[str] = []
+        for item in raw[1:-1].split(","):
+            value = parse_minimal_toml_value(item)
+            if isinstance(value, str):
+                values.append(value)
+        return values
+    if raw.isdigit():
+        return int(raw)
+    return raw
+
+
+def load_minimal_toml(text: str) -> dict[str, Any]:
+    data: dict[str, Any] = {}
+    current_stage: dict[str, Any] | None = None
+    current_assignment: dict[str, Any] | None = None
+
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+
+        if stripped == "[[stages]]":
+            current_stage = {"assignments": []}
+            current_assignment = None
+            data.setdefault("stages", []).append(current_stage)
+            continue
+
+        if stripped == "[[stages.assignments]]":
+            if current_stage is None:
+                raise ValueError("assignment declared before stage")
+            current_assignment = {}
+            current_stage.setdefault("assignments", []).append(current_assignment)
+            continue
+
+        match = re.match(r"([A-Za-z0-9_-]+)\s*=\s*(.+)$", stripped)
+        if not match:
+            raise ValueError(f"unsupported TOML line: {stripped}")
+
+        key, raw_value = match.groups()
+        if current_assignment is not None:
+            target = current_assignment
+        elif current_stage is not None:
+            target = current_stage
+        else:
+            target = data
+        target[key] = parse_minimal_toml_value(raw_value)
+
+    return data
+
+
+def load_toml(path: Path, findings: list[Finding]) -> dict[str, Any] | None:
+    try:
+        text = read_text(path)
+        if tomllib is not None:
+            return tomllib.loads(text)
+        return load_minimal_toml(text)
+    except Exception as exc:
+        findings.append(Finding("ERROR", path, f"invalid TOML: {exc}"))
+        return None
+
+
 def check_skills(root: Path) -> list[Finding]:
     findings: list[Finding] = []
     skills_dir = root / "skills"
@@ -106,6 +195,113 @@ def check_skills(root: Path) -> list[Finding]:
             )
 
     return findings
+
+
+def check_registry_assignments(
+    registry_path: Path,
+    agent_names: set[str],
+    adapter_label: str,
+    findings: list[Finding],
+) -> None:
+    registry = load_toml(registry_path, findings)
+    if registry is None:
+        return
+
+    stages = registry.get("stages")
+    if not isinstance(stages, list):
+        findings.append(Finding("ERROR", registry_path, "missing or invalid stages list"))
+        return
+
+    for stage in stages:
+        stage_name = stage.get("name") if isinstance(stage, dict) else None
+        assignments = stage.get("assignments") if isinstance(stage, dict) else None
+        if not isinstance(stage_name, str) or not isinstance(assignments, list):
+            findings.append(Finding("ERROR", registry_path, "stage is missing name or assignments"))
+            continue
+
+        for assignment in assignments:
+            agent = assignment.get("agent") if isinstance(assignment, dict) else None
+            if not isinstance(agent, str):
+                findings.append(Finding("ERROR", registry_path, f"{stage_name} has an assignment without agent"))
+            elif agent not in agent_names:
+                findings.append(
+                    Finding(
+                        "ERROR",
+                        registry_path,
+                        f"{adapter_label} stage {stage_name!r} references missing agent {agent!r}",
+                    )
+                )
+
+
+def check_codex_adapter(root: Path) -> list[Finding]:
+    findings: list[Finding] = []
+    adapter_dir = root / ".codex"
+    if not adapter_dir.exists():
+        return findings
+
+    agents_dir = adapter_dir / "agents"
+    registry_path = adapter_dir / "role-registry.toml"
+
+    if not agents_dir.exists() and not registry_path.exists():
+        return findings
+    if not agents_dir.is_dir():
+        findings.append(Finding("ERROR", agents_dir, "Codex agents directory is missing"))
+        return findings
+    if not registry_path.is_file():
+        findings.append(Finding("ERROR", registry_path, "Codex role registry is missing"))
+        return findings
+
+    agent_names: set[str] = set()
+    for agent_path in sorted(agents_dir.glob("*.toml")):
+        agent_config = load_toml(agent_path, findings)
+        if agent_config is None:
+            continue
+        name = agent_config.get("name")
+        if not isinstance(name, str) or not name:
+            findings.append(Finding("ERROR", agent_path, "Codex agent is missing string name"))
+            continue
+        agent_names.add(name)
+
+    check_registry_assignments(registry_path, agent_names, "Codex", findings)
+    return findings
+
+
+def check_copilot_adapter(root: Path) -> list[Finding]:
+    findings: list[Finding] = []
+    adapter_dir = root / ".github"
+    if not adapter_dir.exists():
+        return findings
+
+    agents_dir = adapter_dir / "agents"
+    registry_path = adapter_dir / "ai-workflows" / "role-registry.toml"
+
+    if not agents_dir.exists() and not registry_path.exists():
+        return findings
+    if not agents_dir.is_dir():
+        findings.append(Finding("ERROR", agents_dir, "Copilot agents directory is missing"))
+        return findings
+    if not registry_path.is_file():
+        findings.append(Finding("ERROR", registry_path, "Copilot role registry is missing"))
+        return findings
+
+    agent_names: set[str] = set()
+    for agent_path in sorted(agents_dir.glob("*.agent.md")):
+        text = read_text(agent_path)
+        name = find_frontmatter_value(text, "name")
+        description = find_frontmatter_value(text, "description")
+        if not name:
+            findings.append(Finding("ERROR", agent_path, "Copilot agent is missing frontmatter name"))
+            continue
+        if not description:
+            findings.append(Finding("ERROR", agent_path, "Copilot agent is missing frontmatter description"))
+        agent_names.add(name)
+
+    check_registry_assignments(registry_path, agent_names, "Copilot", findings)
+    return findings
+
+
+def check_adapters(root: Path) -> list[Finding]:
+    return [*check_codex_adapter(root), *check_copilot_adapter(root)]
 
 
 def check_h1(path: Path, expected: str) -> list[Finding]:
@@ -235,6 +431,7 @@ def main(argv: list[str]) -> int:
     args = parse_args(argv)
     root = args.root.resolve()
     findings = check_skills(root)
+    findings.extend(check_adapters(root))
 
     stale_terms = args.stale_term
     for dossier in args.dossier:

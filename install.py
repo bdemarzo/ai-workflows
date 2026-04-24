@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install ai-workflows skills and Codex adapter into another repository."""
+"""Install ai-workflows skills and a selected runtime adapter into another repository."""
 
 from __future__ import annotations
 
@@ -12,7 +12,8 @@ from pathlib import Path
 from typing import List
 
 
-PROJECT_ADAPTER_ENTRIES = ("role-registry.toml", "config.toml")
+CODEX_PROJECT_ADAPTER_ENTRIES = ("role-registry.toml", "config.toml")
+COPILOT_PROJECT_ADAPTER_ENTRIES = ("role-registry.toml", "config.toml")
 
 
 @dataclass
@@ -24,9 +25,15 @@ class InstallResult:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Install ai-workflows skills and the optional Codex adapter into "
+            "Install ai-workflows skills and the selected runtime adapter into "
             "the current repository."
         )
+    )
+    parser.add_argument(
+        "--runtime",
+        choices=("codex", "copilot"),
+        required=True,
+        help="Runtime adapter to install. Must be either 'codex' or 'copilot'.",
     )
     parser.add_argument(
         "--target",
@@ -52,23 +59,34 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--no-adapter",
         action="store_true",
-        help="Do not install the Codex adapter layer.",
+        help="Do not install the selected runtime adapter layer.",
     )
     parser.add_argument(
         "--global-skills",
         action="store_true",
-        help="Install skills to ~/.codex/skills instead of the target repo's .codex/skills.",
+        help="For --runtime codex only: install skills to ~/.codex/skills instead of the target repo's .codex/skills.",
     )
     return parser.parse_args()
 
 
-def ensure_source_layout(source_root: Path) -> None:
-    skills_root = source_root / "skills"
-    adapter_root = source_root / ".codex"
-    if not skills_root.is_dir():
-        raise FileNotFoundError(f"Missing source skills directory: {skills_root}")
+def ensure_source_layout(source_root: Path, runtime: str, needs_skills: bool, needs_adapter: bool) -> None:
+    if needs_skills:
+        skills_root = source_root / "skills"
+        if not skills_root.is_dir():
+            raise FileNotFoundError(f"Missing source skills directory: {skills_root}")
+
+    if not needs_adapter:
+        return
+
+    if runtime == "codex":
+        adapter_root = source_root / ".codex"
+        if not adapter_root.is_dir():
+            raise FileNotFoundError(f"Missing source Codex adapter directory: {adapter_root}")
+        return
+
+    adapter_root = source_root / ".github"
     if not adapter_root.is_dir():
-        raise FileNotFoundError(f"Missing source adapter directory: {adapter_root}")
+        raise FileNotFoundError(f"Missing source Copilot adapter directory: {adapter_root}")
 
 
 def remove_destination(path: Path) -> None:
@@ -109,10 +127,12 @@ def copy_path(src: Path, dest: Path, force: bool, dry_run: bool, result: Install
 
 def install_skills(source_root: Path, target_root: Path, args: argparse.Namespace, result: InstallResult) -> None:
     source_skills = source_root / "skills"
-    if args.global_skills:
+    if args.runtime == "codex" and args.global_skills:
         dest_skills = Path.home() / ".codex" / "skills"
-    else:
+    elif args.runtime == "codex":
         dest_skills = target_root / ".codex" / "skills"
+    else:
+        dest_skills = target_root / ".github" / "skills"
 
     for skill_dir in sorted(path for path in source_skills.iterdir() if path.is_dir()):
         skill_file = skill_dir / "SKILL.md"
@@ -121,7 +141,7 @@ def install_skills(source_root: Path, target_root: Path, args: argparse.Namespac
         copy_path(skill_dir, dest_skills / skill_dir.name, args.force, args.dry_run, result)
 
 
-def install_adapter(source_root: Path, target_root: Path, args: argparse.Namespace, result: InstallResult) -> None:
+def install_codex_adapter(source_root: Path, target_root: Path, args: argparse.Namespace, result: InstallResult) -> None:
     source_adapter = source_root / ".codex"
     dest_project_adapter = target_root / ".codex"
     dest_user_agents = Path.home() / ".codex" / "agents"
@@ -133,11 +153,44 @@ def install_adapter(source_root: Path, target_root: Path, args: argparse.Namespa
     for child in sorted(source_agents.iterdir()):
         copy_path(child, dest_user_agents / child.name, args.force, args.dry_run, result)
 
-    for entry_name in PROJECT_ADAPTER_ENTRIES:
+    for entry_name in CODEX_PROJECT_ADAPTER_ENTRIES:
         source_entry = source_adapter / entry_name
         if not source_entry.exists():
             raise FileNotFoundError(f"Missing source adapter entry: {source_entry}")
         copy_path(source_entry, dest_project_adapter / entry_name, args.force, args.dry_run, result)
+
+
+def install_copilot_adapter(source_root: Path, target_root: Path, args: argparse.Namespace, result: InstallResult) -> None:
+    source_adapter = source_root / ".github"
+    dest_adapter = target_root / ".github"
+
+    source_agents = source_adapter / "agents"
+    if not source_agents.is_dir():
+        raise FileNotFoundError(f"Missing source Copilot adapter entry: {source_agents}")
+
+    for child in sorted(source_agents.iterdir()):
+        copy_path(child, dest_adapter / "agents" / child.name, args.force, args.dry_run, result)
+
+    source_workflow_config = source_adapter / "ai-workflows"
+    if not source_workflow_config.is_dir():
+        raise FileNotFoundError(f"Missing source Copilot adapter entry: {source_workflow_config}")
+
+    for entry_name in COPILOT_PROJECT_ADAPTER_ENTRIES:
+        source_entry = source_workflow_config / entry_name
+        if not source_entry.exists():
+            raise FileNotFoundError(f"Missing source Copilot adapter entry: {source_entry}")
+        copy_path(source_entry, dest_adapter / "ai-workflows" / entry_name, args.force, args.dry_run, result)
+
+    instructions = source_adapter / "copilot-instructions.md"
+    if instructions.exists():
+        copy_path(instructions, dest_adapter / instructions.name, args.force, args.dry_run, result)
+
+
+def install_adapter(source_root: Path, target_root: Path, args: argparse.Namespace, result: InstallResult) -> None:
+    if args.runtime == "codex":
+        install_codex_adapter(source_root, target_root, args, result)
+    else:
+        install_copilot_adapter(source_root, target_root, args, result)
 
 
 def print_summary(result: InstallResult, dry_run: bool) -> None:
@@ -161,9 +214,12 @@ def main() -> int:
     target_root = args.target.resolve()
 
     try:
-        ensure_source_layout(source_root)
         if args.no_skills and args.no_adapter:
             raise ValueError("Nothing to install: both --no-skills and --no-adapter were passed.")
+        if args.runtime == "copilot" and args.global_skills:
+            raise ValueError("--global-skills is only supported with --runtime codex.")
+
+        ensure_source_layout(source_root, args.runtime, not args.no_skills, not args.no_adapter)
         if not target_root.is_dir():
             raise FileNotFoundError(f"Target repository root does not exist: {target_root}")
 

@@ -1,6 +1,6 @@
 # ai-workflows
 
-Portable workflow skills for AI-assisted product and engineering work, plus an optional Codex adapter layer for named subagents.
+Portable workflow skills for AI-assisted product and engineering work, plus optional runtime adapter layers for named subagents.
 
 This repository defines a guided workflow where the active AI session is the orchestrator and subagents act as operators and reviewers. The workflow moves through idea, spec, plan, implementation, implementation review, final review, and docs close-out with explicit user gates between major phases.
 
@@ -20,6 +20,7 @@ This repository defines a guided workflow where the active AI session is the orc
   - `final-review`
 - `skeptical-review`: optional manual pressure-test outside the main workflow.
 - `.codex/`: optional Codex adapter with persona agents, role registry, and runtime settings.
+- `.github/`: optional GitHub Copilot adapter with project skills, custom agents, role registry, and repository instructions.
 - `scripts/check_workflow_artifacts.py`: lightweight consistency checker for skill packages and workflow dossiers.
 
 ## Core Model
@@ -126,9 +127,11 @@ Saved review rounds should be concise and findings-first:
 
 Before docs close-out, run a drift sweep across the idea, spec, plan, execution evidence when present, and latest review rounds. Fix stale wording where later accepted decisions superseded earlier artifact language.
 
-## Codex Adapter
+## Runtime Adapters
 
-The portable workflow contract lives in `skills/`. The optional Codex adapter lives in `.codex/`:
+The portable workflow contract lives in `skills/`. Runtime adapters bind that portable contract to concrete agent systems without becoming a second source of truth.
+
+### Codex
 
 - `.codex/agents/`: concrete persona agent definitions
 - `.codex/role-registry.toml`: stage-to-persona-to-agent bindings
@@ -138,30 +141,54 @@ Official Codex workflow delegation must use the concrete `agent` value resolved 
 
 Current Codex runtime limitation: repo-scoped `.codex/agents/*.toml` discovery appears unreliable in some sessions. This package keeps the project-scoped role registry and runtime config in the target repository, but installs persona agent files to `~/.codex/agents/` by default so the named workflow personas are consistently spawnable.
 
+### GitHub Copilot
+
+The optional Copilot adapter lives in `.github/`:
+
+- `.github/skills/`: installed copies of canonical skill packages from `skills/`
+- `.github/agents/*.agent.md`: concrete Copilot custom agent profiles for workflow personas
+- `.github/ai-workflows/role-registry.toml`: stage-to-persona-to-agent bindings
+- `.github/ai-workflows/config.toml`: runtime orchestration settings
+- `.github/copilot-instructions.md`: concise repository instructions for Copilot
+
+Official Copilot workflow delegation must use the concrete `agent` value resolved from `.github/ai-workflows/role-registry.toml`. The Copilot adapter uses project-local skill and custom-agent locations so it can travel with the target repository.
+
 ## Install
 
 From a target repository root:
 
 ```powershell
-python C:\path\to\ai-workflows\install.py
+python C:\path\to\ai-workflows\install.py --runtime codex
+python C:\path\to\ai-workflows\install.py --runtime copilot
 ```
 
-By default this installs:
+For Codex, this installs:
 
 - skill packages into `.codex/skills/`
 - persona agents into `~/.codex/agents/`
 - role registry and runtime config into the target repo's `.codex/`
 
+For Copilot, this installs:
+
+- skill packages into `.github/skills/`
+- custom agent profiles into `.github/agents/`
+- role registry and runtime config into `.github/ai-workflows/`
+- repository instructions into `.github/copilot-instructions.md`
+
 Useful installer options:
 
+- `--runtime codex`: install the Codex adapter
+- `--runtime copilot`: install the GitHub Copilot adapter
 - `--dry-run`: show planned changes without writing files
 - `--force`: overwrite existing managed files
-- `--global-skills`: install skills to `~/.codex/skills`
+- `--global-skills`: install skills to `~/.codex/skills` for Codex only
 - `--no-adapter`: install only skills
 - `--no-skills`: install only the adapter
 - `--target <path>`: install into a specific existing directory
 
-Manual install is also supported. Copy folders from `skills/` into your agent's skills directory. For Codex use, copy `.codex/agents/*.toml` into `~/.codex/agents/`, then copy `.codex/role-registry.toml` and `.codex/config.toml` into the target repository root under `.codex/`.
+Manual install is also supported. For Codex use, copy folders from `skills/` into `.codex/skills/` or `~/.codex/skills/`, copy `.codex/agents/*.toml` into `~/.codex/agents/`, then copy `.codex/role-registry.toml` and `.codex/config.toml` into the target repository root under `.codex/`.
+
+For Copilot use, copy folders from `skills/` into `.github/skills/`, copy `.github/agents/*.agent.md` into `.github/agents/`, copy `.github/ai-workflows/role-registry.toml` and `.github/ai-workflows/config.toml` into `.github/ai-workflows/`, and copy `.github/copilot-instructions.md` into `.github/`.
 
 ## Consistency Checker
 
@@ -177,11 +204,12 @@ Check a workflow dossier:
 python scripts/check_workflow_artifacts.py --root . --dossier C:\path\to\repo\docs\workflows\my-slug --stale-term per-band
 ```
 
-The checker fails on structural errors such as missing skill files, mismatched skill names, or invalid artifact H1s. It reports warnings for budget drift, forbidden `run.md` sections, missing latest-review references, oversized review rounds, and configured stale terms.
+The checker fails on structural errors such as missing skill files, mismatched skill names, adapter registries that reference missing agents, Copilot custom agents with missing frontmatter, or invalid artifact H1s. It reports warnings for budget drift, forbidden `run.md` sections, missing latest-review references, oversized review rounds, and configured stale terms.
 
 ## Repository Layout
 
 - `skills/`: canonical portable skill packages
 - `.codex/`: optional Codex adapter layer
+- `.github/`: optional GitHub Copilot adapter layer
 - `scripts/`: lightweight repository and workflow checks
 - `README.md`: human-facing workflow overview and install guidance

@@ -20,6 +20,9 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - `.codex/agents/*.toml` - optional Codex-specific persona implementations
 - `.codex/role-registry.toml` - optional Codex-specific registry mapping workflow stages to persona labels and then to concrete agent names
 - `.codex/config.toml` - optional Codex-specific runtime settings for subagent orchestration
+- `.github/agents/*.agent.md` - optional GitHub Copilot custom agent persona implementations
+- `.github/ai-workflows/role-registry.toml` - optional Copilot registry mapping workflow stages to persona labels and then to concrete custom agent names
+- `.github/ai-workflows/config.toml` - optional Copilot runtime settings for subagent orchestration
 - `skills/<skill-name>/assets/` - optional skill-local templates or output resources that support standalone use
 - `skills/<skill-name>/references/` - optional skill-local reference docs loaded only when needed
 - `docs/` - supporting docs only
@@ -29,13 +32,15 @@ Use this file for repo-specific operating guidance when changing the skills or d
 
 - The active session is the orchestrator.
 - Operators and reviewers are subagents.
-- Keep skill bodies client-neutral even if this repo also ships optional Codex runtime agent definitions.
-- Treat `skills/` as the portable workflow contract and `.codex/` as an adapter layer, not as a second source of truth for stage behavior.
+- Keep skill bodies client-neutral even if this repo also ships optional runtime agent definitions.
+- Treat `skills/` as the portable workflow contract and `.codex/` / `.github/` as adapter layers, not as second sources of truth for stage behavior.
 - If `.codex/agents/` exists, treat it as the Codex implementation layer for those personas.
 - If `.codex/role-registry.toml` exists, treat it as the Codex binding layer from workflow stages to persona labels and then to concrete agent names.
+- If `.github/agents/` exists, treat it as the GitHub Copilot implementation layer for those personas.
+- If `.github/ai-workflows/role-registry.toml` exists, treat it as the Copilot binding layer from workflow stages to persona labels and then to concrete custom agent names.
 - `workflow-run` is a meta-skill, not a stage.
 - Agents define persona behavior; skills define stage procedure.
-- Official operators and reviewers must use the concrete agent resolved by the role registry; for Codex this means spawning the registry `agent` value as `agent_type`, not prompting `worker`, `explorer`, or `default` to act like the persona.
+- Official operators and reviewers must use the concrete agent resolved by the role registry; for Codex this means spawning the registry `agent` value as `agent_type`, and for Copilot this means selecting or invoking the registry `agent` value as the custom agent.
 - Operators own drafting, accepted artifact revisions, implementation work, and implementation remediations for their phase.
 - Reviewers provide findings and recommendations but do not own the source artifact.
 - The orchestrator writes the official consolidated review rounds and owns stage advancement.
@@ -95,6 +100,8 @@ After changing the workflow or skill packages, verify:
 - `implementation-review` exists as a real skill and is included in the documented phase order
 - if `.codex/agents/` exists, the agent set covers the intended personas without changing the portable stage contract
 - if `.codex/role-registry.toml` exists, it covers every stage-to-persona assignment named in `workflow-run`, README, and the review skills
+- if `.github/agents/` exists, the custom agent set covers the intended personas without changing the portable stage contract
+- if `.github/ai-workflows/role-registry.toml` exists, it covers every stage-to-persona assignment named in `workflow-run`, README, and the review skills
 - artifact path references are consistent across all skills and docs
 - source dossier artifacts use slugged H1 titles:
   - `# Run - {slug}`
@@ -109,7 +116,7 @@ After changing the workflow or skill packages, verify:
 - saved review rounds reflect compact, lens-specific reviewer inputs rather than full reviewer transcripts
 - `workflow-run` is documented consistently as the orchestrator rather than a workflow stage
 - implementation-review specifies architecture, security, and QA / product correctness
-- final-review reviewer personas are covered by the Codex runtime layer when `.codex/agents/` is present
+- final-review reviewer personas are covered by each present runtime adapter layer
 - implement-plan points to implementation-review as the next formal review stage
 - final-review is documented as fidelity review before docs close-out, not immediate closure
 - run ledger guidance records:

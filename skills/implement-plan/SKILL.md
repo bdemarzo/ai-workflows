@@ -46,4 +46,15 @@ When `execution.md` is useful, use [assets/execution-template.md](./assets/execu
 - keep `plan.md` as the implementation control document, not a detailed execution journal
 - when implementation review sends remediation back, the same Software Engineer operator owns the fix pass and hands off again to `implementation-review`
 
+## Progress Checks
+
+When the orchestrator asks for implementation progress, respond with a compact status instead of continuing silently:
+- current task/file or subsystem
+- completed changes
+- active blocker, if any
+- expected time to handoff
+- whether a partial handoff is available now
+
+If blocked or unable to finish within the expected window, say so directly and identify the cleanest handoff point.
+
 The output of this stage should be ready for `implementation-review`, not directly for `final-review`.

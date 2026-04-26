@@ -39,7 +39,7 @@
 - Sidecar/helper agents:
   - [Helper purpose -> Agent/display name, or none]
 - Substitutions or fallbacks:
-  - [Persona -> substituted persona/agent and reason, or none]
+  - [Persona -> substitute/takeover and reason, or none]
 
 ## Stage Assessments
 - [Latest stage only] -> [Readiness, recommendation, and brief orchestrator rationale.]
@@ -49,6 +49,7 @@
 
 ## Current Blockers
 - [Blocker and whether the workflow is waiting on the user or remediation.]
+- Operator recovery: [none | status-checking | waiting | replacing | takeover | custom]
 
 ## Resume Instructions
 - [Exact next action.]

@@ -32,6 +32,7 @@ This repository defines a guided workflow where the active AI session is the orc
 - Operators own source artifacts, accepted revisions, implementation work, and remediation work.
 - Reviewers provide findings and recommendations; they do not own source artifacts.
 - The orchestrator writes official consolidated review rounds and owns stage advancement.
+- If an official operator appears stalled, the orchestrator asks that subagent for progress before changing ownership.
 - User approval is required after idea review resolution, spec review resolution, plan review resolution, implementation-review resolution, and final-review gap resolution plus docs close-out.
 
 ## Workflow
@@ -67,7 +68,7 @@ Canonical phase order:
 | `implement-plan` | Software Engineer | n/a |
 | `implementation-review` | n/a | Software Architect, Security Engineer, QA Engineer |
 | `final-review` | Orchestrator synthesis | Product Manager or Product Strategist, Software Architect, QA Engineer |
-| docs close-out | Documentation Maintainer | n/a |
+| docs close-out (`docs-closeout` binding) | Documentation Maintainer | n/a |
 
 For `idea`, `spec`, and `plan`, reviews use exactly two substantive reviewers plus one skeptic. `implementation-review` always uses architecture, security, and QA / product correctness.
 
@@ -111,6 +112,10 @@ Source artifacts use slugged H1 titles:
 
 The repo markdown artifacts must be sufficient for another operator or orchestrator to resume without chat history. Accepted decisions and review outcomes should be written into the owning artifact before later work depends on them.
 
+## Stalled Operator Recovery
+
+When an official operator subagent appears stalled, blocked, or materially slower than expected, the orchestrator first asks the subagent for a bounded progress report. If the operator is unresponsive or cannot provide a useful handoff, the orchestrator asks the user whether to wait and check again, replace the operator, take over directly, or follow custom direction. The decision, cleanup, substitution, takeover, and implementation evidence state are recorded in `run.md` and `execution.md` when applicable.
+
 ## Review Output Rules
 
 Saved review rounds should be concise and findings-first:
@@ -130,6 +135,8 @@ Before docs close-out, run a drift sweep across the idea, spec, plan, execution 
 ## Runtime Adapters
 
 The portable workflow contract lives in `skills/`. Runtime adapters bind that portable contract to concrete agent systems without becoming a second source of truth.
+
+Registry `allowed_substitutions` entries are persona labels; paired `allowed_substitution_agents` entries are the concrete runtime agent IDs to use when that substitution is selected.
 
 ### Codex
 

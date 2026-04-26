@@ -48,6 +48,7 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - The orchestrator should not rely on accepted decisions that exist only in chat; accepted user feedback and review outcomes should be written into repo markdown artifacts before more work is delegated.
 - Delegate subagent work from exact artifact paths, assigned persona/lens, and saved decisions rather than broad chat-history recap.
 - Keep subagent work bounded; avoid broad repo scans unless implementation evidence, source context, or a specific finding requires them.
+- Before reclaiming, replacing, or aborting a stalled official operator, ask for progress, then get the user's recovery choice and record the decision, cleanup, ownership change, and evidence state in repo markdown artifacts.
 - Prefer sequential reviewer execution on constrained hosts; use parallel reviewers only when host responsiveness is acceptable and faster wall-clock review matters.
 - Close or release subagents after their output has been captured in markdown when the runtime supports explicit shutdown.
 - Keep the dossier layout:
@@ -100,6 +101,7 @@ After changing the workflow or skill packages, verify:
 - `implementation-review` exists as a real skill and is included in the documented phase order
 - if `.codex/agents/` exists, the agent set covers the intended personas without changing the portable stage contract
 - if `.codex/role-registry.toml` exists, it covers every stage-to-persona assignment named in `workflow-run`, README, and the review skills
+- role-registry allowed substitutions should include concrete substitution agent values, not persona labels alone
 - if `.github/agents/` exists, the custom agent set covers the intended personas without changing the portable stage contract
 - if `.github/ai-workflows/role-registry.toml` exists, it covers every stage-to-persona assignment named in `workflow-run`, README, and the review skills
 - artifact path references are consistent across all skills and docs

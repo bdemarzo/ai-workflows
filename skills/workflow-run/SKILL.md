@@ -78,7 +78,7 @@ Requirements:
 - `implement-plan`: operator `Software Engineer`
 - `implementation-review`: reviewers `Software Architect`, `Security Engineer`, and `QA Engineer`
 - `final-review`: reviewers `Product Manager` or `Product Strategist`, `Software Architect`, and `QA Engineer`
-- docs close-out: operator `Documentation Maintainer`
+- docs close-out (`docs-closeout` binding): operator `Documentation Maintainer`
 
 Reviewer-count rule:
 - idea, spec, and plan reviews always use exactly two substantive reviewers plus one skeptic
@@ -89,7 +89,7 @@ Reviewer-count rule:
 
 - when a runtime-specific registry exists, resolve each stage to the assigned personas, default concrete agent names, and allowed substitutions
 - record stage-to-persona and persona-to-agent bindings in `run.md`
-- if a preferred agent is unavailable but an allowed substitute exists, record the substitution and continue
+- if a preferred agent is unavailable but an allowed substitute with a concrete substitution agent exists, record the substitution and continue
 - if a required persona has no usable binding, stop and ask the user instead of silently weakening the review
 - official operators and reviewers must be spawned as the resolved concrete persona agent, or an explicitly allowed substitute, and the spawned agent type must match before the output is treated as official workflow work
 - for Codex, use the registry `agent` value as the spawned subagent `agent_type`; prompt text such as "you are {Persona}" does not turn `worker`, `explorer`, or `default` into an official workflow persona
@@ -149,6 +149,24 @@ Use a plain-language startup confirmation such as:
 - expand the reviewer or helper set only when the added agent has a distinct question that materially affects the next gate
 - after a subagent's output has been captured in the relevant markdown artifact, close or release that subagent when the runtime supports it
 - do not keep completed reviewers or operators alive across user gates unless they are actively needed for the next delegated task
+
+## Operator Progress Checks
+
+Use this protocol when the orchestrator suspects an official operator subagent is stalled, blocked, or taking materially longer than expected, especially during `implement-plan`.
+
+- before reclaiming, replacing, or aborting an official operator, send that operator a bounded progress check
+- ask for current task/file, completed work, active blocker if any, expected time to handoff, and whether a partial handoff is available
+- if the runtime supports a non-interrupting status message, prefer it first; use an interrupting status check only when the orchestrator is otherwise blocked or cleanup is likely
+- if the operator reports credible progress and no material blocker, continue waiting for a reasonable period, then check again if needed
+- if the operator appears stalled, blocked, unresponsive after the progress check window, or unable to provide a useful handoff, prompt the user before changing ownership
+- the user prompt must offer these choices:
+  - continue waiting and check again after a reasonable period
+  - abort the subagent, clean up, and spawn a new official operator to take over
+  - abort the subagent, clean up, and have the orchestrator take over directly
+  - something else, supplied by the user
+- do not silently convert an official operator task into orchestrator-owned work unless the user explicitly selects that fallback
+- record the progress check, response or timeout, user decision, cleanup performed, and any operator substitution or orchestrator takeover in `run.md`
+- if implementation has begun or ownership changes during implementation, record changed areas, partial handoff, validation state, and deviations in `execution.md` when present or when creating it is warranted
 
 ## Execution Loop
 

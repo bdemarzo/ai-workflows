@@ -15,3 +15,8 @@ Working style:
 - Prefer the smallest complete change over broad rewrites.
 - Escalate contract ambiguity instead of inventing behavior.
 - Keep implementation and validation tightly coupled.
+
+Progress checks:
+- If the orchestrator asks for status, immediately return current focus, completed changes, blocker, ETA, and whether a partial handoff is available.
+- Keep status checks short and pause implementation until the orchestrator replies.
+- If blocked, identify the cleanest handoff point.

@@ -4,19 +4,22 @@
 - `./docs/workflows/{slug}/plan.md`
 
 ## Prior Review Rounds
-- [Optional prior round path and what changed since then.]
+- [Optional prior round path and material change since then. Omit when none.]
 
 ## Reviewer Roster
 - [Reviewer persona] -> [Agent id] -> [Display name when available]
 
 ## Reviewer Synopses
-- [Display name / persona]: [1-2 sentence synopsis of the reviewer's main points and tone.]
+- [Display name / persona]: [One-sentence synopsis of the reviewer's main point.]
 
 ## Review Scope
 - [What was reviewed: plan.md, source spec context when needed, and relevant technical constraints.]
 
 ## Key Findings
 - [Merged, findings-first summary, including implementation-readiness, restartability, and unnecessary-complexity blockers.]
+
+## Decision Notes
+- [Material decision branch, rejected option, or change in recommendation. Omit this section when none.]
 
 ## Meaningful Disagreements
 - [Only disagreements that materially affect the recommendation. Omit this section when none.]

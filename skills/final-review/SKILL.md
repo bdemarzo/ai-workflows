@@ -33,9 +33,9 @@ Requirements:
 - focus on fidelity, regressions, and unresolved gaps rather than rerunning all prior stage debate
 - identify each reviewer with persona, concrete agent name, and display name when the runtime exposes one
 - validate that each official reviewer matches the resolved role binding from `workflow-run`
-- preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
+- preserve a one-sentence reviewer-by-reviewer synopsis of each subagent's main point
 - omit empty boilerplate sections from the saved artifact when they would only say `None`
-- keep normal saved rounds around 250-500 words unless material findings require more
+- keep saved rounds compact unless material findings require more
 
 Focus on:
 - fidelity of code and delivered behavior against `idea.md`, `spec.md`, and `plan.md`
@@ -46,7 +46,7 @@ Focus on:
 - whether `run.md` stayed a compact restart ledger without validation evidence or implementation journaling
 - the strongest reasons not to begin docs close-out yet
 
-Reviewer budget:
+Reviewer input:
 - ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
 - merge overlapping findings, keep synopses brief, and preserve only disagreements that materially affect closure readiness
 - summarize validation or regression concerns as actionable gaps rather than long transcripts

@@ -67,6 +67,7 @@ Requirements:
   - `reviews/implementation/round-XX.md`
   - `reviews/final/round-XX.md`
 - keep repo markdown artifacts sufficient for another operator or orchestrator session to resume the workflow without prior chat history
+- keep `idea.md`, `spec.md`, and `plan.md` as current-state source artifacts; use review rounds for decision trees, changed recommendations, rejected options, and reviewer disagreement
 - if a runtime-specific role registry exists, resolve stage-to-persona bindings through it and record the actual bindings used
 - if a required concrete binding is missing and there is no valid substitute, stop and tell the user instead of silently inventing a replacement
 
@@ -129,6 +130,7 @@ Use a plain-language startup confirmation such as:
 - if chat context conflicts with repo markdown artifacts, prefer the artifacts and record the discrepancy in `run.md`
 - do not carry accepted decisions, constraints, or clarifications forward as chat-only context; write them into `run.md` or the relevant source artifact before relying on them
 - do not duplicate the same accepted decision across every artifact; write it to the artifact that owns it and point other artifacts to that source when needed
+- fold accepted review outcomes into the owning source artifact as current truth; remove superseded alternatives instead of appending revision history
 
 ## Delegation And Context Budget
 
@@ -139,7 +141,8 @@ Use a plain-language startup confirmation such as:
 - ask subagents to return only decisions, findings, edits made, and unresolved blockers
 - prohibit long restatements of artifacts, chat history, or reviewer transcripts
 - for focused re-reviews, ask reviewers to inspect only the prior finding, current artifact, and changed area
-- target saved review rounds at roughly 250-500 words unless material findings require more
+- keep saved review rounds compact unless material findings require more
+- keep source artifacts concise by omitting empty sections, stale alternatives, repeated rationale, and history that belongs in review rounds
 - idea, spec, and plan reviews should normally inspect only `run.md` plus the relevant workflow artifacts
 - codebase inspection should be targeted and usually reserved for implementation, implementation-review, final-review fidelity checks, or a specific blocking question
 - generic helper agents may be used only for narrow blocking questions with named paths, symbols, or terms
@@ -183,7 +186,7 @@ Use this protocol when the orchestrator suspects an official operator subagent i
 11. After the user gate, record feedback, ensure accepted feedback is written into repo markdown artifacts through the owning operator when edits are needed, and re-ground before advancing, looping, or rerouting.
 12. After implementation, run `implementation-review`; if any implementation reviewer requires material changes, route remediation back to the implementation operator and repeat.
 13. After implementation-review approval, run `final-review`; if it finds fidelity gaps, route fixes back to the owning operator and rerun review as needed.
-14. Before docs close-out, run a drift sweep across `idea.md`, `spec.md`, `plan.md`, `execution.md` when present, and latest reviews to catch stale wording after later decisions.
+14. Before docs close-out, run a drift sweep across `idea.md`, `spec.md`, `plan.md`, `execution.md` when present, and latest reviews to catch stale wording after later decisions; source artifacts should show the official current state, while review rounds preserve history.
 15. Delegate docs close-out to the documentation maintainer.
 16. Verify docs close-out, re-ground on final markdown artifacts, ask for final approval, and close the workflow.
 

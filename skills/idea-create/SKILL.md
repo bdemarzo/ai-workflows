@@ -26,14 +26,12 @@ Requirements:
 - keep the artifact self-contained enough that a later reader can understand the opportunity without prior thread context
 - open with outcome-first framing that states what changes for the user, why it matters, and how value would be observed if the idea succeeds
 - keep the permanent artifact concise and skimmable by default
-- target under roughly 1,000 words unless the user asks for deeper discovery
 - include local tracking with:
   - `Source Context` when relevant
   - `Status`
   - `Open Questions`
-  - `Revision History`
 - fold accepted user or review feedback into the artifact instead of leaving it chat-only
-- retain useful revision history when updating an existing artifact
+- replace superseded wording when updating an existing artifact; source artifacts should show current state, not revision history
 - include lightweight success signals without turning the idea into a metric plan
 - keep the output focused on the idea itself, not on spec or plan detail
 

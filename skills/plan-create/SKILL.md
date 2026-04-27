@@ -22,12 +22,8 @@ Requirements:
 - keep the permanent artifact concise and skimmable by default
 - treat `./docs/workflows/{slug}/plan.md` as the authoritative execution plan for the workflow
 - repo-local `PLANS.md` may be read as optional project context, but it must not replace this workflow's plan structure, stage contract, or execution control unless the user explicitly asks for repo-native planning mode
-- treat the plan as a living document and keep these sections current:
-  - `Progress`
-  - `Surprises & Discoveries`
-  - `Decision Log`
-  - `Outcomes & Retrospective`
-- keep living sections compact; once implementation starts, detailed step evidence belongs in `execution.md`
+- treat the plan as a living current-state document, not an implementation journal
+- keep implementation decisions current; once implementation starts, detailed step evidence belongs in `execution.md`
 - define non-obvious terms in plain language instead of assuming prior repo knowledge
 - when revising after `plan-review`, incorporate accepted review outcomes into `plan.md`
 - when the plan is ready for execution, mark that state clearly in the plan body
@@ -66,7 +62,7 @@ Style rule:
 Require these expectations:
 - the plan must be restartable from `plan.md` plus the repository alone
 - treat restartability as a hard requirement
-- `Progress`, `Decision Log`, `Surprises & Discoveries`, `Validation and Acceptance`, and `Outcomes & Retrospective` are mandatory living sections
+- `Implementation Decisions`, `Current Plan`, `Validation and Acceptance`, and `Idempotence And Recovery` are mandatory current-state sections
 - validation should include concrete commands or checks with expected observable outcomes when the project permits them
 - accepted review outcomes must be incorporated into the plan before implementation begins
 - do not append a long implementation journal to the plan; summarize progress and point to `execution.md`

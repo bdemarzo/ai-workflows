@@ -81,6 +81,9 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - Review rounds should remain concise, findings-first, and recommendation-driven.
 - Reviewer inputs should stay compact: up to three consequential findings, one explicit recommendation, and only the rationale needed to support it.
 - A person should be able to continue the workflow from the markdown artifacts in the repo alone; if not, reviewers should call that out as a key finding rather than a separate restartability section.
+- Source artifacts (`idea.md`, `spec.md`, `plan.md`) are the official current-state record, not decision-history logs.
+- Review artifacts may preserve decision trees, rejected options, rationale changes, and reviewer disagreement; source artifacts should fold accepted outcomes into the current truth and remove stale wording.
+- Prefer replacing superseded source-artifact text over appending revision history.
 - User gates are required after:
   - idea review resolution
   - spec review resolution
@@ -114,7 +117,7 @@ After changing the workflow or skill packages, verify:
 - review-round path references are consistent across all skills and docs
 - saved review rounds record reviewer persona, concrete agent name, and display name when the runtime exposes one
 - saved review rounds record only reviewers that match the resolved role binding from `workflow-run`
-- saved review rounds preserve brief reviewer synopses in addition to the orchestrator's merged findings
+- saved review rounds preserve one-sentence reviewer synopses in addition to the orchestrator's merged findings
 - saved review rounds reflect compact, lens-specific reviewer inputs rather than full reviewer transcripts
 - `workflow-run` is documented consistently as the orchestrator rather than a workflow stage
 - implementation-review specifies architecture, security, and QA / product correctness
@@ -132,6 +135,7 @@ After changing the workflow or skill packages, verify:
   - documentation close-out status
 - run ledger guidance uses `Decision Log` for resolved decisions and clarifications rather than implying open questions
 - `Validation Evidence` is not required in `run.md`; validation belongs in the plan, execution appendix, or review artifacts when needed
+- source artifacts avoid `Revision History` and other chronology sections unless the user explicitly asks for historical tracking
 - docs close-out is represented consistently across README and workflow-run guidance
 - skill-local templates under `skills/<skill-name>/assets/` reflect the documented artifact shape and current workflow contract
 - skill-local references under `skills/<skill-name>/references/` are linked from `SKILL.md` and used for progressive disclosure rather than duplicating core instructions

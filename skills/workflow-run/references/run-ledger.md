@@ -21,7 +21,7 @@ Maintain these sections:
 
 Do not add `## Validation Evidence` to `run.md`. Validation belongs in `plan.md`, `execution.md`, or review artifacts when needed.
 
-Keep `run.md` under roughly 120 lines. It is a restart ledger, not a chronology, test report, or implementation journal.
+Keep `run.md` compact. It is a restart ledger, not a chronology, test report, or implementation journal.
 
 ## Update Timing
 
@@ -119,6 +119,7 @@ Use only these `workflow_status` values:
 - Put command results, changed areas, remediation evidence, and implementation deviations in `execution.md` when implementation has multiple steps, multiple validation commands, or remediation rounds.
 - Put reviewer conclusions in review-round files.
 - Record only pointers and current readiness in `run.md`.
+- Keep source artifacts as current-state records; do not use `run.md` to compensate for stale `idea.md`, `spec.md`, or `plan.md`.
 
 ## Example
 

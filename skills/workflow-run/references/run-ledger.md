@@ -69,6 +69,9 @@ During implementation review, record:
 - satisfaction status for QA / product correctness
 - remediation cycle count
 
+During operator progress checks or stalled-operator recovery, record:
+- progress check sent, response or timeout, blocker or partial handoff, user recovery decision, cleanup, replacement or takeover, and evidence location
+
 During final-review and close-out, record:
 - unresolved fidelity gaps
 - how they were resolved
@@ -90,9 +93,10 @@ After any material clarification or blocker, record:
 - `Artifact Map`: list the current source artifact paths and latest review-round paths in a compact table.
 - `Progress`: use a compact current-state table, not a dated checklist.
 - `Phase Ownership`: record the current operator, official reviewer roster, and sidecar/helper agents separately.
+- `Phase Ownership`: when an operator is replaced or the orchestrator takes over, record the prior operator, replacement or takeover, and reason under substitutions or fallbacks.
 - `Stage Assessments`: keep only the latest stage assessment plus unresolved prior warnings that still matter.
 - `Decision Log`: record resolved decisions, accepted user feedback, material clarifications, and what changed because of them.
-- `Current Blockers`: list active blockers and whether the workflow is waiting on the user or on remediation.
+- `Current Blockers`: list active blockers and whether the workflow is waiting on the user, operator recovery, or remediation.
 - `Resume Instructions`: state the exact next action and exact approval decision needed when paused.
 - `Outcomes & Retrospective`: summarize what was delivered, deferred, learned, and documented only at completion.
 

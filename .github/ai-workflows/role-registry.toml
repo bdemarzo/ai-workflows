@@ -19,6 +19,7 @@ agent = "stakeholder-advocate"
 persona = "Product Designer"
 agent = "product-designer"
 allowed_substitutions = ["Domain Expert"]
+allowed_substitution_agents = ["domain-expert"]
 [[stages.assignments]]
 persona = "Skeptic"
 agent = "skeptic"
@@ -38,6 +39,7 @@ agent = "software-architect"
 persona = "Stakeholder Advocate"
 agent = "stakeholder-advocate"
 allowed_substitutions = ["Product Designer"]
+allowed_substitution_agents = ["product-designer"]
 [[stages.assignments]]
 persona = "Skeptic"
 agent = "skeptic"
@@ -84,6 +86,7 @@ name = "final-review"
 persona = "Product Manager"
 agent = "product-manager"
 allowed_substitutions = ["Product Strategist"]
+allowed_substitution_agents = ["product-strategist"]
 [[stages.assignments]]
 persona = "Software Architect"
 agent = "software-architect"

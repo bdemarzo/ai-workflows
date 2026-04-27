@@ -10,7 +10,7 @@
 [One-paragraph summary of the user-visible contract. Reference the idea instead of restating its full rationale.]
 
 ## Context And Orientation
-[Optional. Add only when a later planner would otherwise miss important product or workflow context.]
+[Optional. Add only context a later planner would otherwise miss.]
 
 ## Problem Statement
 - [What problem the spec solves.]
@@ -47,6 +47,3 @@
 
 ## Open Questions
 - [Product-contract question to resolve before or during planning. Implementation-only questions belong in plan.md.]
-
-## Revision History
-- [YYYY-MM-DD] [What changed.]

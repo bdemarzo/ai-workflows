@@ -8,19 +8,22 @@
 - [Implementation diff, summary, or grouped code paths reviewed.]
 
 ## Prior Implementation Review Rounds
-- [Optional prior round path and what changed since then.]
+- [Optional prior round path and material change since then. Omit when none.]
 
 ## Reviewer Lenses
 - [Reviewer persona] -> [Agent id] -> [Display name when available]
 
 ## Reviewer Synopses
-- [Display name / persona]: [1-2 sentence synopsis of the reviewer's main points and tone.]
+- [Display name / persona]: [One-sentence synopsis of the reviewer's main point.]
 
 ## Review Scope
 - [Implemented change reviewed, plan/spec context considered, and summarized validation evidence kept in view.]
 
 ## Key Findings
 - [Merged findings-first summary covering architecture, security, QA/product correctness, validation gaps, implementation drift, or markdown-artifact gaps.]
+
+## Decision Notes
+- [Material decision branch, rejected option, or change in recommendation. Omit this section when none.]
 
 ## Meaningful Disagreements
 - [Only disagreements that materially affect the recommendation. Omit this section when none.]

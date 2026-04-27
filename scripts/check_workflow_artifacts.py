@@ -16,14 +16,35 @@ except ModuleNotFoundError:  # pragma: no cover - Python < 3.11 fallback
     tomllib = None
 
 
-DEFAULT_BUDGETS = {
-    "run.md": {"lines": 120},
-    "idea.md": {"words": 1000},
-    "review": {"words_min": 250, "words_max": 500},
-}
-
 FORBIDDEN_RUN_HEADINGS = {
     "## Validation Evidence",
+}
+
+FORBIDDEN_SOURCE_HEADINGS = {
+    "idea.md": {
+        "## Revision History",
+        "## Change Log",
+        "## Changelog",
+        "## Prior Decisions",
+        "## Previous Decisions",
+    },
+    "spec.md": {
+        "## Revision History",
+        "## Change Log",
+        "## Changelog",
+        "## Prior Decisions",
+        "## Previous Decisions",
+    },
+    "plan.md": {
+        "## Revision History",
+        "## Change Log",
+        "## Changelog",
+        "## Prior Decisions",
+        "## Previous Decisions",
+        "## Progress",
+        "## Surprises & Discoveries",
+        "## Outcomes & Retrospective",
+    },
 }
 
 SOURCE_ARTIFACTS = {
@@ -61,14 +82,6 @@ class Finding:
 
 def read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
-
-
-def word_count(text: str) -> int:
-    return len(re.findall(r"\S+", text))
-
-
-def line_count(text: str) -> int:
-    return len(text.splitlines())
 
 
 def find_frontmatter_name(text: str) -> str | None:
@@ -338,15 +351,6 @@ def check_dossier(dossier: Path, stale_terms: list[str]) -> list[Finding]:
         text = read_text(path)
 
         if filename == "run.md":
-            lines = line_count(text)
-            if lines > DEFAULT_BUDGETS["run.md"]["lines"]:
-                findings.append(
-                    Finding(
-                        "WARN",
-                        path,
-                        f"run ledger is {lines} lines; target is <= {DEFAULT_BUDGETS['run.md']['lines']}",
-                    )
-                )
             for heading in FORBIDDEN_RUN_HEADINGS:
                 if re.search(rf"^{re.escape(heading)}\s*$", text, flags=re.MULTILINE):
                     findings.append(
@@ -367,14 +371,13 @@ def check_dossier(dossier: Path, stale_terms: list[str]) -> list[Finding]:
                             )
                         )
 
-        if filename == "idea.md":
-            words = word_count(text)
-            if words > DEFAULT_BUDGETS["idea.md"]["words"]:
+        for heading in FORBIDDEN_SOURCE_HEADINGS.get(filename, set()):
+            if re.search(rf"^{re.escape(heading)}\s*$", text, flags=re.MULTILINE):
                 findings.append(
                     Finding(
                         "WARN",
                         path,
-                        f"idea artifact is {words} words; target is <= {DEFAULT_BUDGETS['idea.md']['words']}",
+                        f"source artifact history section should move to review rounds or execution evidence: {heading}",
                     )
                 )
 
@@ -391,14 +394,6 @@ def check_dossier(dossier: Path, stale_terms: list[str]) -> list[Finding]:
             if stage == "final":
                 expected = f"# Final Review Round {path.stem[-2:]} - {slug}"
             findings.extend(check_h1(path, expected))
-
-            words = word_count(text)
-            low = DEFAULT_BUDGETS["review"]["words_min"]
-            high = DEFAULT_BUDGETS["review"]["words_max"]
-            if words > high:
-                findings.append(
-                    Finding("WARN", path, f"review round is {words} words; target is roughly {low}-{high}")
-                )
 
     return findings
 

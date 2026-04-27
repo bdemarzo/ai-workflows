@@ -34,9 +34,9 @@ Requirements:
 - keep the saved review artifact concise, findings-first, and clear about meaningful disagreement
 - identify each reviewer with persona, concrete agent name, and display name when the runtime exposes one
 - validate that each official reviewer matches the resolved role binding from `workflow-run`
-- preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
+- preserve a one-sentence reviewer-by-reviewer synopsis of each subagent's main point
 - omit empty boilerplate sections from the saved artifact when they would only say `None`
-- keep normal saved rounds around 250-500 words unless material findings require more
+- keep saved rounds compact unless material findings require more
 
 Focus on:
 - architectural soundness against the approved plan
@@ -47,7 +47,7 @@ Focus on:
 - whether the delivered shape and repo markdown artifacts are easy for a later operator to continue without chat history
 - the strongest reasons not to proceed to final-review yet
 
-Reviewer budget:
+Reviewer input:
 - ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
 - merge overlapping findings, keep synopses brief, and preserve only disagreements that materially affect the recommendation
 - summarize validation or test concerns as actionable gaps rather than long transcripts

@@ -34,9 +34,8 @@ Requirements:
   - `Source Idea`
   - `Status`
   - `Open Questions`
-  - `Revision History`
 - incorporate accepted review outcomes into the spec so `spec.md` remains the current contract
-- retain useful revision history when updating an existing artifact
+- replace superseded wording when updating an existing artifact; review rounds preserve the decision history
 - keep the spec as the source of truth for user-visible behavior, scope, and correctness
 
 Operator responsibility:

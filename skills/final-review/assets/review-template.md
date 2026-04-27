@@ -9,19 +9,22 @@
 - [Implementation diff, summary, validation evidence, or grouped code paths reviewed.]
 
 ## Prior Review Rounds
-- [Optional prior round path and what changed since then.]
+- [Optional prior round path and material change since then. Omit when none.]
 
 ## Reviewer Roster
 - [Reviewer persona] -> [Agent id] -> [Display name when available]
 
 ## Reviewer Synopses
-- [Display name / persona]: [1-2 sentence synopsis of the reviewer's main points and tone.]
+- [Display name / persona]: [One-sentence synopsis of the reviewer's main point.]
 
 ## Review Scope
 - [Idea/spec/plan fidelity reviewed, implemented change considered, validation evidence kept in view, unresolved implementation-review context checked, and close-out drift sweep performed.]
 
 ## Key Findings
 - [Merged findings-first summary covering fidelity gaps, regressions, validation gaps, implementation drift, simplicity drift, or markdown-artifact gaps.]
+
+## Decision Notes
+- [Material decision branch, rejected option, or change in recommendation. Omit this section when none.]
 
 ## Meaningful Disagreements
 - [Only disagreements that materially affect closure readiness. Omit this section when none.]

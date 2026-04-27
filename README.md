@@ -21,7 +21,7 @@ This repository defines a guided workflow where the active AI session is the orc
 - `skeptical-review`: optional manual pressure-test outside the main workflow.
 - `.codex/`: optional Codex adapter with persona agents, role registry, and runtime settings.
 - `.github/`: optional GitHub Copilot adapter with project skills, custom agents, role registry, and repository instructions.
-- `scripts/check_workflow_artifacts.py`: lightweight consistency checker for skill packages and workflow dossiers.
+- `scripts/check_workflow_artifacts.py`: lightweight consistency checker for skill packages and concise workflow dossiers.
 
 ## Core Model
 
@@ -103,14 +103,14 @@ Source artifacts use slugged H1 titles:
 
 ## Artifact Ownership
 
-- `run.md` is the compact restart ledger. Keep it under roughly 120 lines, use a current-state summary instead of a long chronology, and do not add `Validation Evidence`.
-- `idea.md` owns opportunity, value, risks, and intentionally deferred questions. Keep it under roughly 1,000 words unless deeper discovery is requested.
-- `spec.md` owns the user-visible contract, acceptance behavior, privacy/business rules, and scope boundaries.
-- `plan.md` owns implementation decisions, sequencing, interfaces, validation plan, idempotence, and recovery.
-- `execution.md` owns implementation evidence, checks run, changed areas, remediation history, and deviations during multi-step work.
-- Review rounds own reviewer findings, recommendation, and brief reviewer synopses.
+- `run.md` is the compact restart ledger. Use current-state summaries instead of chronology, and do not add `Validation Evidence`.
+- `idea.md` owns the current opportunity, value, risks, and intentionally deferred questions.
+- `spec.md` owns the current user-visible contract, acceptance behavior, privacy/business rules, and scope boundaries.
+- `plan.md` owns the current implementation decisions, sequencing, interfaces, validation plan, idempotence, and recovery.
+- `execution.md` owns concise implementation evidence, checks run, changed areas, remediation history, and deviations during multi-step work.
+- Review rounds own reviewer findings, recommendations, brief reviewer synopses, decision branches, and what changed between rounds.
 
-The repo markdown artifacts must be sufficient for another operator or orchestrator to resume without chat history. Accepted decisions and review outcomes should be written into the owning artifact before later work depends on them.
+The repo markdown artifacts must be sufficient for another operator or orchestrator to resume without chat history. Accepted decisions and review outcomes should be folded into the owning source artifact as the official current state before later work depends on them. Do not preserve stale alternatives, dated revision history, or superseded rationale in `idea.md`, `spec.md`, or `plan.md`; that history belongs in review rounds, `run.md` decision pointers, or `execution.md` evidence when relevant.
 
 ## Stalled Operator Recovery
 
@@ -123,12 +123,13 @@ Saved review rounds should be concise and findings-first:
 - keep reviewer rosters visible
 - record concrete agent id and display name when the runtime exposes them
 - keep reviewer inputs to up to three consequential findings, one recommendation, and only necessary rationale
-- preserve brief reviewer synopses without transcript-style detail
+- preserve one-sentence reviewer synopses without transcript-style detail
 - merge overlapping findings
 - omit empty boilerplate sections such as `Meaningful Disagreements`, `Suggested Revisions`, or `Outstanding Dissent`
-- keep normal review rounds around 250-500 words unless material findings require more
+- keep review rounds compact unless material findings require more
 - for focused re-reviews, inspect only the prior finding, current artifact, and changed area
 - record markdown-artifact handoff gaps as findings when they would block restartability
+- use review rounds for meaningful decision trees, rejected options, and changes since the prior round; do not copy that history into the source artifacts after a decision is accepted
 
 Before docs close-out, run a drift sweep across the idea, spec, plan, execution evidence when present, and latest review rounds. Fix stale wording where later accepted decisions superseded earlier artifact language.
 
@@ -211,7 +212,7 @@ Check a workflow dossier:
 python scripts/check_workflow_artifacts.py --root . --dossier C:\path\to\repo\docs\workflows\my-slug --stale-term per-band
 ```
 
-The checker fails on structural errors such as missing skill files, mismatched skill names, adapter registries that reference missing agents, Copilot custom agents with missing frontmatter, or invalid artifact H1s. It reports warnings for budget drift, forbidden `run.md` sections, missing latest-review references, oversized review rounds, and configured stale terms.
+The checker fails on structural errors such as missing skill files, mismatched skill names, adapter registries that reference missing agents, Copilot custom agents with missing frontmatter, or invalid artifact H1s. It reports warnings for source-artifact history sections, forbidden `run.md` sections, missing latest-review references, and configured stale terms.
 
 ## Repository Layout
 

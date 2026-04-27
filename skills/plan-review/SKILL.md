@@ -31,9 +31,9 @@ Requirements:
 - keep the saved review artifact concise and findings-first
 - validate that each official reviewer matches the resolved role binding from `workflow-run`
 - identify each reviewer with persona, concrete agent name, and display name when the runtime exposes one
-- preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
+- preserve a one-sentence reviewer-by-reviewer synopsis of each subagent's main point
 - omit empty boilerplate sections from the saved artifact when they would only say `None`
-- keep normal saved rounds around 250-500 words unless material findings require more
+- keep saved rounds compact unless material findings require more
 
 Focus on:
 - implementation sequencing
@@ -48,7 +48,7 @@ Focus on:
 - whether the plan introduces repetition, split responsibility, or indirection that could be collapsed without losing clarity
 - the strongest reasons not to advance yet
 
-Reviewer budget:
+Reviewer input:
 - ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
 - merge overlapping findings, keep synopses brief, and preserve only disagreements that materially affect the recommendation
 - if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding

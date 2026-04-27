@@ -32,9 +32,9 @@ Requirements:
 - make clear that the reviewers are subagents and the active session writes the consolidated official review round
 - identify each reviewer in the roster with persona, concrete agent name, and subagent display name when the runtime exposes one
 - validate that each official reviewer matches the resolved role binding from `workflow-run`
-- preserve a brief reviewer-by-reviewer synopsis so the saved artifact retains some color from what each subagent actually said
+- preserve a one-sentence reviewer-by-reviewer synopsis of each subagent's main point
 - omit empty boilerplate sections from the saved artifact when they would only say `None`
-- keep normal saved rounds around 250-500 words unless material findings require more
+- keep saved rounds compact unless material findings require more
 
 Focus on:
 - value and user relevance
@@ -52,6 +52,7 @@ Write the review artifact with sections like:
 - reviewer synopses
 - observability of value
 - key findings
+- decision notes when a material branch, rejected option, or changed recommendation matters
 - meaningful disagreements
 - suggested revisions
 - recommendation

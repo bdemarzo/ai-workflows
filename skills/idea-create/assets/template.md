@@ -1,13 +1,13 @@
 # Idea - {slug}
 
 ## Purpose / Big Picture
-[One short outcome-first paragraph: what changes for the user, why it matters, and how value would be observed. Target <= 1,000 words for the whole artifact unless deeper discovery is requested.]
+[One short outcome-first paragraph: what changes for the user, why it matters, and how value would be observed.]
 
 ## Context And Orientation
-[Optional. Add only when repo, business, or workflow context is needed for a later reader.]
+[Optional. Add only context a later reader needs to understand the current idea.]
 
 ## Source Context
-- [Optional. Prompt, request, upstream artifact, or accepted feedback that motivated this idea.]
+- [Optional. Prompt, request, upstream artifact, or accepted feedback that materially shaped the current idea.]
 
 ## User Problem Or Opportunity
 - [Core user problem or opportunity.]
@@ -32,6 +32,3 @@
 
 ## Reasons Not To Do This
 - [Short, direct reasons to kill, narrow, or defer the idea.]
-
-## Revision History
-- [YYYY-MM-DD] [What changed.]

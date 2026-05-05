@@ -117,10 +117,6 @@ The repo markdown artifacts must be sufficient for another operator or orchestra
 
 When an official operator subagent appears stalled, blocked, or materially slower than expected, the orchestrator first asks the subagent for a bounded progress report. If the operator is unresponsive or cannot provide a useful handoff, the orchestrator asks the user whether to wait and check again, replace the operator, take over directly, or follow custom direction. The decision, cleanup, substitution, takeover, and implementation evidence state are recorded in `run.md` and `execution.md` when applicable.
 
-## Stalled Operator Recovery
-
-When an official operator subagent appears stalled, blocked, or materially slower than expected, the orchestrator first asks the subagent for a bounded progress report. If the operator is unresponsive or cannot provide a useful handoff, the orchestrator asks the user whether to wait and check again, replace the operator, take over directly, or follow custom direction. The decision, cleanup, substitution, takeover, and implementation evidence state are recorded in `run.md` and `execution.md` when applicable.
-
 ## Review Output Rules
 
 Saved review rounds should be concise and findings-first:
@@ -171,20 +167,14 @@ Codex persona agents generally inherit the current session model so newer models
 
 Current Codex runtime note: repo-scoped `.codex/agents/*.toml` discovery can vary by surface and version. Project scope remains the default because it keeps the workflow package portable with the target repository. Use `--scope user` when your Codex surface only discovers user-profile agents.
 
-Optional Codex settings:
+Optional Codex approval review setting:
 
 ```toml
 approval_policy = "on-request"
 approvals_reviewer = "auto_review"
 ```
 
-Use automatic approval reviews when your Codex workspace supports them and you want eligible approval prompts pre-reviewed by Codex before you decide. This does not replace the workflow's product/user gates.
-
-Hooks are also supported by recent Codex versions, but this package does not enable them by default. Teams that want a repo-local quality gate can configure a `Stop` or `PostToolUse` hook to run:
-
-```powershell
-python scripts/check_workflow_artifacts.py --root .
-```
+This pre-reviews eligible approval prompts when supported, but it does not replace workflow product/user gates. Teams may also configure Codex hooks to run `python scripts/check_workflow_artifacts.py --root .`; hooks are not enabled by default.
 
 ### GitHub Copilot
 
@@ -250,11 +240,16 @@ Useful installer options:
 - `--no-skills`: install only the adapter
 - `--target <path>`: install into a specific existing directory
 
-Manual install is also supported. For project-scoped Codex use, copy folders from `skills/` into target `.agents/skills/`, overlay any matching `adapters/codex/skill-metadata/<skill>/` files into the installed skill folder, copy `adapters/codex/agents/*.toml` into target `.codex/agents/`, then copy `adapters/codex/role-registry.toml` and `adapters/codex/config.toml` into target `.codex/`. For user-scoped Codex use, make the same copies under `~/.agents/skills/` and `~/.codex/`. For older Codex versions that still expect legacy locations, use `.codex/skills/` under the selected scope root.
+Manual install is also supported:
+
+| Runtime | Project scope | User scope |
+| --- | --- | --- |
+| Codex | copy `skills/` to `.agents/skills/`, overlay `adapters/codex/skill-metadata/`, copy agents/config/registry into `.codex/` | same layout under `~/.agents/skills/` and `~/.codex/` |
+| Copilot | copy skills, agents, config, registry, and instructions into `.github/` | same layout under `~/.github/` |
+
+For legacy Codex skill discovery, use `.codex/skills/` under the selected scope root instead of `.agents/skills/`.
 
 To test this package as a local Codex plugin, build or copy the plugin template from `packages/codex-plugin/ai-workflows/` into an actual marketplace root that matches `marketplaces/codex-local/marketplace.json`. Do not add root-level `.codex-plugin/` or `.agents/plugins/` files to this source repository.
-
-For project-scoped Copilot use, copy folders from `skills/` into target `.github/skills/`, copy `adapters/copilot/agents/*.agent.md` into target `.github/agents/`, copy `adapters/copilot/role-registry.toml` and `adapters/copilot/config.toml` into target `.github/ai-workflows/`, and copy `adapters/copilot/copilot-instructions.md` into target `.github/`. For user-scoped Copilot use, make the same copies under `~/.github/`.
 
 ## Consistency Checker
 

@@ -1,6 +1,5 @@
 name = "skeptic"
 description = "High-skepticism reviewer focused on consequential flaws, weak assumptions, and reasons not to advance yet."
-model = "gpt-5.4"
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 

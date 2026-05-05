@@ -1,0 +1,5 @@
+interface:
+  display_name: "Spec Review"
+  short_description: "Review the spec artifact before implementation planning."
+policy:
+  allow_implicit_invocation: true

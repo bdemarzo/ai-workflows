@@ -1,0 +1,5 @@
+interface:
+  display_name: "Idea Review"
+  short_description: "Review an idea artifact with two reviewers and a skeptic."
+policy:
+  allow_implicit_invocation: true

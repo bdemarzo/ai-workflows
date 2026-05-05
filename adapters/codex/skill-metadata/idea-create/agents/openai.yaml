@@ -1,0 +1,5 @@
+interface:
+  display_name: "Idea Create"
+  short_description: "Draft or revise the outcome-first idea artifact."
+policy:
+  allow_implicit_invocation: true

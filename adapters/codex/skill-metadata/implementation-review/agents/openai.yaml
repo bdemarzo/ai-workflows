@@ -1,0 +1,5 @@
+interface:
+  display_name: "Implementation Review"
+  short_description: "Review implementation readiness with architecture, security, and QA lenses."
+policy:
+  allow_implicit_invocation: true

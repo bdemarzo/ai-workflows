@@ -56,6 +56,7 @@ Canonical phase order:
 Requirements:
 - derive one canonical `slug` from the starting prompt and keep the workflow dossier under `./docs/workflows/{slug}/`
 - treat `./docs/workflows/{slug}/run.md` as the source of truth for workflow state, artifact paths, role bindings, approvals, blockers, and resume context
+- when Codex `/goal` or a thread goal feature is available, it may mirror the current workflow slug, phase, and gate, but repo markdown artifacts remain authoritative
 - start `run.md` with the exact H1 `# Run - {slug}`
 - keep `run.md` as a compact restart ledger, not a chronology, validation log, or implementation journal
 - do not add `Validation Evidence` to `run.md`; point to `plan.md`, `execution.md`, or review artifacts instead
@@ -128,6 +129,7 @@ Use a plain-language startup confirmation such as:
 - before each stage transition, re-read `run.md` and the source artifacts for the next stage
 - after each user gate, reroute, or remediation loop, explicitly re-ground on the current markdown artifacts before making the next stage decision
 - if chat context conflicts with repo markdown artifacts, prefer the artifacts and record the discrepancy in `run.md`
+- if a Codex thread goal conflicts with repo markdown artifacts, update or ignore the thread goal and continue from the artifacts
 - do not carry accepted decisions, constraints, or clarifications forward as chat-only context; write them into `run.md` or the relevant source artifact before relying on them
 - do not duplicate the same accepted decision across every artifact; write it to the artifact that owns it and point other artifacts to that source when needed
 - fold accepted review outcomes into the owning source artifact as current truth; remove superseded alternatives instead of appending revision history

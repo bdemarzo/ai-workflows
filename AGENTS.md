@@ -17,12 +17,15 @@ Use this file for repo-specific operating guidance when changing the skills or d
 ## Repo Layout
 
 - `skills/<skill-name>/SKILL.md` - canonical skill packages
-- `.codex/agents/*.toml` - optional Codex-specific persona implementations
-- `.codex/role-registry.toml` - optional Codex-specific registry mapping workflow stages to persona labels and then to concrete agent names
-- `.codex/config.toml` - optional Codex-specific runtime settings for subagent orchestration
-- `.github/agents/*.agent.md` - optional GitHub Copilot custom agent persona implementations
-- `.github/ai-workflows/role-registry.toml` - optional Copilot registry mapping workflow stages to persona labels and then to concrete custom agent names
-- `.github/ai-workflows/config.toml` - optional Copilot runtime settings for subagent orchestration
+- `adapters/codex/agents/*.toml` - optional Codex-specific persona implementations
+- `adapters/codex/role-registry.toml` - optional Codex-specific registry mapping workflow stages to persona labels and then to concrete agent names
+- `adapters/codex/config.toml` - optional Codex-specific runtime settings for subagent orchestration
+- `adapters/codex/skill-metadata/` - optional Codex app metadata overlaid onto installed skills
+- `adapters/copilot/agents/*.agent.md` - optional GitHub Copilot custom agent persona implementations
+- `adapters/copilot/role-registry.toml` - optional Copilot registry mapping workflow stages to persona labels and then to concrete custom agent names
+- `adapters/copilot/config.toml` - optional Copilot runtime settings for subagent orchestration
+- `packages/codex-plugin/` - optional Codex plugin package source template
+- `marketplaces/codex-local/` - optional Codex local marketplace source template
 - `skills/<skill-name>/assets/` - optional skill-local templates or output resources that support standalone use
 - `skills/<skill-name>/references/` - optional skill-local reference docs loaded only when needed
 - `docs/` - supporting docs only
@@ -33,11 +36,12 @@ Use this file for repo-specific operating guidance when changing the skills or d
 - The active session is the orchestrator.
 - Operators and reviewers are subagents.
 - Keep skill bodies client-neutral even if this repo also ships optional runtime agent definitions.
-- Treat `skills/` as the portable workflow contract and `.codex/` / `.github/` as adapter layers, not as second sources of truth for stage behavior.
-- If `.codex/agents/` exists, treat it as the Codex implementation layer for those personas.
-- If `.codex/role-registry.toml` exists, treat it as the Codex binding layer from workflow stages to persona labels and then to concrete agent names.
-- If `.github/agents/` exists, treat it as the GitHub Copilot implementation layer for those personas.
-- If `.github/ai-workflows/role-registry.toml` exists, treat it as the Copilot binding layer from workflow stages to persona labels and then to concrete custom agent names.
+- Treat `skills/` as the portable workflow contract and `adapters/` as runtime adapter source, not as a second source of truth for stage behavior.
+- Do not store install-target runtime directories such as `.codex/`, `.agents/`, `.codex-plugin/`, or `.github/` as source layout unless they are unrelated real repository infrastructure.
+- If `adapters/codex/agents/` exists, treat it as the Codex implementation layer for those personas.
+- If `adapters/codex/role-registry.toml` exists, treat it as the Codex binding layer from workflow stages to persona labels and then to concrete agent names.
+- If `adapters/copilot/agents/` exists, treat it as the GitHub Copilot implementation layer for those personas.
+- If `adapters/copilot/role-registry.toml` exists, treat it as the Copilot binding layer from workflow stages to persona labels and then to concrete custom agent names.
 - `workflow-run` is a meta-skill, not a stage.
 - Agents define persona behavior; skills define stage procedure.
 - Official operators and reviewers must use the concrete agent resolved by the role registry; for Codex this means spawning the registry `agent` value as `agent_type`, and for Copilot this means selecting or invoking the registry `agent` value as the custom agent.
@@ -102,11 +106,13 @@ After changing the workflow or skill packages, verify:
 - each skill's `name:` matches its folder name
 - `README.md` and the skill package surface describe the same stage names and order
 - `implementation-review` exists as a real skill and is included in the documented phase order
-- if `.codex/agents/` exists, the agent set covers the intended personas without changing the portable stage contract
-- if `.codex/role-registry.toml` exists, it covers every stage-to-persona assignment named in `workflow-run`, README, and the review skills
+- if `adapters/codex/agents/` exists, the agent set covers the intended personas without changing the portable stage contract
+- if `adapters/codex/role-registry.toml` exists, it covers every stage-to-persona assignment named in `workflow-run`, README, and the review skills
 - role-registry allowed substitutions should include concrete substitution agent values, not persona labels alone
-- if `.github/agents/` exists, the custom agent set covers the intended personas without changing the portable stage contract
-- if `.github/ai-workflows/role-registry.toml` exists, it covers every stage-to-persona assignment named in `workflow-run`, README, and the review skills
+- if `packages/codex-plugin/` exists, its manifest template points to `./skills/`
+- if `marketplaces/codex-local/marketplace.json` exists, it has valid marketplace template JSON
+- if `adapters/copilot/agents/` exists, the custom agent set covers the intended personas without changing the portable stage contract
+- if `adapters/copilot/role-registry.toml` exists, it covers every stage-to-persona assignment named in `workflow-run`, README, and the review skills
 - artifact path references are consistent across all skills and docs
 - source dossier artifacts use slugged H1 titles:
   - `# Run - {slug}`
@@ -139,9 +145,9 @@ After changing the workflow or skill packages, verify:
 - docs close-out is represented consistently across README and workflow-run guidance
 - skill-local templates under `skills/<skill-name>/assets/` reflect the documented artifact shape and current workflow contract
 - skill-local references under `skills/<skill-name>/references/` are linked from `SKILL.md` and used for progressive disclosure rather than duplicating core instructions
-- skill folders can still be copied as-is into local Codex skill directories
+- skill folders can still be copied as-is into local skill directories; Codex app metadata lives in `adapters/codex/skill-metadata/` and is overlaid only during Codex installation
 
 ## Current Limitations
 
-- The portable workflow contract lives in `skills/`; the shipped persona layer in this repo is Codex-specific.
+- The portable workflow contract lives in `skills/`; runtime-specific persona and metadata layers live under `adapters/`.
 - There is no dedicated automated test harness yet; consistency is enforced by careful doc and package alignment.

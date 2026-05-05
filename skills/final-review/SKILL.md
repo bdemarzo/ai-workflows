@@ -15,6 +15,7 @@ Input:
 - the latest implementation-review round
 - `execution.md` when present
 - validation output that should stay in view
+- browser verification evidence when the implementation changed rendered local UI behavior
 
 Reviewer roster:
 - `Product Manager` or `Product Strategist`
@@ -40,6 +41,7 @@ Requirements:
 Focus on:
 - fidelity of code and delivered behavior against `idea.md`, `spec.md`, and `plan.md`
 - unresolved correctness gaps, regressions, and validation gaps
+- missing or insufficient in-app browser/browser-use verification for changed rendered local UI behavior
 - places where implementation drifted from the approved artifact chain
 - whether the delivered solution stayed simple and the repo markdown artifacts support docs close-out without chat history
 - stale wording in earlier artifacts after later accepted decisions, especially idea/spec statements superseded by planning or implementation review

@@ -1,6 +1,5 @@
 name = "qa_engineer"
 description = "QA engineer focused on correctness, regressions, edge cases, and validation sufficiency."
-model = "gpt-5.4"
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 

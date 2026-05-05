@@ -1,0 +1,5 @@
+interface:
+  display_name: "Plan Create"
+  short_description: "Create or revise the implementation-ready engineering plan."
+policy:
+  allow_implicit_invocation: true

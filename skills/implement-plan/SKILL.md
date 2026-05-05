@@ -33,6 +33,7 @@ When `execution.md` is useful, use [assets/execution-template.md](./assets/execu
 
 - make the minimum change required for the current approved step
 - run repo-appropriate validation for the change
+- when the change affects a rendered local UI, verify it through the Codex app in-app browser or browser-use when available, including the specific changed flow rather than only build-level checks
 - keep `plan.md` current when material discoveries, decisions, or deviations change the work
 - route new architectural direction, major constraints, or third-party dependencies back through the orchestrator unless already authorized by the approved plan
 - if a Git commit policy exists in the workflow guidelines, follow it carefully
@@ -42,7 +43,7 @@ When `execution.md` is useful, use [assets/execution-template.md](./assets/execu
 - use `./docs/workflows/{slug}/execution.md` when implementation has more than one approved step, multiple validation commands, remediation rounds, material validation, deviations, blockers, or follow-up evidence
 - when `execution.md` is used, start it with the exact H1 `# Execution - {slug}`
 - keep evidence concise; do not paste long logs, transcripts, or repeated plan/spec content
-- record changed areas, checks run, failures fixed, deviations from the plan, and the next handoff
+- record changed areas, checks run, browser verification for rendered local UI changes, failures fixed, deviations from the plan, and the next handoff
 - keep `plan.md` as the implementation control document, not a detailed execution journal
 - when implementation review sends remediation back, the same Software Engineer operator owns the fix pass and hands off again to `implementation-review`
 

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Workflow Run"
+  short_description: "Coordinate a full guided workflow from idea through close-out."
+policy:
+  allow_implicit_invocation: true

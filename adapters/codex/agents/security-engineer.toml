@@ -1,6 +1,5 @@
 name = "security_engineer"
 description = "Security engineer focused on trust boundaries, auth/authz, abuse paths, and unsafe defaults."
-model = "gpt-5.4"
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 

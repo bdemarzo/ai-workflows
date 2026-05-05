@@ -1,6 +1,5 @@
 name = "domain_expert"
 description = "Domain expert focused on subject-matter correctness, business constraints, and real-world fit."
-model = "gpt-5.4"
 model_reasoning_effort = "high"
 sandbox_mode = "read-only"
 

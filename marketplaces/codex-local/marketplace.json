@@ -1,0 +1,20 @@
+{
+  "name": "ai-workflows-local",
+  "interface": {
+    "displayName": "AI Workflows Local"
+  },
+  "plugins": [
+    {
+      "name": "ai-workflows",
+      "source": {
+        "source": "local",
+        "path": "./plugins/ai-workflows"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

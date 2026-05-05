@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from dataclasses import dataclass
@@ -62,6 +63,11 @@ REVIEW_DIRS = {
     "implementation",
     "final",
 }
+
+CODEX_ADAPTER_ROOT = Path("adapters") / "codex"
+COPILOT_ADAPTER_ROOT = Path("adapters") / "copilot"
+CODEX_PLUGIN_TEMPLATE = Path("packages") / "codex-plugin" / "ai-workflows" / ".codex-plugin" / "plugin.json"
+CODEX_MARKETPLACE_TEMPLATE = Path("marketplaces") / "codex-local" / "marketplace.json"
 
 
 @dataclass
@@ -248,7 +254,7 @@ def check_registry_assignments(
 
 def check_codex_adapter(root: Path) -> list[Finding]:
     findings: list[Finding] = []
-    adapter_dir = root / ".codex"
+    adapter_dir = root / CODEX_ADAPTER_ROOT
     if not adapter_dir.exists():
         return findings
 
@@ -281,12 +287,12 @@ def check_codex_adapter(root: Path) -> list[Finding]:
 
 def check_copilot_adapter(root: Path) -> list[Finding]:
     findings: list[Finding] = []
-    adapter_dir = root / ".github"
+    adapter_dir = root / COPILOT_ADAPTER_ROOT
     if not adapter_dir.exists():
         return findings
 
     agents_dir = adapter_dir / "agents"
-    registry_path = adapter_dir / "ai-workflows" / "role-registry.toml"
+    registry_path = adapter_dir / "role-registry.toml"
 
     if not agents_dir.exists() and not registry_path.exists():
         return findings
@@ -315,6 +321,89 @@ def check_copilot_adapter(root: Path) -> list[Finding]:
 
 def check_adapters(root: Path) -> list[Finding]:
     return [*check_codex_adapter(root), *check_copilot_adapter(root)]
+
+
+def check_plugin_packaging(root: Path) -> list[Finding]:
+    findings: list[Finding] = []
+    manifest_path = root / CODEX_PLUGIN_TEMPLATE
+    marketplace_path = root / CODEX_MARKETPLACE_TEMPLATE
+
+    if manifest_path.exists():
+        try:
+            manifest = json.loads(read_text(manifest_path))
+        except Exception as exc:
+            findings.append(Finding("ERROR", manifest_path, f"invalid JSON: {exc}"))
+            manifest = None
+
+        if isinstance(manifest, dict):
+            name = manifest.get("name")
+            skills = manifest.get("skills")
+            if not isinstance(name, str) or not name:
+                findings.append(Finding("ERROR", manifest_path, "plugin manifest is missing string name"))
+            if skills != "./skills/":
+                findings.append(Finding("ERROR", manifest_path, "plugin manifest template must point skills to ./skills/"))
+
+    if marketplace_path.exists():
+        try:
+            marketplace = json.loads(read_text(marketplace_path))
+        except Exception as exc:
+            findings.append(Finding("ERROR", marketplace_path, f"invalid JSON: {exc}"))
+            marketplace = None
+
+        if isinstance(marketplace, dict):
+            plugins = marketplace.get("plugins")
+            if not isinstance(plugins, list) or not plugins:
+                findings.append(Finding("ERROR", marketplace_path, "marketplace must contain at least one plugin"))
+            else:
+                for plugin in plugins:
+                    if not isinstance(plugin, dict):
+                        findings.append(Finding("ERROR", marketplace_path, "marketplace plugin entry must be an object"))
+                        continue
+                    source = plugin.get("source")
+                    source_path: str | None = None
+                    if isinstance(source, str):
+                        source_path = source
+                    elif isinstance(source, dict) and isinstance(source.get("path"), str):
+                        source_path = source["path"]
+                    if not source_path:
+                        findings.append(Finding("ERROR", marketplace_path, "marketplace plugin entry is missing source path"))
+                        continue
+                    if Path(source_path).is_absolute() or not source_path.startswith("./"):
+                        findings.append(
+                            Finding("ERROR", marketplace_path, "marketplace source path must be ./-relative")
+                        )
+                        continue
+                    policy = plugin.get("policy")
+                    if not isinstance(policy, dict):
+                        findings.append(Finding("ERROR", marketplace_path, "marketplace plugin entry is missing policy"))
+
+    return findings
+
+
+def check_runtime_source_leakage(root: Path) -> list[Finding]:
+    findings: list[Finding] = []
+
+    for path in [
+        root / ".codex",
+        root / ".codex-plugin",
+        root / ".agents",
+    ]:
+        if path.exists():
+            findings.append(
+                Finding("ERROR", path, "runtime install path should not be present in the source repository")
+            )
+
+    for path in [
+        root / ".github" / "agents",
+        root / ".github" / "ai-workflows",
+        root / ".github" / "copilot-instructions.md",
+    ]:
+        if path.exists():
+            findings.append(
+                Finding("ERROR", path, "Copilot adapter source belongs under adapters/copilot")
+            )
+
+    return findings
 
 
 def check_h1(path: Path, expected: str) -> list[Finding]:
@@ -426,6 +515,8 @@ def main(argv: list[str]) -> int:
     args = parse_args(argv)
     root = args.root.resolve()
     findings = check_skills(root)
+    findings.extend(check_runtime_source_leakage(root))
+    findings.extend(check_plugin_packaging(root))
     findings.extend(check_adapters(root))
 
     stale_terms = args.stale_term

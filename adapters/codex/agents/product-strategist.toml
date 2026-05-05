@@ -1,6 +1,5 @@
 name = "product_strategist"
 description = "Product strategist focused on outcome-first opportunities, value clarity, and worthwhile product direction."
-model = "gpt-5.4"
 model_reasoning_effort = "high"
 sandbox_mode = "workspace-write"
 

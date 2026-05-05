@@ -1,0 +1,5 @@
+interface:
+  display_name: "Spec Create"
+  short_description: "Turn an approved idea into a planning-ready product contract."
+policy:
+  allow_implicit_invocation: true

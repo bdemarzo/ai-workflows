@@ -1,0 +1,5 @@
+interface:
+  display_name: "Final Review"
+  short_description: "Check final fidelity and docs close-out readiness."
+policy:
+  allow_implicit_invocation: true

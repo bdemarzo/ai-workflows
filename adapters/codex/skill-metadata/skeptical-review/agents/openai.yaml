@@ -1,0 +1,5 @@
+interface:
+  display_name: "Skeptical Review"
+  short_description: "Pressure-test an artifact or decision outside the formal workflow."
+policy:
+  allow_implicit_invocation: true

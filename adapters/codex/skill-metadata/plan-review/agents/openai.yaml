@@ -1,0 +1,5 @@
+interface:
+  display_name: "Plan Review"
+  short_description: "Review the implementation plan before engineering execution."
+policy:
+  allow_implicit_invocation: true

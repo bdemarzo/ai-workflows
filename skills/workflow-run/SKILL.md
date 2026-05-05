@@ -20,6 +20,8 @@ Use [assets/run-template.md](./assets/run-template.md) as the default `run.md` s
 
 Read [references/run-ledger.md](./references/run-ledger.md) only when creating or updating `run.md`, resuming a workflow, resolving a user gate, or handling a reroute/remediation loop.
 
+Read [references/operator-recovery.md](./references/operator-recovery.md) only when an official operator appears stalled, blocked, or too slow to hand off.
+
 This skill is the orchestrator. It stays in the active session, asks clarifying questions, delegates work to subagents, consolidates outputs, and asks the user when it is time to proceed.
 
 ## Core Model
@@ -56,6 +58,7 @@ Canonical phase order:
 Requirements:
 - derive one canonical `slug` from the starting prompt and keep the workflow dossier under `./docs/workflows/{slug}/`
 - treat `./docs/workflows/{slug}/run.md` as the source of truth for workflow state, artifact paths, role bindings, approvals, blockers, and resume context
+- when Codex `/goal` or a thread goal feature is available, it may mirror the current workflow slug, phase, and gate, but repo markdown artifacts remain authoritative
 - start `run.md` with the exact H1 `# Run - {slug}`
 - keep `run.md` as a compact restart ledger, not a chronology, validation log, or implementation journal
 - do not add `Validation Evidence` to `run.md`; point to `plan.md`, `execution.md`, or review artifacts instead
@@ -106,18 +109,7 @@ Reviewer-count rule:
 - present one concise start confirmation before the first stage begins
 - do not begin `idea-create` until the user confirms the startup summary
 
-Use a plain-language startup confirmation such as:
-- `Here is how I will run this workflow:`
-- `- Workflow ask: Build a lightweight internal release notes tool for product and engineering teams.`
-- `- Canonical slug: release-notes-tool`
-- `- Orchestrator: active session`
-- `- Bound product strategist persona: product_strategist`
-- `- Idea operator: Product Strategist`
-- `- Spec operator: Product Manager`
-- `- Plan operator: Software Architect`
-- `- Implementation operator: Software Engineer`
-- `- User approvals required after idea, spec, plan, implementation review, and close-out`
-- `Reply 'start' to begin, or tell me what to change.`
+The startup confirmation should name the workflow ask, slug, orchestrator, resolved core operators, required gates, and ask the user to reply `start` or provide changes.
 
 ## Grounding And Clarification
 
@@ -128,6 +120,7 @@ Use a plain-language startup confirmation such as:
 - before each stage transition, re-read `run.md` and the source artifacts for the next stage
 - after each user gate, reroute, or remediation loop, explicitly re-ground on the current markdown artifacts before making the next stage decision
 - if chat context conflicts with repo markdown artifacts, prefer the artifacts and record the discrepancy in `run.md`
+- if a Codex thread goal conflicts with repo markdown artifacts, update or ignore the thread goal and continue from the artifacts
 - do not carry accepted decisions, constraints, or clarifications forward as chat-only context; write them into `run.md` or the relevant source artifact before relying on them
 - do not duplicate the same accepted decision across every artifact; write it to the artifact that owns it and point other artifacts to that source when needed
 - fold accepted review outcomes into the owning source artifact as current truth; remove superseded alternatives instead of appending revision history
@@ -155,21 +148,10 @@ Use a plain-language startup confirmation such as:
 
 ## Operator Progress Checks
 
-Use this protocol when the orchestrator suspects an official operator subagent is stalled, blocked, or taking materially longer than expected, especially during `implement-plan`.
-
-- before reclaiming, replacing, or aborting an official operator, send that operator a bounded progress check
-- ask for current task/file, completed work, active blocker if any, expected time to handoff, and whether a partial handoff is available
-- if the runtime supports a non-interrupting status message, prefer it first; use an interrupting status check only when the orchestrator is otherwise blocked or cleanup is likely
-- if the operator reports credible progress and no material blocker, continue waiting for a reasonable period, then check again if needed
-- if the operator appears stalled, blocked, unresponsive after the progress check window, or unable to provide a useful handoff, prompt the user before changing ownership
-- the user prompt must offer these choices:
-  - continue waiting and check again after a reasonable period
-  - abort the subagent, clean up, and spawn a new official operator to take over
-  - abort the subagent, clean up, and have the orchestrator take over directly
-  - something else, supplied by the user
-- do not silently convert an official operator task into orchestrator-owned work unless the user explicitly selects that fallback
-- record the progress check, response or timeout, user decision, cleanup performed, and any operator substitution or orchestrator takeover in `run.md`
-- if implementation has begun or ownership changes during implementation, record changed areas, partial handoff, validation state, and deviations in `execution.md` when present or when creating it is warranted
+- before reclaiming, replacing, or aborting an official operator, read [references/operator-recovery.md](./references/operator-recovery.md)
+- ask the operator for status, partial handoff, blockers, and expected time to completion
+- ask the user before changing ownership unless they already gave explicit direction
+- record the recovery decision and evidence location in `run.md`; use `execution.md` for implementation handoff or validation state when relevant
 
 ## Execution Loop
 

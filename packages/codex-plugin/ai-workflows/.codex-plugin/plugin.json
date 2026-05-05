@@ -1,0 +1,18 @@
+{
+  "name": "ai-workflows",
+  "version": "0.1.0",
+  "description": "Portable workflow skills for guided product and engineering work in Codex.",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "AI Workflows",
+    "shortDescription": "Guided idea, spec, plan, implementation, review, and close-out workflows.",
+    "longDescription": "A portable workflow package that coordinates the active Codex session as orchestrator with specialized subagents as operators and reviewers.",
+    "developerName": "BDCF",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "defaultPrompt": [
+      "Use workflow-run to guide this idea through idea, spec, plan, implementation, reviews, and docs close-out.",
+      "Use skeptical-review to pressure-test this workflow artifact."
+    ]
+  }
+}

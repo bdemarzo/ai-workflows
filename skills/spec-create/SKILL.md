@@ -9,7 +9,7 @@ Use this skill as the `Product Manager` operator playbook.
 
 The operator owns drafting and updating `./docs/workflows/{slug}/spec.md`.
 
-Use [assets/template.md](./assets/template.md) as the default output skeleton when creating a new artifact. Adapt sections as needed, but preserve the slugged title format.
+Use [assets/template.md](./assets/template.md) as the default output skeleton when creating a new artifact. Adapt sections as needed, preserve the slugged title format, and omit any section that does not carry a contract decision, product rule, acceptance expectation, or material uncertainty.
 
 Write a functional product contract, not an execution plan.
 
@@ -30,10 +30,7 @@ Requirements:
 - avoid copying idea rationale into the spec when a short source link or summary is enough
 - link back to the source idea artifact path when the spec was created from one
 - if a workflow split created this dossier, explain that relationship in the spec body
-- include local tracking with:
-  - `Source Idea`
-  - `Status`
-  - `Open Questions`
+- include local tracking only when it carries signal; `Source Idea` and `Status` should stay visible, but `Open Questions` is optional
 - incorporate accepted review outcomes into the spec so `spec.md` remains the current contract
 - replace superseded wording when updating an existing artifact; review rounds preserve the decision history
 - keep the spec as the source of truth for user-visible behavior, scope, and correctness
@@ -60,6 +57,8 @@ Before finalizing `spec.md`, perform a scope check:
 - convert prematurely specific implementation detail into:
   - a product-facing constraint or requirement if it truly affects user expectations, privacy, or correctness, or
   - an `Open Questions` item to be decided in planning
+- delete optional sections that contain only generic background, duplicated rationale, placeholders, or weak `None` / `TBD` style content
+- merge overlapping bullets so each retained line changes the user-visible contract, acceptance behavior, or next planning decision
 - compress repeated examples, requirement restatements, or rationale when one clear statement is sufficient
 - keep acceptance criteria observable but compact; do not duplicate every functional requirement as a second full list unless that improves planning safety
 

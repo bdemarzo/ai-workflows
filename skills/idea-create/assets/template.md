@@ -1,34 +1,18 @@
 # Idea - {slug}
 
-## Purpose / Big Picture
-[One short outcome-first paragraph: what changes for the user, why it matters, and how value would be observed.]
+## Outcome
+[One short outcome-first paragraph: what changes, for whom, why it matters, and how value would be observed.]
 
-## Context And Orientation
-[Optional. Add only context a later reader needs to understand the current idea.]
+## Direction
+- [Core user problem or opportunity.]
+- [High-level product direction worth exploring.]
+- [Primary user or business value signal.]
 
 ## Source Context
-- [Optional. Prompt, request, upstream artifact, or accepted feedback that materially shaped the current idea.]
+- [Prompt, upstream artifact, or accepted feedback that materially shaped the current idea.]
 
-## User Problem Or Opportunity
-- [Core user problem or opportunity.]
-
-## Proposed Direction
-- [High-level product direction worth exploring. Do not define detailed behavior, routes, data models, or implementation steps here.]
-
-## Expected Value
-- [Primary user or business value.]
-
-## Success Signals Or Evidence Of Value
-- [High-level signs the idea is working.]
-
-## Tradeoffs And Risks
-- [Meaningful tradeoffs or reasons this may not be worth doing.]
+## Risks / Questions
+- [Only material uncertainty, tradeoff, or reason not to proceed.]
 
 ## Status
-- [Draft | In review | Approved for spec | Rejected]
-
-## Open Questions
-- [Intentional uncertainty to review or defer. Product-contract questions move to spec; implementation questions move to plan.]
-
-## Reasons Not To Do This
-- [Short, direct reasons to kill, narrow, or defer the idea.]
+[Draft | In review | Approved for spec | Rejected]

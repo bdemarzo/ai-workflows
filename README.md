@@ -113,6 +113,8 @@ Source artifacts use slugged H1 titles:
 
 The repo markdown artifacts must be sufficient for another operator or orchestrator to resume without chat history. Accepted decisions and review outcomes should be folded into the owning source artifact as the official current state before later work depends on them. Do not preserve stale alternatives, dated revision history, or superseded rationale in `idea.md`, `spec.md`, or `plan.md`; that history belongs in review rounds, `run.md` decision pointers, or `execution.md` evidence when relevant.
 
+Source artifacts should be decision-complete, not explanation-complete. Omit any section that does not carry a current decision, material uncertainty, validation expectation, recovery note, or blocker. Before saving `idea.md`, `spec.md`, or `plan.md`, delete placeholder or `None` / `TBD` filler, merge overlapping bullets, remove repeated rationale from prior artifacts, and keep only the shortest context needed for the next human or operator decision.
+
 ## Stalled Operator Recovery
 
 When an official operator subagent appears stalled, blocked, or materially slower than expected, the orchestrator first asks the subagent for a bounded progress report. If the operator is unresponsive or cannot provide a useful handoff, the orchestrator asks the user whether to wait and check again, replace the operator, take over directly, or follow custom direction. The decision, cleanup, substitution, takeover, and implementation evidence state are recorded in `run.md` and `execution.md` when applicable.
@@ -265,7 +267,7 @@ Check a workflow dossier:
 python scripts/check_workflow_artifacts.py --root . --dossier C:\path\to\repo\docs\workflows\my-slug --stale-term per-band
 ```
 
-The checker fails on structural errors such as missing skill files, mismatched skill names, invalid plugin templates, adapter registries that reference missing agents, Copilot custom agents with missing frontmatter, or invalid artifact H1s. It reports warnings for source-artifact history sections, forbidden `run.md` sections, missing latest-review references, and configured stale terms.
+The checker fails on structural errors such as missing skill files, mismatched skill names, invalid plugin templates, adapter registries that reference missing agents, Copilot custom agents with missing frontmatter, or invalid artifact H1s. It reports warnings for source-artifact history sections, forbidden `run.md` sections, missing latest-review references, template placeholders, excessive section counts, weak empty/TBD-style sections, and configured stale terms.
 
 ## Repository Layout
 

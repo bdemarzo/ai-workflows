@@ -132,10 +132,11 @@ The startup confirmation should name the workflow ask, slug, orchestrator, resol
 - delegate with artifact paths instead of pasted artifact contents whenever files are available in the workspace
 - do not include long chat-history summaries when `run.md` and source artifacts contain the needed context
 - ask subagents to return only decisions, findings, edits made, and unresolved blockers
-- prohibit long restatements of artifacts, chat history, or reviewer transcripts
+- prohibit long restatements of artifacts, chat history, reviewer transcripts, or rationale already captured in source artifacts
 - for focused re-reviews, ask reviewers to inspect only the prior finding, current artifact, and changed area
 - keep saved review rounds compact unless material findings require more
 - keep source artifacts concise by omitting empty sections, stale alternatives, repeated rationale, and history that belongs in review rounds
+- before saving `idea.md`, `spec.md`, or `plan.md`, run a compression pass: delete sections with no decision signal, merge duplicate bullets, remove placeholders and `None` / `TBD` filler, and keep only the shortest rationale needed for the next human decision
 - idea, spec, and plan reviews should normally inspect only `run.md` plus the relevant workflow artifacts
 - codebase inspection should be targeted and usually reserved for implementation, implementation-review, final-review fidelity checks, or a specific blocking question
 - generic helper agents may be used only for narrow blocking questions with named paths, symbols, or terms

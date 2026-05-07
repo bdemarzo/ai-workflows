@@ -64,6 +64,7 @@ Compression rule:
 - preserve only the disagreements that materially affect the recommendation
 - keep each reviewer synopsis brief and high-signal rather than turning the artifact into a transcript
 - keep reviewer inputs compact: ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
+- ask reviewers to return only decisions, consequential findings, required artifact edits, and unresolved blockers; do not restate the artifact
 - keep each reviewer within their assigned lens and avoid duplicating another lens unless the disagreement changes the recommendation
 - if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding rather than creating a separate restartability section
 - for focused re-reviews, ask reviewers to inspect only the prior finding, current artifact, and changed area

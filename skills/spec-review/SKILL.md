@@ -48,6 +48,7 @@ Focus on:
 
 Reviewer input:
 - ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
+- ask reviewers to return only decisions, consequential findings, required artifact edits, and unresolved blockers; do not restate the artifact
 - merge overlapping findings, keep synopses brief, and preserve only disagreements that materially affect the recommendation
 - if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding
 - for focused re-reviews, ask reviewers to inspect only the prior finding, current artifact, and changed area

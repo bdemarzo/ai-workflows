@@ -9,7 +9,7 @@ Use this skill as the `Product Strategist` operator playbook.
 
 The operator owns drafting and updating `./docs/workflows/{slug}/idea.md`.
 
-Use [assets/template.md](./assets/template.md) as the default output skeleton when creating a new artifact. Adapt sections as needed, but preserve the slugged title format.
+Use [assets/template.md](./assets/template.md) as the default output skeleton when creating a new artifact. Adapt sections as needed, preserve the slugged title format, and omit any section that does not carry a decision or material uncertainty.
 
 Input can be:
 - a rough prompt or theme
@@ -26,10 +26,7 @@ Requirements:
 - keep the artifact self-contained enough that a later reader can understand the opportunity without prior thread context
 - open with outcome-first framing that states what changes for the user, why it matters, and how value would be observed if the idea succeeds
 - keep the permanent artifact concise and skimmable by default
-- include local tracking with:
-  - `Source Context` when relevant
-  - `Status`
-  - `Open Questions`
+- include local tracking only when it carries signal; `Status` should stay visible, but `Source Context` and `Open Questions` are optional
 - fold accepted user or review feedback into the artifact instead of leaving it chat-only
 - replace superseded wording when updating an existing artifact; source artifacts should show current state, not revision history
 - include lightweight success signals without turning the idea into a metric plan
@@ -73,6 +70,8 @@ Before finalizing `idea.md`, perform a scope check:
 - convert prematurely specific downstream detail into:
   - a higher-level product direction statement, or
   - an `Open Questions` entry for later stages
+- delete optional sections that contain only generic background, duplicated rationale, placeholders, or weak `None` / `TBD` style content
+- merge overlapping bullets so each retained line changes the reader's decision or next action
 - compress repeated rationale, examples, or risk descriptions when they do not materially change the decision
 - when revising after later-stage decisions, remove stale idea-level wording that now contradicts the accepted spec or delivered behavior
 

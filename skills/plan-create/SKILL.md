@@ -9,7 +9,7 @@ Use this skill as the `Software Architect` operator playbook.
 
 The operator owns drafting and updating `./docs/workflows/{slug}/plan.md`.
 
-Use [assets/template.md](./assets/template.md) as the default output skeleton when creating a new artifact. Adapt sections as needed, but preserve the slugged title format.
+Use [assets/template.md](./assets/template.md) as the default output skeleton when creating a new artifact. Adapt sections as needed, preserve the slugged title format, and omit any section that does not carry an implementation decision, sequencing constraint, validation expectation, recovery note, dependency, or material blocker.
 
 Requirements:
 - derive `slug` from the workflow dossier or source spec
@@ -62,7 +62,7 @@ Style rule:
 Require these expectations:
 - the plan must be restartable from `plan.md` plus the repository alone
 - treat restartability as a hard requirement
-- `Implementation Decisions`, `Current Plan`, `Validation and Acceptance`, and `Idempotence And Recovery` are mandatory current-state sections
+- `Approach`, `Steps`, `Validation`, and `Status` are expected current-state sections; add recovery, interface, dependency, or open-question sections only when they carry non-obvious execution signal
 - validation should include concrete commands or checks with expected observable outcomes when the project permits them
 - accepted review outcomes must be incorporated into the plan before implementation begins
 - do not append a long implementation journal to the plan; summarize progress and point to `execution.md`
@@ -76,5 +76,11 @@ Do not:
 - introduce architecture that is primarily justified by hypothetical future needs
 - duplicate the same control point across multiple layers unless the redundancy is intentional and clearly justified
 - repeat spec acceptance criteria only when the repetition materially reduces implementation risk
+
+Before finalizing `plan.md`, perform a compression pass:
+- delete optional sections that contain only generic background, duplicated rationale, placeholders, or weak `None` / `TBD` style content
+- merge overlapping bullets so each retained line changes the engineering decision, sequence, validation, recovery path, or blocker list
+- replace broad option catalogs with the chosen approach unless an option is intentionally unresolved
+- move chronology, checks already run, remediation history, and deviations to `execution.md` when implementation has started
 
 The output of this stage should be ready for `plan-review`.

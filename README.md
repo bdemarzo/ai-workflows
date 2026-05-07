@@ -153,17 +153,19 @@ Codex adapter source:
 
 Codex project-scope install destinations:
 
-- target `.agents/skills/`: default repo-local Codex skill install location
-- target `.codex/agents/*.toml`: persona agent definitions
-- target `.codex/role-registry.toml` and `.codex/config.toml`: runtime binding/config
+- target `.agents/skills/ai-workflows-*`: default repo-local Codex skill install location
+- target `.codex/agents/ai-workflows-*.toml`: persona agent definitions
+- target `.codex/ai-workflows/role-registry.toml` and `.codex/ai-workflows/config.toml`: runtime binding/config
+- target `.codex/ai-workflows/manifest.json`: managed install manifest for upgrade and uninstall
 
 Codex user-scope install destinations:
 
-- user `~/.agents/skills/`: default user Codex skill install location
-- user `~/.codex/agents/*.toml`: persona agent definitions
-- user `~/.codex/role-registry.toml` and `~/.codex/config.toml`: runtime binding/config
+- user `~/.agents/skills/ai-workflows-*`: default user Codex skill install location
+- user `~/.codex/agents/ai-workflows-*.toml`: persona agent definitions
+- user `~/.codex/ai-workflows/role-registry.toml` and `~/.codex/ai-workflows/config.toml`: runtime binding/config
+- user `~/.codex/ai-workflows/manifest.json`: managed install manifest for upgrade and uninstall
 
-Official Codex workflow delegation must use the concrete `agent` value resolved from `.codex/role-registry.toml`. Generic helpers such as `worker`, `explorer`, or `default` may support sidecar discovery, but prompt text alone does not make them official workflow operators or reviewers.
+Official Codex workflow delegation must use the concrete `agent` value resolved from `.codex/ai-workflows/role-registry.toml`. Generic helpers such as `worker`, `explorer`, or `default` may support sidecar discovery, but prompt text alone does not make them official workflow operators or reviewers.
 
 Codex persona agents generally inherit the current session model so newer models such as GPT-5.5 are used when selected and available. The documentation maintainer remains pinned to a smaller model for concise docs work.
 
@@ -189,17 +191,19 @@ Copilot adapter source:
 
 Copilot project-scope install destinations:
 
-- target `.github/skills/`: installed copies of canonical skill packages from `skills/`
-- target `.github/agents/*.agent.md`: concrete Copilot custom agent profiles
+- target `.github/skills/ai-workflows-*`: installed copies of canonical skill packages from `skills/`
+- target `.github/agents/ai-workflows-*.agent.md`: concrete Copilot custom agent profiles
 - target `.github/ai-workflows/role-registry.toml` and `.github/ai-workflows/config.toml`: project runtime binding/config
-- target `.github/copilot-instructions.md`: repository instructions
+- target `.github/ai-workflows/copilot-instructions.md`: library Copilot instructions for teams to include or inspect
+- target `.github/ai-workflows/manifest.json`: managed install manifest for upgrade and uninstall
 
 Copilot user-scope install destinations:
 
-- user `~/.github/skills/`: installed copies of canonical skill packages from `skills/`
-- user `~/.github/agents/*.agent.md`: concrete Copilot custom agent profiles
+- user `~/.github/skills/ai-workflows-*`: installed copies of canonical skill packages from `skills/`
+- user `~/.github/agents/ai-workflows-*.agent.md`: concrete Copilot custom agent profiles
 - user `~/.github/ai-workflows/role-registry.toml` and `~/.github/ai-workflows/config.toml`: runtime binding/config
-- user `~/.github/copilot-instructions.md`: user-profile instructions
+- user `~/.github/ai-workflows/copilot-instructions.md`: library Copilot instructions for teams to include or inspect
+- user `~/.github/ai-workflows/manifest.json`: managed install manifest for upgrade and uninstall
 
 Official Copilot workflow delegation must use the concrete `agent` value resolved from `.github/ai-workflows/role-registry.toml`. The Copilot adapter defaults to project-local skill and custom-agent locations so it can travel with the target repository.
 
@@ -218,16 +222,15 @@ python C:\path\to\ai-workflows\install.py --runtime copilot
 
 For Codex, this installs:
 
-- skill packages into `.agents/skills/`
-- persona agents into `.codex/agents/`
-- role registry and runtime config into the target repo's `.codex/`
+- namespaced skill packages into `.agents/skills/ai-workflows-*`
+- namespaced persona agents into `.codex/agents/ai-workflows-*`
+- role registry, runtime config, and manifest into `.codex/ai-workflows/`
 
 For Copilot, this installs:
 
-- skill packages into `.github/skills/`
-- custom agent profiles into `.github/agents/`
-- role registry and runtime config into `.github/ai-workflows/`
-- repository instructions into `.github/copilot-instructions.md`
+- namespaced skill packages into `.github/skills/ai-workflows-*`
+- namespaced custom agent profiles into `.github/agents/ai-workflows-*`
+- role registry, runtime config, library instructions, and manifest into `.github/ai-workflows/`
 
 Useful installer options:
 
@@ -238,16 +241,21 @@ Useful installer options:
 - `--dry-run`: show planned changes without writing files
 - `--force`: overwrite existing managed files
 - `--legacy-codex-skills`: for Codex only, install skills to `.codex/skills` for project scope or `~/.codex/skills` for user scope
+- `--namespace <name>`: prefix deployed skills and agents; defaults to `ai-workflows`
+- `--legacy-names`: preserve the older flat deployed names instead of namespace-prefixed names
+- `--uninstall`: remove files recorded in the selected runtime/scope manifest
 - `--no-adapter`: install only skills
 - `--no-skills`: install only the adapter
 - `--target <path>`: install into a specific existing directory
+
+By default, installed files are namespace-prefixed so they are easy to distinguish from project-local skills and agents. The installer rewrites deployed skill frontmatter, deployed agent names, and the installed role registry so official bindings point at the namespaced agents. It also writes a manifest under the runtime's `ai-workflows` directory. On later installs, files listed in the manifest are treated as managed and can be upgraded without `--force`; unrelated files are skipped unless `--force` is provided. `--uninstall` removes only paths recorded in the manifest.
 
 Manual install is also supported:
 
 | Runtime | Project scope | User scope |
 | --- | --- | --- |
-| Codex | copy `skills/` to `.agents/skills/`, overlay `adapters/codex/skill-metadata/`, copy agents/config/registry into `.codex/` | same layout under `~/.agents/skills/` and `~/.codex/` |
-| Copilot | copy skills, agents, config, registry, and instructions into `.github/` | same layout under `~/.github/` |
+| Codex | copy skills as `.agents/skills/ai-workflows-*`, overlay `adapters/codex/skill-metadata/`, copy agents as `.codex/agents/ai-workflows-*`, and copy config/registry/manifest into `.codex/ai-workflows/` | same layout under `~/.agents/skills/` and `~/.codex/` |
+| Copilot | copy skills as `.github/skills/ai-workflows-*`, agents as `.github/agents/ai-workflows-*`, and config/registry/instructions/manifest into `.github/ai-workflows/` | same layout under `~/.github/` |
 
 For legacy Codex skill discovery, use `.codex/skills/` under the selected scope root instead of `.agents/skills/`.
 

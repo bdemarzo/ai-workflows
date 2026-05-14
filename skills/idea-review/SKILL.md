@@ -42,7 +42,16 @@ Focus on:
 - whether success signals are observable enough to justify advancing
 - whether the markdown artifacts in the repo are sufficient for a later operator to continue to `spec-create` without chat history
 - major UX / workflow risks when relevant
+- for enhancement work, whether the artifact distinguishes current behavior, desired change, and behavior to preserve
+- for enhancement work, whether the idea has drifted into describing or redesigning the whole existing feature
 - the strongest reasons not to advance yet
+
+Treat these as findings when present:
+- enhancement work is framed as greenfield functionality
+- existing functionality is described as if it does not already exist
+- current behavior is asserted without user confirmation, artifact evidence, or targeted discovery
+- desired delta and preserved behavior are mixed together
+- the next stage could not tell what actually changes for the user
 
 Write the review artifact with sections like:
 - reviewed artifact

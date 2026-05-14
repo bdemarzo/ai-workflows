@@ -50,7 +50,7 @@ FORBIDDEN_SOURCE_HEADINGS = {
 
 SOURCE_HEADING_LIMITS = {
     "idea.md": 6,
-    "spec.md": 8,
+    "spec.md": 9,
     "plan.md": 8,
 }
 

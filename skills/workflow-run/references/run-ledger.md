@@ -12,6 +12,7 @@ Maintain these sections:
 - `### Workflow Guidelines`
 - `## Artifact Map`
 - `## Progress`
+- `## Baseline / Delta`
 - `## Phase Ownership`
 - `## Stage Assessments`
 - `## Decision Log`
@@ -32,6 +33,8 @@ After startup confirmation, record:
 - concrete persona-to-agent bindings used
 - substitutions or fallbacks used
 - initial user constraints and clarifications
+- work type classification
+- baseline/delta grounding when the work changes existing behavior
 - confirmation that the user approved the guided workflow start
 
 Before each create stage, record:
@@ -39,6 +42,7 @@ Before each create stage, record:
 - current reviewer roster
 - current phase objective
 - artifact-based restatement of current truth used to start the phase
+- for enhancement, bug-fix, and refactor work, the current behavior, desired delta, preserved behavior, and evidence or unknowns
 
 After each create stage, update:
 - `Artifact Map`
@@ -92,6 +96,7 @@ After any material clarification or blocker, record:
 - `Workflow Guidelines`: record the current orchestrator, current phase, workflow status, current gate decision needed when paused, and important constraints.
 - `Artifact Map`: list the current source artifact paths and latest review-round paths in a compact table.
 - `Progress`: use a compact current-state table, not a dated checklist.
+- `Baseline / Delta`: for work on existing functionality, record the affected existing surface, current behavior, requested change, preserved behavior, and evidence or unknowns; for greenfield work, keep this section as `Not applicable`.
 - `Phase Ownership`: record the current operator, official reviewer roster, and sidecar/helper agents separately.
 - `Phase Ownership`: when an operator is replaced or the orchestrator takes over, record the prior operator, replacement or takeover, and reason under substitutions or fallbacks.
 - `Stage Assessments`: keep only the latest stage assessment plus unresolved prior warnings that still matter.

@@ -19,6 +19,7 @@ Requirements:
 - link to the source spec artifact path in the plan body
 - keep the plan self-contained enough that a later engineer can resume from the plan plus the repository without needing `run.md`
 - make clear near the top what changes for the user or system and how successful delivery will be observed
+- for enhancement work, preserve the spec's current/changed/preserved behavior split and plan the smallest credible change against the existing implementation
 - keep the permanent artifact concise and skimmable by default
 - treat `./docs/workflows/{slug}/plan.md` as the authoritative execution plan for the workflow
 - repo-local `PLANS.md` may be read as optional project context, but it must not replace this workflow's plan structure, stage contract, or execution control unless the user explicitly asks for repo-native planning mode
@@ -48,6 +49,7 @@ Decision rule:
 Architecture standard:
 - prefer the simplest plan that can credibly satisfy the approved spec
 - reuse existing repository patterns, abstractions, and infrastructure before introducing new ones
+- for enhancement work, start from the existing implementation path and justify any replacement or redesign against the approved delta
 - justify each non-trivial layer, service, dependency, job, external tool, or abstraction in present-tense terms
 - cut any proposed component that cannot be justified by the current spec
 - do not add speculative extensibility, future-proofing layers, or optional platformization unless the current spec clearly requires them
@@ -74,6 +76,7 @@ Do not:
 - silently repair product-contract gaps that should have been clarified in the spec
 - expand straightforward decisions into essay-style rationale unless the tradeoff is non-obvious or high risk
 - introduce architecture that is primarily justified by hypothetical future needs
+- turn an enhancement spec into a broad rebuild of existing functionality unless the spec explicitly requires that
 - duplicate the same control point across multiple layers unless the redundancy is intentional and clearly justified
 - repeat spec acceptance criteria only when the repetition materially reduces implementation risk
 

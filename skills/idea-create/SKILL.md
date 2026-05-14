@@ -14,6 +14,7 @@ Use [assets/template.md](./assets/template.md) as the default output skeleton wh
 Input can be:
 - a rough prompt or theme
 - a specific product question
+- a requested enhancement to an existing product surface or workflow
 - an existing idea file at `./docs/workflows/{slug}/idea.md`
 
 Requirements:
@@ -25,6 +26,7 @@ Requirements:
 - keep the dossier slug stable unless the workflow intentionally splits into a new dossier
 - keep the artifact self-contained enough that a later reader can understand the opportunity without prior thread context
 - open with outcome-first framing that states what changes for the user, why it matters, and how value would be observed if the idea succeeds
+- when the work enhances existing behavior, make the idea delta-first: state what exists today, what should change, what must be preserved, and why the change is worth doing
 - keep the permanent artifact concise and skimmable by default
 - include local tracking only when it carries signal; `Status` should stay visible, but `Source Context` and `Open Questions` are optional
 - fold accepted user or review feedback into the artifact instead of leaving it chat-only
@@ -57,10 +59,13 @@ Focus on:
 - how success would be recognized at a high level
 - why the idea is worth pursuing or rejecting
 - open questions that should be reviewed next
+- for enhancement work, the gap between current behavior and the desired outcome
 
 Do not:
 - write a functional spec
 - write an implementation plan
+- describe existing functionality as if it is new
+- broaden an enhancement request into a full feature redesign unless the user explicitly asked for that
 - settle engineering details that belong later
 - include detailed acceptance criteria, route inventories, API contracts, data models, migration mechanics, file/module breakdowns, or task sequencing
 - repeat the same framing in multiple sections when one short summary is enough
@@ -73,6 +78,7 @@ Before finalizing `idea.md`, perform a scope check:
 - delete optional sections that contain only generic background, duplicated rationale, placeholders, or weak `None` / `TBD` style content
 - merge overlapping bullets so each retained line changes the reader's decision or next action
 - compress repeated rationale, examples, or risk descriptions when they do not materially change the decision
+- for enhancement work, remove abstract feature descriptions that do not distinguish current behavior from the desired change
 - when revising after later-stage decisions, remove stale idea-level wording that now contradicts the accepted spec or delivered behavior
 
 The output of this stage should be ready for `idea-review`.

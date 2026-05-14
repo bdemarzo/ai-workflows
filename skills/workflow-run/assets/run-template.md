@@ -5,6 +5,7 @@
 
 ### Workflow Guidelines
 - Orchestrator: [active session or concrete orchestrator]
+- Work type: [new capability | enhancement to existing behavior | bug fix | refactor / technical change | docs / process]
 - Current phase: [phase]
 - Workflow status: [in-progress | awaiting-user-approval | awaiting-clarification | blocked | complete]
 - Current gate decision needed: [exact approval or revision decision]
@@ -31,6 +32,13 @@
 | Latest completed stage | [stage or none] |
 | Next action | [exact next action] |
 | Gate needed | [approval / clarification / none] |
+
+## Baseline / Delta
+- Existing surface or workflow: [Required for enhancement, bug-fix, and refactor work.]
+- Current behavior: [Observed behavior, supplied baseline, or unknown.]
+- Desired change: [Exact delta requested.]
+- Preserve: [Existing behavior that must not regress.]
+- Evidence / unknowns: [Artifact, code, doc, test, route, or user confirmation used to establish baseline.]
 
 ## Phase Ownership
 - Current operator: [Persona -> Agent]

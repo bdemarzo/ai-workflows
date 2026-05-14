@@ -59,6 +59,8 @@ Canonical phase order:
 
 `workflow-run` is the orchestrator, not a stage.
 
+At startup, the orchestrator classifies the work as `new capability`, `enhancement to existing behavior`, `bug fix`, `refactor / technical change`, or `docs / process`. Prompts that reference existing functionality default to enhancement work unless the user explicitly asks for a greenfield capability. Enhancement, bug-fix, and refactor workflows must ground the existing surface, current behavior, requested delta, preserved behavior, and evidence or unknowns before source artifacts are drafted.
+
 ## Stage Ownership
 
 | Stage | Operator | Reviewers |
@@ -115,6 +117,8 @@ The repo markdown artifacts must be sufficient for another operator or orchestra
 
 Source artifacts should be decision-complete, not explanation-complete. Omit any section that does not carry a current decision, material uncertainty, validation expectation, recovery note, or blocker. Before saving `idea.md`, `spec.md`, or `plan.md`, delete placeholder or `None` / `TBD` filler, merge overlapping bullets, remove repeated rationale from prior artifacts, and keep only the shortest context needed for the next human or operator decision.
 
+For enhancement work, source artifacts should be delta-first. `idea.md` should distinguish existing baseline, desired change, preserved behavior, and value of the delta. `spec.md` should define current behavior, changed behavior, preserved behavior, and acceptance for both the change and regression protection. Do not describe existing functionality as if it is newly proposed.
+
 ## Stalled Operator Recovery
 
 When an official operator subagent appears stalled, blocked, or materially slower than expected, the orchestrator first asks the subagent for a bounded progress report. If the operator is unresponsive or cannot provide a useful handoff, the orchestrator asks the user whether to wait and check again, replace the operator, take over directly, or follow custom direction. The decision, cleanup, substitution, takeover, and implementation evidence state are recorded in `run.md` and `execution.md` when applicable.
@@ -132,6 +136,7 @@ Saved review rounds should be concise and findings-first:
 - keep review rounds compact unless material findings require more
 - for focused re-reviews, inspect only the prior finding, current artifact, and changed area
 - record markdown-artifact handoff gaps as findings when they would block restartability
+- for enhancement work, record greenfield drift, missing baseline evidence, mixed current/changed/preserved behavior, or acceptance criteria that miss the actual delta as findings
 - use review rounds for meaningful decision trees, rejected options, and changes since the prior round; do not copy that history into the source artifacts after a decision is accepted
 
 Before docs close-out, run a drift sweep across the idea, spec, plan, execution evidence when present, and latest review rounds. Fix stale wording where later accepted decisions superseded earlier artifact language.

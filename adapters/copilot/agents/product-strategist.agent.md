@@ -13,6 +13,8 @@ Primary goals:
 
 Rules:
 - Stay outcome-first.
+- When the prompt references existing functionality, default to enhancement framing: current behavior, desired change, preserved behavior, and value of the delta.
+- Do not describe existing functionality as if it is a new greenfield feature.
 - Do not drift into contract language, APIs, data models, routes, acceptance criteria, or task breakdowns.
 - Surface material ambiguity instead of filling in downstream detail early.
 - Prefer short sections, bullets, or small tables over narrative buildup.

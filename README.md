@@ -154,7 +154,7 @@ Codex adapter source:
 Codex project-scope install destinations:
 
 - target `.agents/skills/ai-workflows-*`: default repo-local Codex skill install location
-- target `.codex/agents/ai-workflows-*.toml`: persona agent definitions
+- user `~/.codex/agents/ai-workflows-*.toml`: persona agent definitions required by Codex agent discovery
 - target `.codex/ai-workflows/role-registry.toml` and `.codex/ai-workflows/config.toml`: runtime binding/config
 - target `.codex/ai-workflows/manifest.json`: managed install manifest for upgrade and uninstall
 
@@ -169,7 +169,7 @@ Official Codex workflow delegation must use the concrete `agent` value resolved 
 
 Codex persona agents generally inherit the current session model so newer models such as GPT-5.5 are used when selected and available. The documentation maintainer remains pinned to a smaller model for concise docs work.
 
-Current Codex runtime note: repo-scoped `.codex/agents/*.toml` discovery can vary by surface and version. Project scope remains the default because it keeps the workflow package portable with the target repository. Use `--scope user` when your Codex surface only discovers user-profile agents.
+Current Codex runtime note: Codex agent discovery requires persona agents under `~/.codex/agents`, so the Codex installer always writes agent definitions there. Project scope remains the default for skills, role registry, config, and manifest so the workflow package can still travel with the target repository.
 
 Optional Codex approval review setting:
 
@@ -223,7 +223,7 @@ python C:\path\to\ai-workflows\install.py --runtime copilot
 For Codex, this installs:
 
 - namespaced skill packages into `.agents/skills/ai-workflows-*`
-- namespaced persona agents into `.codex/agents/ai-workflows-*`
+- namespaced persona agents into `~/.codex/agents/ai-workflows-*`
 - role registry, runtime config, and manifest into `.codex/ai-workflows/`
 
 For Copilot, this installs:
@@ -239,7 +239,7 @@ Useful installer options:
 - `--scope project`: install into the target repository; this is the default
 - `--scope user`: install into the current user's profile for the selected runtime
 - `--dry-run`: show planned changes without writing files
-- `--force`: overwrite existing managed files
+- `--force`: compatibility option; installs overwrite ai-workflows target files by default
 - `--legacy-codex-skills`: for Codex only, install skills to `.codex/skills` for project scope or `~/.codex/skills` for user scope
 - `--namespace <name>`: prefix deployed skills and agents; defaults to `ai-workflows`
 - `--legacy-names`: preserve the older flat deployed names instead of namespace-prefixed names
@@ -248,13 +248,13 @@ Useful installer options:
 - `--no-skills`: install only the adapter
 - `--target <path>`: install into a specific existing directory
 
-By default, installed files are namespace-prefixed so they are easy to distinguish from project-local skills and agents. The installer rewrites deployed skill frontmatter, deployed agent names, and the installed role registry so official bindings point at the namespaced agents. It also writes a manifest under the runtime's `ai-workflows` directory. On later installs, files listed in the manifest are treated as managed and can be upgraded without `--force`; unrelated files are skipped unless `--force` is provided. `--uninstall` removes only paths recorded in the manifest.
+By default, installed files are namespace-prefixed so they are easy to distinguish from project-local skills and agents. The installer rewrites deployed skill frontmatter, deployed agent names, and the installed role registry so official bindings point at the namespaced agents. It also writes a manifest under the runtime's `ai-workflows` directory. Later installs overwrite the ai-workflows target files so stale pre-manifest or older managed installs upgrade cleanly. `--uninstall` removes only paths recorded in the manifest. For Codex project-scope installs, the manifest may include absolute managed entries under `~/.codex/agents` because Codex discovers agents from the user profile.
 
 Manual install is also supported:
 
 | Runtime | Project scope | User scope |
 | --- | --- | --- |
-| Codex | copy skills as `.agents/skills/ai-workflows-*`, overlay `adapters/codex/skill-metadata/`, copy agents as `.codex/agents/ai-workflows-*`, and copy config/registry/manifest into `.codex/ai-workflows/` | same layout under `~/.agents/skills/` and `~/.codex/` |
+| Codex | copy skills as `.agents/skills/ai-workflows-*`, overlay `adapters/codex/skill-metadata/`, copy agents as `~/.codex/agents/ai-workflows-*`, and copy config/registry/manifest into `.codex/ai-workflows/` | copy skills under `~/.agents/skills/` and agents/config/registry/manifest under `~/.codex/` |
 | Copilot | copy skills as `.github/skills/ai-workflows-*`, agents as `.github/agents/ai-workflows-*`, and config/registry/instructions/manifest into `.github/ai-workflows/` | same layout under `~/.github/` |
 
 For legacy Codex skill discovery, use `.codex/skills/` under the selected scope root instead of `.agents/skills/`.

@@ -27,7 +27,6 @@ MANAGED_HEADER = "Managed by ai-workflows. Source files live in the ai-workflows
 @dataclass
 class InstallResult:
     installed: List[Path]
-    skipped: List[Path]
     removed: List[Path]
 
 
@@ -60,7 +59,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--force",
         action="store_true",
-        help="Replace existing managed skill and adapter files.",
+        help="Compatibility option. Installs overwrite ai-workflows target files by default.",
     )
     parser.add_argument(
         "--dry-run",
@@ -171,6 +170,24 @@ def manifest_path_for(runtime: str, target_root: Path, args: argparse.Namespace)
     return scope_root / ".github" / LIBRARY_NAME / "manifest.json"
 
 
+def codex_agents_dest() -> Path:
+    return Path.home() / ".codex" / "agents"
+
+
+def uninstall_allowed_roots(runtime: str, target_root: Path, args: argparse.Namespace) -> list[Path]:
+    roots = [scope_root_for(runtime, target_root, args)]
+    if runtime == "codex":
+        roots.append(codex_agents_dest())
+    return roots
+
+
+def uninstall_stop_root(path: Path, allowed_roots: list[Path]) -> Path:
+    for root in sorted((root.resolve() for root in allowed_roots), key=lambda item: len(str(item)), reverse=True):
+        if is_same_or_child(path, root):
+            return root
+    return allowed_roots[0].resolve()
+
+
 def relative_to_scope(path: Path, scope_root: Path) -> str:
     try:
         return path.resolve().relative_to(scope_root.resolve()).as_posix()
@@ -240,11 +257,7 @@ def copy_path(
     previous_managed_paths: set[Path] | None = None,
     transform: Callable[[str], str] | None = None,
 ) -> bool:
-    previous_managed_paths = previous_managed_paths or set()
     if dest.exists():
-        if not force and dest.resolve() not in previous_managed_paths:
-            result.skipped.append(dest)
-            return False
         if dry_run:
             result.installed.append(dest)
             return True
@@ -416,8 +429,9 @@ def install_codex_adapter(
     manifest_entries: list[ManifestEntry],
 ) -> None:
     source_adapter = source_root / CODEX_ADAPTER_ROOT
-    dest_adapter = (Path.home() if args.scope == "user" else target_root) / ".codex"
-    dest_library = dest_adapter / LIBRARY_NAME
+    dest_metadata = (Path.home() if args.scope == "user" else target_root) / ".codex"
+    dest_library = dest_metadata / LIBRARY_NAME
+    dest_agents = codex_agents_dest()
 
     source_agents = source_adapter / "agents"
     if not source_agents.is_dir():
@@ -425,7 +439,7 @@ def install_codex_adapter(
 
     for child in sorted(source_agents.iterdir()):
         source_id = child.stem.replace("-", "_")
-        dest = dest_adapter / "agents" / deployed_agent_file_name(child.name, args)
+        dest = dest_agents / deployed_agent_file_name(child.name, args)
         dest_id = deployed_agent_id(source_id, "codex", args)
         if copy_path(
             child,
@@ -575,19 +589,20 @@ def uninstall_from_manifest(manifest_path: Path, target_root: Path, args: argpar
     if not isinstance(entries, list):
         raise ValueError(f"Invalid manifest entries in: {manifest_path}")
 
+    allowed_roots = uninstall_allowed_roots(args.runtime, target_root, args)
     for entry in sorted(entries, key=lambda item: str(item.get("path", "")), reverse=True):
         if not isinstance(entry, dict) or not isinstance(entry.get("path"), str):
             continue
         path = Path(entry["path"])
         if not path.is_absolute():
             path = scope_root / path
-        if not is_same_or_child(path, scope_root):
-            raise ValueError(f"Refusing to uninstall path outside selected scope: {path}")
+        if not any(is_same_or_child(path, root) for root in allowed_roots):
+            raise ValueError(f"Refusing to uninstall path outside managed roots: {path}")
         if not path.exists():
             continue
         if not args.dry_run:
             remove_destination(path)
-            remove_empty_parents(path, scope_root)
+            remove_empty_parents(path, uninstall_stop_root(path, allowed_roots))
         result.removed.append(path)
 
     if manifest_path.exists():
@@ -599,7 +614,6 @@ def uninstall_from_manifest(manifest_path: Path, target_root: Path, args: argpar
 
 def print_summary(result: InstallResult, dry_run: bool) -> None:
     verb = "Would install" if dry_run else "Installed"
-    skip_verb = "Would skip existing" if dry_run else "Skipped existing"
     remove_verb = "Would remove" if dry_run else "Removed"
 
     print(f"{verb}: {len(result.installed)} item(s)")
@@ -610,12 +624,6 @@ def print_summary(result: InstallResult, dry_run: bool) -> None:
         print(f"{remove_verb}: {len(result.removed)} item(s)")
         for path in result.removed:
             print(f"  - {path}")
-
-    if result.skipped:
-        print(f"{skip_verb}: {len(result.skipped)} item(s)")
-        for path in result.skipped:
-            print(f"  = {path}")
-        print("Use --force to replace skipped unmanaged files.")
 
 
 def main() -> int:
@@ -651,7 +659,7 @@ def main() -> int:
                 "pass --target, use --scope user, or use --dry-run to inspect planned changes."
             )
 
-        result = InstallResult(installed=[], skipped=[], removed=[])
+        result = InstallResult(installed=[], removed=[])
         manifest_path = manifest_path_for(args.runtime, target_root, args)
 
         if args.uninstall:

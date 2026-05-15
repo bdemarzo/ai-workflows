@@ -7,10 +7,11 @@
 [One short paragraph: implementation shape, main decision, and why it fits the approved spec.]
 
 ## Steps
-- [Decision-complete engineering step. Avoid listing every obvious file edit.]
+- Milestone 1: [Concrete code change that leaves the codebase buildable and testable.]
+  - Check: `[build/test/check command]` -> [Expected result before the next milestone begins.]
 
 ## Validation
-- [Concrete command or check when available] -> [Expected observable result]
+- Final: `[complete validation command set]` -> [Expected observable result.]
 
 ## Recovery
 - [Only if rollback, resume, rerun, or idempotence is non-obvious.]

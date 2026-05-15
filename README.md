@@ -109,7 +109,7 @@ Source artifacts use slugged H1 titles:
 - `run.md` is the compact restart ledger. Use current-state summaries instead of chronology, and do not add `Validation Evidence`.
 - `idea.md` owns the current opportunity, value, risks, and intentionally deferred questions.
 - `spec.md` owns the current user-visible contract, acceptance behavior, privacy/business rules, and scope boundaries.
-- `plan.md` owns the current implementation decisions, sequencing, interfaces, validation plan, idempotence, and recovery.
+- `plan.md` owns the current implementation decisions, sequencing, interfaces, validation plan, idempotence, and recovery. Each implementation step should be a concrete milestone that leaves the codebase buildable and testable before the next step begins.
 - `execution.md` owns concise implementation evidence, checks run, changed areas, remediation history, and deviations during multi-step work.
 - Review rounds own reviewer findings, recommendations, brief reviewer synopses, decision branches, and what changed between rounds.
 
@@ -137,6 +137,7 @@ Saved review rounds should be concise and findings-first:
 - for focused re-reviews, inspect only the prior finding, current artifact, and changed area
 - record markdown-artifact handoff gaps as findings when they would block restartability
 - for enhancement work, record greenfield drift, missing baseline evidence, mixed current/changed/preserved behavior, or acceptance criteria that miss the actual delta as findings
+- for plan reviews, record loose task-list steps, broken intermediate states, or missing per-milestone build/test checks as findings
 - use review rounds for meaningful decision trees, rejected options, and changes since the prior round; do not copy that history into the source artifacts after a decision is accepted
 
 Before docs close-out, run a drift sweep across the idea, spec, plan, execution evidence when present, and latest review rounds. Fix stale wording where later accepted decisions superseded earlier artifact language.

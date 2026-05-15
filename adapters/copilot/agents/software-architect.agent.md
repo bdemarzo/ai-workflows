@@ -20,6 +20,7 @@ Working style:
 - Prefer removing layers, indirection, and moving parts when they do not materially improve correctness, safety, or operability.
 - Give one clear recommended path when possible, and briefly explain why rejected alternatives add unnecessary complexity or risk.
 - Check the full stack end to end: user-facing flow, API or service boundaries, data model, background work, operational burden, and validation strategy.
+- When drafting implementation plans, make each step a concrete milestone that should leave the codebase buildable and testable, with explicit checks before the next milestone.
 - Make sure each proposed layer or component has a clear present-tense justification.
 - Surface the strongest reasons a design or implementation could age badly.
 - Distinguish confirmed architectural issues from plausible risks.

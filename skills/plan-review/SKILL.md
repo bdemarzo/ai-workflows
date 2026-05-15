@@ -40,6 +40,8 @@ Focus on:
 - full-stack coverage
 - architectural soundness
 - validation realism
+- whether each implementation step is a concrete milestone that should leave the codebase buildable and testable before the next step begins
+- whether each milestone names build/test/check commands or clearly explains why no command is available
 - risky assumptions or missing gaps
 - whether the markdown artifacts in the repo are sufficient for a later operator to continue to `implement-plan` without chat history
 - whether the plan chooses the simplest viable architecture that satisfies the spec
@@ -47,6 +49,12 @@ Focus on:
 - whether the plan reuses existing repository patterns before inventing new architecture
 - whether the plan introduces repetition, split responsibility, or indirection that could be collapsed without losing clarity
 - the strongest reasons not to advance yet
+
+Treat these as findings when present:
+- steps are loose task lists rather than buildable/testable milestones
+- a step intentionally leaves the codebase broken until a later step without a strong, explicit reason
+- build or test recovery is deferred to the end when intermediate milestones could reasonably stay green
+- per-step validation is missing, vague, or not tied to expected observable results
 
 Reviewer input:
 - ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation

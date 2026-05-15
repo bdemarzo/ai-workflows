@@ -25,6 +25,7 @@ Requirements:
 - repo-local `PLANS.md` may be read as optional project context, but it must not replace this workflow's plan structure, stage contract, or execution control unless the user explicitly asks for repo-native planning mode
 - treat the plan as a living current-state document, not an implementation journal
 - keep implementation decisions current; once implementation starts, detailed step evidence belongs in `execution.md`
+- structure implementation work as concrete milestones; after each milestone, the codebase must be expected to build and the relevant tests/checks must pass before the next milestone begins
 - define non-obvious terms in plain language instead of assuming prior repo knowledge
 - when revising after `plan-review`, incorporate accepted review outcomes into `plan.md`
 - when the plan is ready for execution, mark that state clearly in the plan body
@@ -37,6 +38,7 @@ Operator responsibility:
 Plan boundary:
 - use the spec to define what must be true for users
 - use the plan to define engineering decisions, sequencing, interfaces, validation, idempotence, and recovery
+- use the plan's steps as buildable/testable milestones, not loose task lists
 - use `execution.md` for checks run, changed areas, remediation history, and deviations during multi-step implementation
 - send user-visible behavior, privacy, correctness, or scope gaps back to `spec-create`
 
@@ -65,7 +67,9 @@ Require these expectations:
 - the plan must be restartable from `plan.md` plus the repository alone
 - treat restartability as a hard requirement
 - `Approach`, `Steps`, `Validation`, and `Status` are expected current-state sections; add recovery, interface, dependency, or open-question sections only when they carry non-obvious execution signal
-- validation should include concrete commands or checks with expected observable outcomes when the project permits them
+- every implementation step must be a concrete milestone that leaves the codebase in a buildable, testable state
+- every step must name the build/test/check commands or explain why no command is available, and state the expected observable result before the next step begins
+- validation should include the complete final command set plus any step-specific checks with expected observable outcomes when the project permits them
 - accepted review outcomes must be incorporated into the plan before implementation begins
 - do not append a long implementation journal to the plan; summarize progress and point to `execution.md`
 
@@ -73,6 +77,8 @@ Do not:
 - restate product policy unless the spec is ambiguous
 - mix in brainstorming
 - begin implementation
+- create steps that require several later steps before the codebase can build or tests can pass
+- defer build/test recovery to the end of the plan when an earlier milestone can reasonably be kept green
 - silently repair product-contract gaps that should have been clarified in the spec
 - expand straightforward decisions into essay-style rationale unless the tradeoff is non-obvious or high risk
 - introduce architecture that is primarily justified by hypothetical future needs
@@ -83,6 +89,7 @@ Do not:
 Before finalizing `plan.md`, perform a compression pass:
 - delete optional sections that contain only generic background, duplicated rationale, placeholders, or weak `None` / `TBD` style content
 - merge overlapping bullets so each retained line changes the engineering decision, sequence, validation, recovery path, or blocker list
+- split or reorder steps that cannot independently leave the codebase buildable and testable
 - replace broad option catalogs with the chosen approach unless an option is intentionally unresolved
 - move chronology, checks already run, remediation history, and deviations to `execution.md` when implementation has started
 

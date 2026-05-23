@@ -9,7 +9,7 @@ Use this skill as the `Software Architect` operator playbook.
 
 The operator owns drafting and updating `./docs/workflows/{slug}/plan.md`.
 
-Use [assets/template.md](./assets/template.md) as the default output skeleton when creating a new artifact. Adapt sections as needed, but preserve the slugged title format.
+Use [assets/template.md](./assets/template.md) as the default output skeleton when creating a new artifact. Adapt sections as needed, preserve the slugged title format, and omit any section that does not carry an implementation decision, sequencing constraint, validation expectation, recovery note, dependency, or material blocker.
 
 Requirements:
 - derive `slug` from the workflow dossier or source spec
@@ -19,11 +19,13 @@ Requirements:
 - link to the source spec artifact path in the plan body
 - keep the plan self-contained enough that a later engineer can resume from the plan plus the repository without needing `run.md`
 - make clear near the top what changes for the user or system and how successful delivery will be observed
+- for enhancement work, preserve the spec's current/changed/preserved behavior split and plan the smallest credible change against the existing implementation
 - keep the permanent artifact concise and skimmable by default
 - treat `./docs/workflows/{slug}/plan.md` as the authoritative execution plan for the workflow
 - repo-local `PLANS.md` may be read as optional project context, but it must not replace this workflow's plan structure, stage contract, or execution control unless the user explicitly asks for repo-native planning mode
 - treat the plan as a living current-state document, not an implementation journal
 - keep implementation decisions current; once implementation starts, detailed step evidence belongs in `execution.md`
+- structure implementation work as concrete milestones; after each milestone, the codebase must be expected to build and the relevant tests/checks must pass before the next milestone begins
 - define non-obvious terms in plain language instead of assuming prior repo knowledge
 - when revising after `plan-review`, incorporate accepted review outcomes into `plan.md`
 - when the plan is ready for execution, mark that state clearly in the plan body
@@ -36,6 +38,7 @@ Operator responsibility:
 Plan boundary:
 - use the spec to define what must be true for users
 - use the plan to define engineering decisions, sequencing, interfaces, validation, idempotence, and recovery
+- use the plan's steps as buildable/testable milestones, not loose task lists
 - use `execution.md` for checks run, changed areas, remediation history, and deviations during multi-step implementation
 - send user-visible behavior, privacy, correctness, or scope gaps back to `spec-create`
 
@@ -48,6 +51,7 @@ Decision rule:
 Architecture standard:
 - prefer the simplest plan that can credibly satisfy the approved spec
 - reuse existing repository patterns, abstractions, and infrastructure before introducing new ones
+- for enhancement work, start from the existing implementation path and justify any replacement or redesign against the approved delta
 - justify each non-trivial layer, service, dependency, job, external tool, or abstraction in present-tense terms
 - cut any proposed component that cannot be justified by the current spec
 - do not add speculative extensibility, future-proofing layers, or optional platformization unless the current spec clearly requires them
@@ -62,8 +66,10 @@ Style rule:
 Require these expectations:
 - the plan must be restartable from `plan.md` plus the repository alone
 - treat restartability as a hard requirement
-- `Implementation Decisions`, `Current Plan`, `Validation and Acceptance`, and `Idempotence And Recovery` are mandatory current-state sections
-- validation should include concrete commands or checks with expected observable outcomes when the project permits them
+- `Approach`, `Steps`, `Validation`, and `Status` are expected current-state sections; add recovery, interface, dependency, or open-question sections only when they carry non-obvious execution signal
+- every implementation step must be a concrete milestone that leaves the codebase in a buildable, testable state
+- every step must name the build/test/check commands or explain why no command is available, and state the expected observable result before the next step begins
+- validation should include the complete final command set plus any step-specific checks with expected observable outcomes when the project permits them
 - accepted review outcomes must be incorporated into the plan before implementation begins
 - do not append a long implementation journal to the plan; summarize progress and point to `execution.md`
 
@@ -71,10 +77,20 @@ Do not:
 - restate product policy unless the spec is ambiguous
 - mix in brainstorming
 - begin implementation
+- create steps that require several later steps before the codebase can build or tests can pass
+- defer build/test recovery to the end of the plan when an earlier milestone can reasonably be kept green
 - silently repair product-contract gaps that should have been clarified in the spec
 - expand straightforward decisions into essay-style rationale unless the tradeoff is non-obvious or high risk
 - introduce architecture that is primarily justified by hypothetical future needs
+- turn an enhancement spec into a broad rebuild of existing functionality unless the spec explicitly requires that
 - duplicate the same control point across multiple layers unless the redundancy is intentional and clearly justified
 - repeat spec acceptance criteria only when the repetition materially reduces implementation risk
+
+Before finalizing `plan.md`, perform a compression pass:
+- delete optional sections that contain only generic background, duplicated rationale, placeholders, or weak `None` / `TBD` style content
+- merge overlapping bullets so each retained line changes the engineering decision, sequence, validation, recovery path, or blocker list
+- split or reorder steps that cannot independently leave the codebase buildable and testable
+- replace broad option catalogs with the chosen approach unless an option is intentionally unresolved
+- move chronology, checks already run, remediation history, and deviations to `execution.md` when implementation has started
 
 The output of this stage should be ready for `plan-review`.

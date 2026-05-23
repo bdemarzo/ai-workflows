@@ -96,7 +96,7 @@ Reviewer-count rule:
 - if a preferred agent is unavailable but an allowed substitute with a concrete substitution agent exists, record the substitution and continue
 - if a required persona has no usable binding, stop and ask the user instead of silently weakening the review
 - official operators and reviewers must be spawned as the resolved concrete persona agent, or an explicitly allowed substitute, and the spawned agent type must match before the output is treated as official workflow work
-- for Codex, use the registry `agent` value as the spawned subagent `agent_type`; prompt text such as "you are {Persona}" does not turn `worker`, `explorer`, or `default` into an official workflow persona
+- for Codex, use the registry `agent` value from `.codex/ai-workflows/role-registry.toml` as the spawned subagent `agent_type`; prompt text such as "you are {Persona}" does not turn `worker`, `explorer`, or `default` into an official workflow persona
 - for GitHub Copilot, use the registry `agent` value from `.github/ai-workflows/role-registry.toml` as the selected or invoked custom agent; prompt text alone does not turn the default Copilot agent into an official workflow persona
 - generic helper agents may be used only for sidecar discovery or bounded support work; record them separately from official operator/reviewer rosters
 
@@ -104,18 +104,22 @@ Reviewer-count rule:
 
 - treat startup as guided preflight, not as the beginning of stage execution
 - derive the slug, clarify goal/audience/constraints/success criteria whenever needed, and resolve role bindings
+- classify the workflow ask before `idea-create` as one of: `new capability`, `enhancement to existing behavior`, `bug fix`, `refactor / technical change`, or `docs / process`
+- when the prompt references existing product behavior, default to `enhancement to existing behavior` unless the user explicitly asks for a greenfield capability
+- for enhancement, bug-fix, or refactor work, identify the existing surface, current behavior, desired delta, behavior to preserve, and any missing evidence before drafting source artifacts
 - explain that the active session will orchestrate subagents through idea, spec, plan, implementation, implementation review, final review, and docs close-out
 - explain that user approval is required after idea review resolution, spec review resolution, plan review resolution, implementation-review resolution, and final-review gap resolution plus docs close-out
 - present one concise start confirmation before the first stage begins
 - do not begin `idea-create` until the user confirms the startup summary
 
-The startup confirmation should name the workflow ask, slug, orchestrator, resolved core operators, required gates, and ask the user to reply `start` or provide changes.
+The startup confirmation should name the workflow ask, work type, slug, orchestrator, resolved core operators, required gates, and ask the user to reply `start` or provide changes.
 
 ## Grounding And Clarification
 
 - ask questions whenever clarity is needed for correctness, scope, contract fidelity, or implementation safety
 - do not defer material ambiguity simply to stay moving
 - record resolved decisions and material clarifications in `run.md`
+- for enhancement work, record a compact baseline/delta grounding before delegating `idea-create`: existing surface or workflow, observed current behavior, requested change, preserved behavior, and evidence source or unknowns
 - treat repo markdown artifacts as authoritative and long chat history as convenience context only
 - before each stage transition, re-read `run.md` and the source artifacts for the next stage
 - after each user gate, reroute, or remediation loop, explicitly re-ground on the current markdown artifacts before making the next stage decision
@@ -132,12 +136,14 @@ The startup confirmation should name the workflow ask, slug, orchestrator, resol
 - delegate with artifact paths instead of pasted artifact contents whenever files are available in the workspace
 - do not include long chat-history summaries when `run.md` and source artifacts contain the needed context
 - ask subagents to return only decisions, findings, edits made, and unresolved blockers
-- prohibit long restatements of artifacts, chat history, or reviewer transcripts
+- prohibit long restatements of artifacts, chat history, reviewer transcripts, or rationale already captured in source artifacts
 - for focused re-reviews, ask reviewers to inspect only the prior finding, current artifact, and changed area
 - keep saved review rounds compact unless material findings require more
 - keep source artifacts concise by omitting empty sections, stale alternatives, repeated rationale, and history that belongs in review rounds
+- before saving `idea.md`, `spec.md`, or `plan.md`, run a compression pass: delete sections with no decision signal, merge duplicate bullets, remove placeholders and `None` / `TBD` filler, and keep only the shortest rationale needed for the next human decision
 - idea, spec, and plan reviews should normally inspect only `run.md` plus the relevant workflow artifacts
-- codebase inspection should be targeted and usually reserved for implementation, implementation-review, final-review fidelity checks, or a specific blocking question
+- for enhancement, bug-fix, or refactor work, allow narrow pre-spec discovery of named docs, routes, UI surfaces, tests, files, symbols, or prior artifacts needed to establish current behavior
+- codebase inspection should otherwise be targeted and usually reserved for implementation, implementation-review, final-review fidelity checks, or a specific blocking question
 - generic helper agents may be used only for narrow blocking questions with named paths, symbols, or terms
 - start with the required operator or reviewer set for the current phase
 - do not spawn sidecar agents unless a specific blocker or unknown must be resolved

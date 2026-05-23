@@ -59,6 +59,8 @@ Canonical phase order:
 
 `workflow-run` is the orchestrator, not a stage.
 
+At startup, the orchestrator classifies the work as `new capability`, `enhancement to existing behavior`, `bug fix`, `refactor / technical change`, or `docs / process`. Prompts that reference existing functionality default to enhancement work unless the user explicitly asks for a greenfield capability. Enhancement, bug-fix, and refactor workflows must ground the existing surface, current behavior, requested delta, preserved behavior, and evidence or unknowns before source artifacts are drafted.
+
 ## Stage Ownership
 
 | Stage | Operator | Reviewers |
@@ -107,11 +109,15 @@ Source artifacts use slugged H1 titles:
 - `run.md` is the compact restart ledger. Use current-state summaries instead of chronology, and do not add `Validation Evidence`.
 - `idea.md` owns the current opportunity, value, risks, and intentionally deferred questions.
 - `spec.md` owns the current user-visible contract, acceptance behavior, privacy/business rules, and scope boundaries.
-- `plan.md` owns the current implementation decisions, sequencing, interfaces, validation plan, idempotence, and recovery.
+- `plan.md` owns the current implementation decisions, sequencing, interfaces, validation plan, idempotence, and recovery. Each implementation step should be a concrete milestone that leaves the codebase buildable and testable before the next step begins.
 - `execution.md` owns concise implementation evidence, checks run, changed areas, remediation history, and deviations during multi-step work.
 - Review rounds own reviewer findings, recommendations, brief reviewer synopses, decision branches, and what changed between rounds.
 
 The repo markdown artifacts must be sufficient for another operator or orchestrator to resume without chat history. Accepted decisions and review outcomes should be folded into the owning source artifact as the official current state before later work depends on them. Do not preserve stale alternatives, dated revision history, or superseded rationale in `idea.md`, `spec.md`, or `plan.md`; that history belongs in review rounds, `run.md` decision pointers, or `execution.md` evidence when relevant.
+
+Source artifacts should be decision-complete, not explanation-complete. Omit any section that does not carry a current decision, material uncertainty, validation expectation, recovery note, or blocker. Before saving `idea.md`, `spec.md`, or `plan.md`, delete placeholder or `None` / `TBD` filler, merge overlapping bullets, remove repeated rationale from prior artifacts, and keep only the shortest context needed for the next human or operator decision.
+
+For enhancement work, source artifacts should be delta-first. `idea.md` should distinguish existing baseline, desired change, preserved behavior, and value of the delta. `spec.md` should define current behavior, changed behavior, preserved behavior, and acceptance for both the change and regression protection. Do not describe existing functionality as if it is newly proposed.
 
 ## Stalled Operator Recovery
 
@@ -130,6 +136,8 @@ Saved review rounds should be concise and findings-first:
 - keep review rounds compact unless material findings require more
 - for focused re-reviews, inspect only the prior finding, current artifact, and changed area
 - record markdown-artifact handoff gaps as findings when they would block restartability
+- for enhancement work, record greenfield drift, missing baseline evidence, mixed current/changed/preserved behavior, or acceptance criteria that miss the actual delta as findings
+- for plan reviews, record loose task-list steps, broken intermediate states, or missing per-milestone build/test checks as findings
 - use review rounds for meaningful decision trees, rejected options, and changes since the prior round; do not copy that history into the source artifacts after a decision is accepted
 
 Before docs close-out, run a drift sweep across the idea, spec, plan, execution evidence when present, and latest review rounds. Fix stale wording where later accepted decisions superseded earlier artifact language.
@@ -151,21 +159,23 @@ Codex adapter source:
 
 Codex project-scope install destinations:
 
-- target `.agents/skills/`: default repo-local Codex skill install location
-- target `.codex/agents/*.toml`: persona agent definitions
-- target `.codex/role-registry.toml` and `.codex/config.toml`: runtime binding/config
+- target `.agents/skills/ai-workflows-*`: default repo-local Codex skill install location
+- user `~/.codex/agents/ai-workflows-*.toml`: persona agent definitions required by Codex agent discovery
+- target `.codex/ai-workflows/role-registry.toml` and `.codex/ai-workflows/config.toml`: runtime binding/config
+- target `.codex/ai-workflows/manifest.json`: managed install manifest for upgrade and uninstall
 
 Codex user-scope install destinations:
 
-- user `~/.agents/skills/`: default user Codex skill install location
-- user `~/.codex/agents/*.toml`: persona agent definitions
-- user `~/.codex/role-registry.toml` and `~/.codex/config.toml`: runtime binding/config
+- user `~/.agents/skills/ai-workflows-*`: default user Codex skill install location
+- user `~/.codex/agents/ai-workflows-*.toml`: persona agent definitions
+- user `~/.codex/ai-workflows/role-registry.toml` and `~/.codex/ai-workflows/config.toml`: runtime binding/config
+- user `~/.codex/ai-workflows/manifest.json`: managed install manifest for upgrade and uninstall
 
-Official Codex workflow delegation must use the concrete `agent` value resolved from `.codex/role-registry.toml`. Generic helpers such as `worker`, `explorer`, or `default` may support sidecar discovery, but prompt text alone does not make them official workflow operators or reviewers.
+Official Codex workflow delegation must use the concrete `agent` value resolved from `.codex/ai-workflows/role-registry.toml`. Generic helpers such as `worker`, `explorer`, or `default` may support sidecar discovery, but prompt text alone does not make them official workflow operators or reviewers.
 
 Codex persona agents generally inherit the current session model so newer models such as GPT-5.5 are used when selected and available. The documentation maintainer remains pinned to a smaller model for concise docs work.
 
-Current Codex runtime note: repo-scoped `.codex/agents/*.toml` discovery can vary by surface and version. Project scope remains the default because it keeps the workflow package portable with the target repository. Use `--scope user` when your Codex surface only discovers user-profile agents.
+Current Codex runtime note: Codex agent discovery requires persona agents under `~/.codex/agents`, so the Codex installer always writes agent definitions there. Project scope remains the default for skills, role registry, config, and manifest so the workflow package can still travel with the target repository.
 
 Optional Codex approval review setting:
 
@@ -187,17 +197,19 @@ Copilot adapter source:
 
 Copilot project-scope install destinations:
 
-- target `.github/skills/`: installed copies of canonical skill packages from `skills/`
-- target `.github/agents/*.agent.md`: concrete Copilot custom agent profiles
+- target `.github/skills/ai-workflows-*`: installed copies of canonical skill packages from `skills/`
+- target `.github/agents/ai-workflows-*.agent.md`: concrete Copilot custom agent profiles
 - target `.github/ai-workflows/role-registry.toml` and `.github/ai-workflows/config.toml`: project runtime binding/config
-- target `.github/copilot-instructions.md`: repository instructions
+- target `.github/ai-workflows/copilot-instructions.md`: library Copilot instructions for teams to include or inspect
+- target `.github/ai-workflows/manifest.json`: managed install manifest for upgrade and uninstall
 
 Copilot user-scope install destinations:
 
-- user `~/.github/skills/`: installed copies of canonical skill packages from `skills/`
-- user `~/.github/agents/*.agent.md`: concrete Copilot custom agent profiles
+- user `~/.github/skills/ai-workflows-*`: installed copies of canonical skill packages from `skills/`
+- user `~/.github/agents/ai-workflows-*.agent.md`: concrete Copilot custom agent profiles
 - user `~/.github/ai-workflows/role-registry.toml` and `~/.github/ai-workflows/config.toml`: runtime binding/config
-- user `~/.github/copilot-instructions.md`: user-profile instructions
+- user `~/.github/ai-workflows/copilot-instructions.md`: library Copilot instructions for teams to include or inspect
+- user `~/.github/ai-workflows/manifest.json`: managed install manifest for upgrade and uninstall
 
 Official Copilot workflow delegation must use the concrete `agent` value resolved from `.github/ai-workflows/role-registry.toml`. The Copilot adapter defaults to project-local skill and custom-agent locations so it can travel with the target repository.
 
@@ -216,16 +228,15 @@ python C:\path\to\ai-workflows\install.py --runtime copilot
 
 For Codex, this installs:
 
-- skill packages into `.agents/skills/`
-- persona agents into `.codex/agents/`
-- role registry and runtime config into the target repo's `.codex/`
+- namespaced skill packages into `.agents/skills/ai-workflows-*`
+- namespaced persona agents into `~/.codex/agents/ai-workflows-*`
+- role registry, runtime config, and manifest into `.codex/ai-workflows/`
 
 For Copilot, this installs:
 
-- skill packages into `.github/skills/`
-- custom agent profiles into `.github/agents/`
-- role registry and runtime config into `.github/ai-workflows/`
-- repository instructions into `.github/copilot-instructions.md`
+- namespaced skill packages into `.github/skills/ai-workflows-*`
+- namespaced custom agent profiles into `.github/agents/ai-workflows-*`
+- role registry, runtime config, library instructions, and manifest into `.github/ai-workflows/`
 
 Useful installer options:
 
@@ -234,18 +245,23 @@ Useful installer options:
 - `--scope project`: install into the target repository; this is the default
 - `--scope user`: install into the current user's profile for the selected runtime
 - `--dry-run`: show planned changes without writing files
-- `--force`: overwrite existing managed files
+- `--force`: compatibility option; installs overwrite ai-workflows target files by default
 - `--legacy-codex-skills`: for Codex only, install skills to `.codex/skills` for project scope or `~/.codex/skills` for user scope
+- `--namespace <name>`: prefix deployed skills and agents; defaults to `ai-workflows`
+- `--legacy-names`: preserve the older flat deployed names instead of namespace-prefixed names
+- `--uninstall`: remove files recorded in the selected runtime/scope manifest
 - `--no-adapter`: install only skills
 - `--no-skills`: install only the adapter
 - `--target <path>`: install into a specific existing directory
+
+By default, installed files are namespace-prefixed so they are easy to distinguish from project-local skills and agents. The installer rewrites deployed skill frontmatter, deployed agent names, and the installed role registry so official bindings point at the namespaced agents. It also writes a manifest under the runtime's `ai-workflows` directory. Later installs overwrite the ai-workflows target files so stale pre-manifest or older managed installs upgrade cleanly. `--uninstall` removes only paths recorded in the manifest. For Codex project-scope installs, the manifest may include absolute managed entries under `~/.codex/agents` because Codex discovers agents from the user profile.
 
 Manual install is also supported:
 
 | Runtime | Project scope | User scope |
 | --- | --- | --- |
-| Codex | copy `skills/` to `.agents/skills/`, overlay `adapters/codex/skill-metadata/`, copy agents/config/registry into `.codex/` | same layout under `~/.agents/skills/` and `~/.codex/` |
-| Copilot | copy skills, agents, config, registry, and instructions into `.github/` | same layout under `~/.github/` |
+| Codex | copy skills as `.agents/skills/ai-workflows-*`, overlay `adapters/codex/skill-metadata/`, copy agents as `~/.codex/agents/ai-workflows-*`, and copy config/registry/manifest into `.codex/ai-workflows/` | copy skills under `~/.agents/skills/` and agents/config/registry/manifest under `~/.codex/` |
+| Copilot | copy skills as `.github/skills/ai-workflows-*`, agents as `.github/agents/ai-workflows-*`, and config/registry/instructions/manifest into `.github/ai-workflows/` | same layout under `~/.github/` |
 
 For legacy Codex skill discovery, use `.codex/skills/` under the selected scope root instead of `.agents/skills/`.
 
@@ -265,7 +281,7 @@ Check a workflow dossier:
 python scripts/check_workflow_artifacts.py --root . --dossier C:\path\to\repo\docs\workflows\my-slug --stale-term per-band
 ```
 
-The checker fails on structural errors such as missing skill files, mismatched skill names, invalid plugin templates, adapter registries that reference missing agents, Copilot custom agents with missing frontmatter, or invalid artifact H1s. It reports warnings for source-artifact history sections, forbidden `run.md` sections, missing latest-review references, and configured stale terms.
+The checker fails on structural errors such as missing skill files, mismatched skill names, invalid plugin templates, adapter registries that reference missing agents, Copilot custom agents with missing frontmatter, or invalid artifact H1s. It reports warnings for source-artifact history sections, forbidden `run.md` sections, missing latest-review references, template placeholders, excessive section counts, weak empty/TBD-style sections, and configured stale terms.
 
 ## Repository Layout
 

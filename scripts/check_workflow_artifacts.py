@@ -48,6 +48,24 @@ FORBIDDEN_SOURCE_HEADINGS = {
     },
 }
 
+SOURCE_HEADING_LIMITS = {
+    "idea.md": 6,
+    "spec.md": 9,
+    "plan.md": 8,
+}
+
+WEAK_SECTION_VALUES = {
+    "",
+    "none",
+    "n/a",
+    "na",
+    "tbd",
+    "todo",
+    "to do",
+    "unknown",
+    "not applicable",
+}
+
 SOURCE_ARTIFACTS = {
     "run.md": "Run",
     "idea.md": "Idea",
@@ -414,6 +432,72 @@ def check_h1(path: Path, expected: str) -> list[Finding]:
     return []
 
 
+def normalize_section_body(body: str) -> str:
+    lines: list[str] = []
+    for line in body.splitlines():
+        stripped = line.strip()
+        if stripped.startswith("- "):
+            stripped = stripped[2:].strip()
+        if stripped.startswith("* "):
+            stripped = stripped[2:].strip()
+        stripped = stripped.strip("[]().:;` ")
+        if stripped:
+            lines.append(stripped)
+    return " ".join(lines).strip().lower()
+
+
+def find_sections(text: str) -> list[tuple[str, str]]:
+    matches = list(re.finditer(r"^##\s+(.+?)\s*$", text, flags=re.MULTILINE))
+    sections: list[tuple[str, str]] = []
+    for index, match in enumerate(matches):
+        start = match.end()
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        sections.append((match.group(1).strip(), text[start:end]))
+    return sections
+
+
+def check_source_concision(path: Path, filename: str, text: str) -> list[Finding]:
+    findings: list[Finding] = []
+
+    sections = find_sections(text)
+    section_limit = SOURCE_HEADING_LIMITS.get(filename)
+    if section_limit is not None and len(sections) > section_limit:
+        findings.append(
+            Finding(
+                "WARN",
+                path,
+                f"source artifact has {len(sections)} second-level sections; consider merging or deleting sections without decision signal",
+            )
+        )
+
+    placeholder_lines = [
+        line.strip()
+        for line in text.splitlines()
+        if re.search(r"(?<!!)\[[^\]]+\](?!\()", line) and "{slug}" not in line
+    ]
+    if placeholder_lines:
+        findings.append(
+            Finding(
+                "WARN",
+                path,
+                "source artifact appears to contain template placeholder text",
+            )
+        )
+
+    for heading, body in sections:
+        normalized = normalize_section_body(body)
+        if normalized in WEAK_SECTION_VALUES:
+            findings.append(
+                Finding(
+                    "WARN",
+                    path,
+                    f"section {heading!r} appears empty or placeholder-like; omit it unless it carries real signal",
+                )
+            )
+
+    return findings
+
+
 def latest_rounds(dossier: Path, stage: str) -> list[Path]:
     review_dir = dossier / "reviews" / stage
     if not review_dir.exists():
@@ -469,6 +553,9 @@ def check_dossier(dossier: Path, stale_terms: list[str]) -> list[Finding]:
                         f"source artifact history section should move to review rounds or execution evidence: {heading}",
                     )
                 )
+
+        if filename in SOURCE_HEADING_LIMITS:
+            findings.extend(check_source_concision(path, filename, text))
 
         for term in stale_terms:
             if re.search(re.escape(term), text, flags=re.IGNORECASE):

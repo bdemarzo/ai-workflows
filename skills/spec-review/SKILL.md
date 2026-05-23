@@ -44,10 +44,20 @@ Focus on:
 - whether the spec is shaping the smallest sufficient solution rather than quietly requiring speculative architecture
 - whether the spec is accidentally prescribing implementation detail that belongs in the plan
 - what should stay out of the spec and move to the plan
+- for enhancement work, whether the spec is a delta contract against the observed baseline rather than a full feature essay
+- for enhancement work, whether acceptance covers both the desired change and preserved existing behavior
 - the strongest reasons not to advance yet
+
+Treat these as findings when present:
+- the spec describes existing behavior as if it is new functionality
+- the spec lacks current-behavior evidence or explicit user-supplied baseline for an enhancement
+- desired delta, current behavior, and preserved behavior are not separable
+- acceptance criteria validate the whole feature but miss the actual change or regression expectations
+- abstract product language obscures the concrete change to existing functionality
 
 Reviewer input:
 - ask each reviewer for up to three consequential findings, one explicit recommendation, and only the rationale needed to support that recommendation
+- ask reviewers to return only decisions, consequential findings, required artifact edits, and unresolved blockers; do not restate the artifact
 - merge overlapping findings, keep synopses brief, and preserve only disagreements that materially affect the recommendation
 - if the repo markdown artifacts are not sufficient to continue safely, state that as a key finding
 - for focused re-reviews, ask reviewers to inspect only the prior finding, current artifact, and changed area
